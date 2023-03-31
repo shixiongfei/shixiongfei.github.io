@@ -1,0 +1,49 @@
+# Header
+nav:
+  Posts: /archives
+  Categories: /category
+  Tags: /tag
+
+# favicon
+favicon: /favicon.png
+
+# logo
+logo: /images/logo.svg
+
+# links
+links:
+  Github: https://github.com/shixiongfei
+  ZhiHu: https://www.zhihu.com/people/shixiongfei
+  # Twitter:
+  # Weibo:
+
+# analytics
+google_analytics:
+baidu_analytics: 4dbc75a8d627e17a8714e4c8b2e9afa8
+
+# mathjax
+fancybox: true
+
+# mathjax
+mathjax: true
+
+# echarts
+echarts: true
+
+# busuanzi
+busuanzi: false
+
+# mermaid
+mermaid:
+  enable: true
+  # Available themes: default | dark | forest | neutral
+  theme: default
+
+# giscus
+giscus:
+  enable: true
+  repo: shixiongfei/shixiongfei.github.io
+  repo_id: MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc=
+  category: General
+  category_id: DIC_kwDOE95Za84CVZLb
+  mapping: pathname
