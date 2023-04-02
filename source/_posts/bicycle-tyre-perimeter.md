@@ -2,8 +2,8 @@
 title: 小轮车的轮胎周长
 author: shixiongfei
 date: 2018-12-21 15:31:00
-categories: 生活
-tags: [生活, 运动, 自行车]
+categories: 杂记
+tags: [杂记, 运动, 自行车]
 ---
 
 | 车胎规格   | 轮周长   | 车型举例                             |
