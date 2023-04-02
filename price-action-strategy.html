@@ -33,7 +33,7 @@
   <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
 
 
-<title>归档: 2020/10 | Xiongfei Shi</title>
+<title>价格行为交易策略 | Xiongfei Shi</title>
 
 
 
@@ -196,61 +196,134 @@
 </div>
 
   <main class="p-12">
-    <section class="px-6 max-w-prose mx-auto gap-12 grid grid-cols-1">
-  <div class="flex flex-col h-48 items-center justify-center">
-    <h1 class="site-title text-4xl leading-relaxed">
-      Xiongfei Shi
-    </h1>
-    <p class="text-gray-500 mt-2">
-      LESS is MORE
-    </p>
-  </div>
-  
-  
-    
-    
-      <div class="relative pointer-events-none">
-        <span class="text-9xl opacity-10 absolute -left-11 -top-6 font-bold">2020</span>
+    <!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        价格行为交易策略
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2021-01-22 09:46:21</time>
+          <span class="text-gray-400">·</span>
+          <span>1 min</span>
+          <span class="text-gray-400">·</span>
+          <span>410 words</span>
+        </section>
       </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="股票池"><a href="#股票池" class="headerlink" title="股票池"></a>股票池</h2><ul>
+<li>剔除所有ST股票及退市整理期的股票</li>
+<li>剔除所有科创板股票</li>
+<li>剔除不足48周交易日的股票</li>
+<li>剔除最近1年交易总金额排名靠后 20% 的股票</li>
+</ul>
+<h2 id="交易信号"><a href="#交易信号" class="headerlink" title="交易信号"></a>交易信号</h2><h3 id="Pin-Bar"><a href="#Pin-Bar" class="headerlink" title="Pin Bar"></a>Pin Bar</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> +</span><br><span class="line"> |        +++</span><br><span class="line">+++   R   | |  &lt;---- Here</span><br><span class="line">| |   +   | |</span><br><span class="line">| |  +++  | |</span><br><span class="line">+++  +++  +++</span><br><span class="line"> |    |    |</span><br><span class="line"> +    |    +</span><br><span class="line">      |</span><br><span class="line">      |</span><br><span class="line">      +</span><br></pre></td></tr></table></figure>
+
+<h4 id="Pin-Bar-定义"><a href="#Pin-Bar-定义" class="headerlink" title="Pin Bar 定义"></a>Pin Bar 定义</h4><p>主影线长度超过整个K线长度 2&#x2F;3 的 K 线就是 Pin Bar</p>
+<h4 id="R定义"><a href="#R定义" class="headerlink" title="R定义"></a>R定义</h4><p>ATR 是价格波动，此策略以 ATR 作为风险值 R</p>
+<h4 id="信号的研判"><a href="#信号的研判" class="headerlink" title="信号的研判"></a>信号的研判</h4><h5 id="两个基本条件"><a href="#两个基本条件" class="headerlink" title="两个基本条件"></a>两个基本条件</h5><ol>
+<li>信号收盘价必须大于 5 均线</li>
+<li>信号最低价必须比前一根K线最低价更低</li>
+</ol>
+<h5 id="五个细节条件"><a href="#五个细节条件" class="headerlink" title="五个细节条件"></a>五个细节条件</h5><ol>
+<li>整个 Pin Bar 在盘面上是否明显？(下引线 &#x2F; R &gt; 4&#x2F;5)</li>
+<li>是否有假突破（信号 K 线实体大于 5 &#x2F; 10 均线，最低价小于 5 &#x2F; 10 均线）</li>
+<li>Pin Bar 的实体有没有包含在之前的 K 线(左眼)的最高价和最低价之内？并且信号的幅度要大于左眼？</li>
+<li>是不是顺着较大级别趋势？( 5 均线大于10均线)</li>
+<li>盈亏比是否足够？（突破价 + R 的一半是否大于前高）</li>
+</ol>
+<h4 id="选股条件"><a href="#选股条件" class="headerlink" title="选股条件"></a>选股条件</h4><ol>
+<li>全部满足基本条件</li>
+<li>满足两个细节条件</li>
+</ol>
+<h4 id="开仓"><a href="#开仓" class="headerlink" title="开仓"></a>开仓</h4><ol>
+<li>9:50 之前不操作，仅收集数据分析 K 线</li>
+<li>9:50 之后价格超过突破价</li>
+</ol>
+<h4 id="加仓"><a href="#加仓" class="headerlink" title="加仓"></a>加仓</h4><ol>
+<li>信号第 2 天 1 根 K 线完成期望 R</li>
+<li>第 3 天突破前一天最高价 (重新计算 R)</li>
+</ol>
+<h4 id="平仓"><a href="#平仓" class="headerlink" title="平仓"></a>平仓</h4><ol>
+<li>9:50 之前不操作，仅收集数据分析 K 线</li>
+<li>价格回调 0.5R</li>
+<li>3 天不创新高</li>
+<li>前一天触发平仓信号</li>
+</ol>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
     
-    <a href="/clear-history-of-git.html">
-      <header>
-        <h2 class="font-bold text-xl">
-          清空Git仓库全部历史记录
-        </h2>
-      </header>
-      <section class="text-gray-400 my-1 text-sm time">
-        <p class="line-clamp-4">
-          
-        </p>
-        <p class="line-clamp-4">
-          10月 29
-          ·
-          1 min
-        </p>
-      </section>
-    </a>
-  
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%8A%95%E8%B5%84%E7%90%86%E8%B4%A2/">投资理财</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E8%82%A1%E7%A5%A8%E6%8A%95%E8%B5%84/">股票投资</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93/">量化交易</a>
+        </span>
+      
     
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/otc-fund-valuation.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          场外基金价值评估
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/callback-rebound-trading.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          回调/反弹交易系统
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
     
-    <a href="/high-dividend-strategy.html">
-      <header>
-        <h2 class="font-bold text-xl">
-          高股息择时策略
-        </h2>
-      </header>
-      <section class="text-gray-400 my-1 text-sm time">
-        <p class="line-clamp-4">
-          
-        </p>
-        <p class="line-clamp-4">
-          10月 05
-          ·
-          1 min
-        </p>
-      </section>
-    </a>
-  
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
 </section>
 
   </main>

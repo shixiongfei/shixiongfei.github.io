@@ -33,7 +33,7 @@
   <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
 
 
-<title>归档: 2020/10 | Xiongfei Shi</title>
+<title>回调/反弹交易系统 | Xiongfei Shi</title>
 
 
 
@@ -196,61 +196,135 @@
 </div>
 
   <main class="p-12">
-    <section class="px-6 max-w-prose mx-auto gap-12 grid grid-cols-1">
-  <div class="flex flex-col h-48 items-center justify-center">
-    <h1 class="site-title text-4xl leading-relaxed">
-      Xiongfei Shi
-    </h1>
-    <p class="text-gray-500 mt-2">
-      LESS is MORE
-    </p>
-  </div>
-  
-  
-    
-    
-      <div class="relative pointer-events-none">
-        <span class="text-9xl opacity-10 absolute -left-11 -top-6 font-bold">2020</span>
+    <!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        回调/反弹交易系统
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2020-12-05 21:28:30</time>
+          <span class="text-gray-400">·</span>
+          <span>2 min</span>
+          <span class="text-gray-400">·</span>
+          <span>496 words</span>
+        </section>
       </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="上涨回调做多信号参数"><a href="#上涨回调做多信号参数" class="headerlink" title="上涨回调做多信号参数"></a>上涨回调做多信号参数</h2><ul>
+<li>20SMA &gt; 50SMA</li>
+<li>成交量(20天平均) &gt; 100000</li>
+<li>股票处于上升趋势，同时50SMA向上</li>
+<li>股价在50SMA线之上</li>
+<li>随机指数(5) &lt; 25</li>
+<li>在第一根阳线或十字星时入场</li>
+</ul>
+<h3 id="估值栏"><a href="#估值栏" class="headerlink" title="估值栏"></a>估值栏</h3><ul>
+<li>以前的P&#x2F;E &lt; 现在的P&#x2F;E</li>
+<li>P&#x2F;S(市场价格&#x2F;销售收入) &lt; 2.0(越小越好)</li>
+<li>P&#x2F;B(市场价格&#x2F;账目价值) &lt; 2.5(越小越好)</li>
+<li>P&#x2F;FCF(市场价格&#x2F;自由现金流) &lt; 30(越小越好)</li>
+<li>Debt&#x2F;Eq(债务&#x2F;权益) &lt; 0.3(越小越好)</li>
+</ul>
+<h3 id="成长栏"><a href="#成长栏" class="headerlink" title="成长栏"></a>成长栏</h3><ul>
+<li>当年的每股收益(EPS)增长率 &gt; 20%(越高越好)</li>
+<li>下一年的每股收益(EPS)增长率&#x3D;正(越高越好)</li>
+<li>下季度的每股收益估计(EPS)增长率&#x3D;正(越高越好)</li>
+<li>销售增长率Q&#x2F;Q(当季&#x2F;上季) &gt; 10%(越高越好)</li>
+<li>每股收益增长率Q&#x2F;Q(当季&#x2F;上季) &gt; 10%(越高越好)</li>
+</ul>
+<h2 id="下跌反弹做空信号参数"><a href="#下跌反弹做空信号参数" class="headerlink" title="下跌反弹做空信号参数"></a>下跌反弹做空信号参数</h2><ul>
+<li>20SMA &lt; 50SMA</li>
+<li>成交量(20天平均) &gt; 100000</li>
+<li>股票处于下降趋势，同时50SMA向下</li>
+<li>股价在50SMA线之下</li>
+<li>随机指数(5) &gt; 75</li>
+<li>在第一根阴线或十字星时入场</li>
+</ul>
+<h3 id="估值栏-1"><a href="#估值栏-1" class="headerlink" title="估值栏"></a>估值栏</h3><ul>
+<li>以前的P&#x2F;E &gt; 现在的P&#x2F;E</li>
+<li>P&#x2F;S(市场价格&#x2F;销售收入) &gt; 2.0(越小越好)</li>
+<li>P&#x2F;B(市场价格&#x2F;账目价值) &gt; 2.5(越小越好)</li>
+<li>P&#x2F;FCF(市场价格&#x2F;自由现金流) &gt; 30(越小越好)</li>
+<li>Debt&#x2F;Eq(债务&#x2F;权益) &gt; 0.3(越小越好)</li>
+</ul>
+<h3 id="成长栏-1"><a href="#成长栏-1" class="headerlink" title="成长栏"></a>成长栏</h3><ul>
+<li>当年的每股收益(EPS)增长率 &lt; 20%(越高越好)</li>
+<li>下一年的每股收益(EPS)增长率&#x3D;负(越高越好)</li>
+<li>下季度的每股收益估计(EPS)增长率&#x3D;负(越高越好)</li>
+<li>销售增长率Q&#x2F;Q(当季&#x2F;上季) &lt; 10%(越高越好)</li>
+<li>每股收益增长率Q&#x2F;Q(当季&#x2F;上季) &lt; 10%(越高越好)</li>
+</ul>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
     
-    <a href="/clear-history-of-git.html">
-      <header>
-        <h2 class="font-bold text-xl">
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%8A%95%E8%B5%84%E7%90%86%E8%B4%A2/">投资理财</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E8%82%A1%E7%A5%A8%E6%8A%95%E8%B5%84/">股票投资</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/price-action-strategy.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          价格行为交易策略
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/clear-history-of-git.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
           清空Git仓库全部历史记录
-        </h2>
-      </header>
-      <section class="text-gray-400 my-1 text-sm time">
-        <p class="line-clamp-4">
-          
-        </p>
-        <p class="line-clamp-4">
-          10月 29
-          ·
-          1 min
-        </p>
-      </section>
-    </a>
-  
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
     
-    
-    <a href="/high-dividend-strategy.html">
-      <header>
-        <h2 class="font-bold text-xl">
-          高股息择时策略
-        </h2>
-      </header>
-      <section class="text-gray-400 my-1 text-sm time">
-        <p class="line-clamp-4">
-          
-        </p>
-        <p class="line-clamp-4">
-          10月 05
-          ·
-          1 min
-        </p>
-      </section>
-    </a>
-  
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
 </section>
 
   </main>

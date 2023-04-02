@@ -33,7 +33,7 @@
   <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
 
 
-<title>数字的可预测性 | Xiongfei Shi</title>
+<title>关于投资框架的思考 | Xiongfei Shi</title>
 
 
 
@@ -198,66 +198,240 @@
   <main class="p-12">
     <!-- toc -->
 
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
 <section class="px-6 max-w-prose mx-auto md:px-0">
   <!-- header -->
   <header class="overflow-hidden pt-6 pb-6 md:pt-12">
     <div class="pt-4 md:pt-6">
       <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
-        数字的可预测性
+        关于投资框架的思考
       </h1>
       <p class="mb-6">
         
       </p>
       <div>
         <section class="flex items-center gap-3 text-sm">
-          <time>2019-04-04 22:56:00</time>
+          <time>2020-06-21 21:45:11</time>
           <span class="text-gray-400">·</span>
-          <span>1 min</span>
+          <span>3 min</span>
           <span class="text-gray-400">·</span>
-          <span>515 words</span>
+          <span>962 words</span>
         </section>
       </div>
     </div>
   </header>
   <!-- content -->
   <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><ul>
-<li><p>任何整数乘以10，在数字后加个0即可；乘以100，加2个0；</p>
-</li>
-<li><p>如果一个数字的个位能被2整除，不论他有多少位，它都是偶数；</p>
-</li>
-<li><p>如果一个整数的个位是0或5，它必能被5整除；</p>
-</li>
-<li><p>两个奇数之和为偶数；</p>
-</li>
-<li><p>如果一个数的各位相加之和能被3整除，则此数必能被3整除；（这样你可以一眼看出287511能被3整除）</p>
-</li>
-<li><p>类似的，如果一个数的各位之和能被9整除，则此数必能被9整除；</p>
-</li>
-<li><p>如果一个数的末3位除以4后结果是偶数，则此数必能被8整除；</p>
-</li>
-<li><p>把一个数去掉末位后再减去末位数的两倍，重复以上步骤直到只剩一位数。如果剩下的是7、0或者-7，那么此数必能被7整除。</p>
-</li>
-<li><p>用0,1,2,3,4,5组成一个4位数，要求每一位都不一样，请问能组成多少个四位数？</p>
-<ul>
-<li>千位：可取1~5，5个数</li>
-<li>百位：去掉千位一个数，可取5个数</li>
-<li>百位：去掉千位一个数，可取5个数</li>
-<li>十位：去掉千位和百位两个数，可取4个数</li>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="股利折现模型-DDM"><a href="#股利折现模型-DDM" class="headerlink" title="股利折现模型(DDM)"></a>股利折现模型(DDM)</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">股价 = 股利 / (折现率 - 股利增长率)</span><br></pre></td></tr></table></figure>
+
+<h2 id="如何选出优质股票"><a href="#如何选出优质股票" class="headerlink" title="如何选出优质股票"></a>如何选出优质股票</h2><ul>
+<li>现金流量 &#x2F; 总资产 &gt; 10%</li>
+<li>ROE &gt; 15%</li>
+<li>营业利润增长率 &gt; 20%</li>
+<li>市盈率P&#x2F;E &lt; 20</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">5 * 5 * 4 * 3 = 300</span><br></pre></td></tr></table></figure>
+<h2 id="宏观经济分析框架"><a href="#宏观经济分析框架" class="headerlink" title="宏观经济分析框架"></a>宏观经济分析框架</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GDP = 消费 + 投资 + 进出口 + 政府开支</span><br></pre></td></tr></table></figure>
+
+<h2 id="宏观经济基本面"><a href="#宏观经济基本面" class="headerlink" title="宏观经济基本面"></a>宏观经济基本面</h2><ul>
+<li><p>经济总量</p>
 </li>
-<li><p>小明有200个淘公仔，小梅有20个电脑包，每次小明给小梅6个淘公仔，小梅就给小明1个电脑包，经过多少次交互后，小明手中的淘公仔的个数是小梅手中电脑包数量的11倍？</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">200 - 6n = 11 * (20 - n)</span><br><span class="line">n = 4</span><br></pre></td></tr></table></figure>
+<li><p>GDP</p>
 </li>
-<li><p>天气预报说明天降水概率是84%，假设降水和时间无关，请问明天中午12点之前就降水的概率是多大？</p>
+<li><p>PMI：采购经理指数</p>
+</li>
+<li><p>消费</p>
+</li>
+<li><p>价格水平</p>
 <ul>
-<li>假设上午不降水的概率为x，下午不降水的概率为y</li>
-<li>第二天不降水的概率为：x * y &#x3D; 0.16</li>
-<li>降水和时间无关，所以上下午的不降水概率相等，因此：x &#x3D; y &#x3D; sqrt(0.16) &#x3D; 0.4</li>
-<li>上午不降水的概率为: 1 - x &#x3D; 0.6</li>
+<li>CPI、PPI</li>
+<li>经济活动和货币政策的重要指示器</li>
 </ul>
 </li>
+<li><p>总消费</p>
+</li>
+<li><p>投资</p>
+</li>
+<li><p>固定资产投资增长率</p>
+</li>
+<li><p>工业附加值的增长率</p>
+</li>
+<li><p>银行贷款</p>
+</li>
+<li><p>不动产的价格&#x2F;存量</p>
+</li>
+<li><p>大宗商品：如水泥、钢铁等价格</p>
+</li>
+<li><p>货币供给</p>
+</li>
+<li><p>进出口</p>
+</li>
+<li><p>进口</p>
+</li>
+<li><p>出口</p>
+</li>
+<li><p>贸易赤字&#x2F;贸易盈余</p>
+</li>
+</ul>
+<h2 id="政府和政策"><a href="#政府和政策" class="headerlink" title="政府和政策"></a>政府和政策</h2><ul>
+<li><p>货币政策和财政政策</p>
+</li>
+<li><p>扩张性政策通常会导致股市上涨</p>
+</li>
+<li><p>经济改革和政治改革</p>
+</li>
+<li><p>政治改革和经济改革经常创造出巨大的投资机会</p>
+</li>
+<li><p>政治稳定性和社会稳定性</p>
+</li>
+<li><p>不稳定的政治环境或社会环境会损伤投资者信心</p>
+</li>
+<li><p>不过，政治动荡或社会动荡可能会带来巨大的投资机会</p>
+</li>
+</ul>
+<h2 id="资本市场"><a href="#资本市场" class="headerlink" title="资本市场"></a>资本市场</h2><ul>
+<li><p>流动性充足度</p>
+</li>
+<li><p>市场流动性对于支持股票价格具有重要作用</p>
+</li>
+<li><p>市场流动性在季末、春节前夕会趋紧</p>
+</li>
+<li><p>主要衡量：央行公开市场操作、SHIBOR和交易所逆回购利率</p>
+</li>
+<li><p>市场改革</p>
+</li>
+<li><p>有助于提升监管、披露、交易效率</p>
+</li>
+<li><p>有助于改善公司治理水平</p>
+</li>
+<li><p>有助于保护中小股东利益</p>
+</li>
+<li><p>改革红利，足以成为牛市的动力</p>
+</li>
+<li><p>投资者情绪</p>
+</li>
+<li><p>市场情绪反映的是投资者对于投资的意愿程度和积极性</p>
+<ul>
+<li>过高的市场情绪容易导致泡沫</li>
+<li>过低的市场情绪导致市场萎靡</li>
+</ul>
+</li>
+<li><p>新增开户数</p>
+</li>
+<li><p>成交金额</p>
+</li>
+<li><p>融资融券比</p>
+</li>
+<li><p>市场估值</p>
+</li>
+<li><p>优选市净率，而不是市盈率</p>
+<ul>
+<li>适用范围广</li>
+<li>极值更少</li>
+<li>预测收益能力强</li>
+</ul>
+</li>
+</ul>
+<h2 id="经济周期的四个阶段"><a href="#经济周期的四个阶段" class="headerlink" title="经济周期的四个阶段"></a>经济周期的四个阶段</h2><ul>
+<li><p>衰退</p>
+</li>
+<li><p>GDP增长率迟缓</p>
+</li>
+<li><p>生产力过剩，大宗商品价格下降促使通胀率下降</p>
+</li>
+<li><p>企业利润微薄，实际收益率下降</p>
+</li>
+<li><p>GDP增长下行，CPI下行</p>
+</li>
+<li><p>复苏</p>
+</li>
+<li><p>宽松政策开始奏效</p>
+</li>
+<li><p>GDP增长开始加速</p>
+</li>
+<li><p>不过通胀率会持续下降</p>
+</li>
+<li><p>企业盈利迅速恢复</p>
+</li>
+<li><p>GDP增长上行，CPI下行</p>
+</li>
+<li><p>过热</p>
+</li>
+<li><p>产出增长开始放缓</p>
+</li>
+<li><p>产能受限</p>
+</li>
+<li><p>通胀率上升</p>
+</li>
+<li><p>央行加息使过热的经济回到可持续增长路径</p>
+</li>
+<li><p>GDP增长上行，CPI上行</p>
+</li>
+<li><p>滞胀</p>
+</li>
+<li><p>GDP增长率低于趋势增长率，但通货膨胀率持续上升</p>
+</li>
+<li><p>生产力下降</p>
+</li>
+<li><p>工资、价格螺旋式上升，公司提高价格以保护其利润边际</p>
+</li>
+<li><p>只有急速上升的失业率才可以打破这种恶性循环</p>
+</li>
+<li><p>通胀太高，央行也不愿意放松货币政策</p>
+</li>
+<li><p>GDP增长下行，CPI上行</p>
+</li>
+</ul>
+<h2 id="美林时钟"><a href="#美林时钟" class="headerlink" title="美林时钟"></a>美林时钟</h2><table>
+<thead>
+<tr>
+<th>经济阶段</th>
+<th>GDP增长</th>
+<th>CPI</th>
+<th>资产配置</th>
+<th>股票择时</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>衰退期</td>
+<td>下降</td>
+<td>下降</td>
+<td>债券</td>
+<td>现金</td>
+</tr>
+<tr>
+<td>复苏期</td>
+<td>上升</td>
+<td>下降</td>
+<td>股票</td>
+<td>股票</td>
+</tr>
+<tr>
+<td>过热期</td>
+<td>上升</td>
+<td>上升</td>
+<td>大宗商品</td>
+<td>股票</td>
+</tr>
+<tr>
+<td>滞胀期</td>
+<td>下降</td>
+<td>上升</td>
+<td>现金</td>
+<td>现金</td>
+</tr>
+</tbody></table>
+<h2 id="通货膨胀利用CPI"><a href="#通货膨胀利用CPI" class="headerlink" title="通货膨胀利用CPI"></a>通货膨胀利用CPI</h2><h2 id="经济增长用GDP缺口，而不是GDP增长率"><a href="#经济增长用GDP缺口，而不是GDP增长率" class="headerlink" title="经济增长用GDP缺口，而不是GDP增长率"></a>经济增长用GDP缺口，而不是GDP增长率</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GDP缺口 = GDP增长率 - GDP增长率的趋势</span><br></pre></td></tr></table></figure>
+
+<h2 id="GDP增长率的趋势，代表人们对GDP增长率的预期"><a href="#GDP增长率的趋势，代表人们对GDP增长率的预期" class="headerlink" title="GDP增长率的趋势，代表人们对GDP增长率的预期"></a>GDP增长率的趋势，代表人们对GDP增长率的预期</h2><ul>
+<li>GDP缺口为正：GDP超预期增长，利好</li>
+<li>GDP缺口为负：GDP增长低于预期，利空</li>
+</ul>
+<h2 id="GDP增长率缺口-x3D-GDP增长率-GDP趋势增长率"><a href="#GDP增长率缺口-x3D-GDP增长率-GDP趋势增长率" class="headerlink" title="GDP增长率缺口 &#x3D; GDP增长率 - GDP趋势增长率"></a>GDP增长率缺口 &#x3D; GDP增长率 - GDP趋势增长率</h2><ul>
+<li>GDP增长率（季度）指的是和去年同季相比的增长率（同比增长）</li>
+<li>用HP滤波法来估计GDP趋势增长率</li>
 </ul>
 
   </article>
@@ -266,11 +440,19 @@
     
       
         <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
-          <a href="/tags/%E6%9D%82%E8%AE%B0/">杂记</a>
+          <a href="/tags/%E6%8A%95%E8%B5%84%E7%90%86%E8%B4%A2/">投资理财</a>
         </span>
       
         <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
-          <a href="/tags/%E6%95%B0%E5%AD%A6/">数学</a>
+          <a href="/tags/%E8%82%A1%E7%A5%A8%E6%8A%95%E8%B5%84/">股票投资</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%9C%9F%E8%B4%A7%E6%8A%95%E8%B5%84/">期货投资</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93/">量化交易</a>
         </span>
       
     
@@ -279,16 +461,16 @@
   <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
     <div>
       
-        <a href="/investment-wisdom-in-tao-te-jing.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+        <a href="/windows-install-ocaml.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
           <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
-          《道德经》中的投资智慧
+          Windows安装WSL+OCaml开发环境
         </a>
       
     </div>
     <div>
       
-        <a href="/yum-repo.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
-          YUM添加第三方软件仓库
+        <a href="/value-stock-selection-strategy.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          价值选股策略
           <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
         </a>
       

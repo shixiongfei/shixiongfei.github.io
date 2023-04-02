@@ -33,7 +33,7 @@
   <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
 
 
-<title>归档: 2020/10 | Xiongfei Shi</title>
+<title>指数定投交易策略 | Xiongfei Shi</title>
 
 
 
@@ -196,61 +196,177 @@
 </div>
 
   <main class="p-12">
-    <section class="px-6 max-w-prose mx-auto gap-12 grid grid-cols-1">
-  <div class="flex flex-col h-48 items-center justify-center">
-    <h1 class="site-title text-4xl leading-relaxed">
-      Xiongfei Shi
-    </h1>
-    <p class="text-gray-500 mt-2">
-      LESS is MORE
-    </p>
-  </div>
-  
-  
-    
-    
-      <div class="relative pointer-events-none">
-        <span class="text-9xl opacity-10 absolute -left-11 -top-6 font-bold">2020</span>
+    <!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        指数定投交易策略
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2021-10-15 17:25:49</time>
+          <span class="text-gray-400">·</span>
+          <span>3 min</span>
+          <span class="text-gray-400">·</span>
+          <span>952 words</span>
+        </section>
       </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="交易框架"><a href="#交易框架" class="headerlink" title="交易框架"></a>交易框架</h2><p>指数基金为投资标的</p>
+<p>动态仓位管理</p>
+<p>止盈不止损</p>
+<p>投资目标赚取市场平均收益</p>
+<h2 id="数据计算"><a href="#数据计算" class="headerlink" title="数据计算"></a>数据计算</h2><h3 id="巴菲特指数"><a href="#巴菲特指数" class="headerlink" title="巴菲特指数"></a>巴菲特指数</h3><p>计算方法：国家股市总市值 &#x2F; 国民生产总值(GDP)</p>
+<p>主要用途：评估整体股市的热度</p>
+<ul>
+<li><code>&gt; 100% 表示股市过热</code></li>
+<li><code>&lt; 50% 表示股市被低估</code></li>
+<li><code>70% ~ 80% 左右是合理估值</code></li>
+</ul>
+<p>1889年日本牛市巅峰时，巴菲特指标达到146%</p>
+<p>2000年英国牛市巅峰时，巴菲特指标达到188%</p>
+<p>2000年法国牛市巅峰时，巴菲特指标达到103%</p>
+<p>2007年韩国牛市巅峰时，巴菲特指标达到107%</p>
+<p>2007年中国A股牛市巅峰时，巴菲特指标达到136%</p>
+<p>2015年中国A股牛市巅峰时，巴菲特指标达到122%</p>
+<h3 id="指数四分位"><a href="#指数四分位" class="headerlink" title="指数四分位"></a>指数四分位</h3><p>计算方法：取至少过去10年的平均市盈率，并计算四分位(n+1法)</p>
+<p>主要用途：估计标的指数的估值水平</p>
+<ul>
+<li>根据四分位计算出市盈率的5个值，分别是最低，1&#x2F;4位, 1&#x2F;2位, 3&#x2F;4位，最高</li>
+<li>低于1&#x2F;4位为低估</li>
+<li>高于3&#x2F;4位为高估</li>
+</ul>
+<h4 id="四分位计算公式有2种，假定有n个数已由小到大排列好"><a href="#四分位计算公式有2种，假定有n个数已由小到大排列好" class="headerlink" title="四分位计算公式有2种，假定有n个数已由小到大排列好"></a>四分位计算公式有2种，假定有n个数已由小到大排列好</h4><p>n + 1 方法</p>
+<ul>
+<li>Q1 &#x3D; (n + 1) &#x2F; 4</li>
+<li>Q2 &#x3D; (2 * (n + 1)) &#x2F; 4 &#x3D; (n + 1) &#x2F; 2</li>
+<li>Q3 &#x3D; (3 * (n + 1) &#x2F; 4</li>
+</ul>
+<p>n - 1 方法</p>
+<ul>
+<li>Q1 &#x3D; 1 + ((n - 1) &#x2F; 4)</li>
+<li>Q2 &#x3D; 1 + ((2 * (n - 1)) &#x2F; 4) &#x3D; 1 + ((n - 1) &#x2F; 2)</li>
+<li>Q3 &#x3D; 1 + (3 * (n - 1)) &#x2F; 4</li>
+</ul>
+<h3 id="指数偏离度"><a href="#指数偏离度" class="headerlink" title="指数偏离度"></a>指数偏离度</h3><p>计算公式：((T-1时收盘价 &#x2F; T日时N天平均线) - 1) * 100%</p>
+<ul>
+<li>N天平均线取240（一年）</li>
+<li>均线一般选择有180天、250天、500天等</li>
+</ul>
+<p>主要用途：计算网格区间</p>
+<ul>
+<li>按5%一档计算网格</li>
+</ul>
+<p>定投金额计算：实际扣款金额 &#x3D; 基础金额 * (1 + 档位参数 * 级差)</p>
+<ul>
+<li>级差可以设为：10%, 20%, 30%</li>
+<li>分别对应180天，250天，500天均线</li>
+</ul>
+<h3 id="指数盈利收益率-E-x2F-P"><a href="#指数盈利收益率-E-x2F-P" class="headerlink" title="指数盈利收益率(E&#x2F;P)"></a>指数盈利收益率(E&#x2F;P)</h3><p>计算方法：指数PE的倒数（对于股票来说是公司盈利 &#x2F; 公司市值）</p>
+<ul>
+<li>例如市盈率是8，那盈利收益率就是12.5%</li>
+</ul>
+<p>主要用途：辅助计算指数投资价值</p>
+<ul>
+<li>盈利收益率&gt;10%时，分批投资</li>
+<li>盈利收益率&lt;10%，&gt;6.4%，坚定持有已买入的份额</li>
+<li>&lt; 6.4%时，分批卖出</li>
+</ul>
+<p>实际定投金额 &#x3D; 预期定投金额 * (当月盈利收益率 &#x2F; 首次盈利收益率)</p>
+<h2 id="仓位管理"><a href="#仓位管理" class="headerlink" title="仓位管理"></a>仓位管理</h2><p>默认50%中性仓位</p>
+<p>仓位最大值90%</p>
+<p>仓位最小值10%</p>
+<p>巴菲特指数进入低估阶段时，仓位+10%</p>
+<p>指数分位低于1&#x2F;4时，仓位+10%</p>
+<p>指数偏离度每向下偏离5%，仓位+5%</p>
+<p>指数盈利收益率&gt;10%，仓位+5%</p>
+<p>巴菲特指数由高估回归到合理区间时，仓位+10%</p>
+<p>指数分位由高估回归到合理区间时，仓位+10%</p>
+<p>巴菲特指数由低估回归到合理区间时，仓位-10%</p>
+<p>指数分位由低估回归到合理区间时，仓位-10%</p>
+<p>巴菲特指数进入高估阶段，仓位-10%</p>
+<p>指数分位高于3&#x2F;4时，仓位-10%</p>
+<p>指数偏离度每向上偏离5%，仓位-5%</p>
+<p>指数盈利收益率&lt;6.4%，仓位-10%</p>
+<h2 id="交易策略"><a href="#交易策略" class="headerlink" title="交易策略"></a>交易策略</h2><p>采用动态仓位，周定投策略</p>
+<p>遇到节假日则跳过当期策略</p>
+<p>每周三上午9点整计算整体仓位比例变化，确定目标仓位比例</p>
+<p>10点整计算账户盈亏情况，确定与目标市值的差额</p>
+<p>卖出或买入差额部分，如果差额 &lt; 5% 则忽略</p>
+<p>每日下午2点整，结余资金全部买入国债逆回购</p>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
     
-    <a href="/clear-history-of-git.html">
-      <header>
-        <h2 class="font-bold text-xl">
-          清空Git仓库全部历史记录
-        </h2>
-      </header>
-      <section class="text-gray-400 my-1 text-sm time">
-        <p class="line-clamp-4">
-          
-        </p>
-        <p class="line-clamp-4">
-          10月 29
-          ·
-          1 min
-        </p>
-      </section>
-    </a>
-  
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%8A%95%E8%B5%84%E7%90%86%E8%B4%A2/">投资理财</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E9%87%8F%E5%8C%96%E4%BA%A4%E6%98%93/">量化交易</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E5%9F%BA%E9%87%91%E6%8A%95%E8%B5%84/">基金投资</a>
+        </span>
+      
     
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/git-clear-delete-commit.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          干净的删除Git Commit记录
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/mean-regression-strategy.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          均值回归系统
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
     
-    <a href="/high-dividend-strategy.html">
-      <header>
-        <h2 class="font-bold text-xl">
-          高股息择时策略
-        </h2>
-      </header>
-      <section class="text-gray-400 my-1 text-sm time">
-        <p class="line-clamp-4">
-          
-        </p>
-        <p class="line-clamp-4">
-          10月 05
-          ·
-          1 min
-        </p>
-      </section>
-    </a>
-  
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
 </section>
 
   </main>

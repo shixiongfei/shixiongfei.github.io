@@ -33,7 +33,7 @@
   <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
 
 
-<title>归档: 2020/10 | Xiongfei Shi</title>
+<title>高股息择时策略 | Xiongfei Shi</title>
 
 
 
@@ -196,61 +196,114 @@
 </div>
 
   <main class="p-12">
-    <section class="px-6 max-w-prose mx-auto gap-12 grid grid-cols-1">
-  <div class="flex flex-col h-48 items-center justify-center">
-    <h1 class="site-title text-4xl leading-relaxed">
-      Xiongfei Shi
-    </h1>
-    <p class="text-gray-500 mt-2">
-      LESS is MORE
-    </p>
-  </div>
-  
-  
-    
-    
-      <div class="relative pointer-events-none">
-        <span class="text-9xl opacity-10 absolute -left-11 -top-6 font-bold">2020</span>
+    <!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        高股息择时策略
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2020-10-05 22:11:51</time>
+          <span class="text-gray-400">·</span>
+          <span>1 min</span>
+          <span class="text-gray-400">·</span>
+          <span>395 words</span>
+        </section>
       </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="数值计算"><a href="#数值计算" class="headerlink" title="数值计算"></a>数值计算</h2><h3 id="无风险利率"><a href="#无风险利率" class="headerlink" title="无风险利率"></a>无风险利率</h3><p>选取银行定存1年期利率作为无风险市场参考利率</p>
+<p>沪深300股息率与10年期国债利率差值(股市投资价值，资金管理？)</p>
+<h3 id="股息率"><a href="#股息率" class="headerlink" title="股息率"></a>股息率</h3><p>股息率 &#x3D; (过去三个会计年度分红总额 &#x2F; 3) &#x2F; 调整日总市值</p>
+<h3 id="收益率"><a href="#收益率" class="headerlink" title="收益率"></a>收益率</h3><p>收益率 &#x3D; (今收 - 昨收) &#x2F; 昨收</p>
+<h3 id="波动率"><a href="#波动率" class="headerlink" title="波动率"></a>波动率</h3><p>波动率 &#x3D; STD(收益率, 252) * SQRT(252)</p>
+<h3 id="ROE-TTM"><a href="#ROE-TTM" class="headerlink" title="ROE-TTM"></a>ROE-TTM</h3><h2 id="行业"><a href="#行业" class="headerlink" title="行业"></a>行业</h2><p>一般而言，周期性行业的高股息率较为不可靠，随时可能会出现变脸，除非投资者有信心现在正处于行业上升周期，不然选择周期性行业较为不妥。而公用事业行业，如电力、高速公路等行业会较为稳固。</p>
+<h2 id="股池"><a href="#股池" class="headerlink" title="股池"></a>股池</h2><ul>
+<li>按照最近一年（新股为上市以来）的A股日均成交金额由高到低排名，剔除排名靠后 20% 的股票</li>
+<li>剔除 ROE-TTM 小于 0 的股票</li>
+<li>选取过去三年连续现金分红且每年现金股息率均大于 0 的股票</li>
+<li>按照股息率进行降序排序，选取排名靠前的 300 只股票</li>
+<li>再根据波动率进行升序排序，选取排名靠前的 100 只股票</li>
+<li>调整实施时间为每季度调整一次，时间为每年3月、6月、9月 和12月的第二个星期五收盘后的下一交易日</li>
+<li>当周的股息率处于历史分位数 80% 以上，发出信号(思考: 股息率分位数怎么用)</li>
+</ul>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
     
-    <a href="/clear-history-of-git.html">
-      <header>
-        <h2 class="font-bold text-xl">
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%8A%95%E8%B5%84%E7%90%86%E8%B4%A2/">投资理财</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E8%82%A1%E7%A5%A8%E6%8A%95%E8%B5%84/">股票投资</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%8A%95%E8%B5%84%E7%AD%96%E7%95%A5/">投资策略</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E4%BB%B7%E5%80%BC%E6%8A%95%E8%B5%84/">价值投资</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/clear-history-of-git.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
           清空Git仓库全部历史记录
-        </h2>
-      </header>
-      <section class="text-gray-400 my-1 text-sm time">
-        <p class="line-clamp-4">
-          
-        </p>
-        <p class="line-clamp-4">
-          10月 29
-          ·
-          1 min
-        </p>
-      </section>
-    </a>
-  
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/make.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          Make命令教程
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
     
-    
-    <a href="/high-dividend-strategy.html">
-      <header>
-        <h2 class="font-bold text-xl">
-          高股息择时策略
-        </h2>
-      </header>
-      <section class="text-gray-400 my-1 text-sm time">
-        <p class="line-clamp-4">
-          
-        </p>
-        <p class="line-clamp-4">
-          10月 05
-          ·
-          1 min
-        </p>
-      </section>
-    </a>
-  
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
 </section>
 
   </main>

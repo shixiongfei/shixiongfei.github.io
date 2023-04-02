@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>悟缠 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        悟缠
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2022-04-17 23:25:34</time>
+          <span class="text-gray-400">·</span>
+          <span>26 min</span>
+          <span class="text-gray-400">·</span>
+          <span>7.7k words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="股票操作"><a href="#股票操作" class="headerlink" title="股票操作"></a>股票操作</h2><p>股票操作第一原则：建立一套选股标准，只做符合选股标准的股票</p>
+<p>股票选择系统，应该由3个独立的选择程序构成。例如：技术指标、比价关系、基本面</p>
+<p>技术指标有相同的量价输入，因此不是相互独立的。</p>
+<p>技术分析最核心的思想就是分类。</p>
+<p>任何技术指标，只是把市场进行完全分类后指出在这个技术指标的视角下，什么是能搞的，什么是不能搞的，如此而已。</p>
+<p>至于这个指标对应的情况是否百分百反映在实际的走势上，这个问题的答案肯定是否定的。</p>
+<h3 id="任何单独的选股程序都存在失效的问题。如何有效的规避这个问题？"><a href="#任何单独的选股程序都存在失效的问题。如何有效的规避这个问题？" class="headerlink" title="任何单独的选股程序都存在失效的问题。如何有效的规避这个问题？"></a>任何单独的选股程序都存在失效的问题。如何有效的规避这个问题？</h3><p>首先资金管理，要建立一套严格的分批介入和退出的程序。</p>
+<p>其次建立一套严格的股票选择程序组合，提高获胜概率</p>
+<p>分析图形，要从高看到低，低级别走势的意义，是在高级别意义的彰显后才能彰显</p>
+<h2 id="将参与的股票限制在能搞的范围内"><a href="#将参与的股票限制在能搞的范围内" class="headerlink" title="将参与的股票限制在能搞的范围内"></a>将参与的股票限制在能搞的范围内</h2><p>不管任何情况，这是必须遵守的原则。</p>
+<p>可以搞的分类原则，各人可以有所不同。</p>
+<p>例如：中线250天线以及周线上的成交量压力线的突破；资金量不大且短线技术还可以的，可以把250天线改成70天线、35天线，甚至改为30分钟图里的相应均线；</p>
+<p>一支股票涨起来，千万不要随意抛了。中线如果连30天均线都没有跌破，证明走势很强，就要拿着。</p>
+<p>如果你水平高一点，在上涨的时候，根据短线指标可以打短差，这样可以增加资金的利用率，但高位抛掉的，只要中线图形没走坏，回档时一定要买回来，特别那些没出现加速的股票。</p>
+<p>中线的生命线是5周均线，一旦有效跌破将进入中期调整</p>
+<p>中线的顶不是一天炼成的，只有筑顶一定时间后才会出现大阴线。</p>
+<p>而上升途中的大阴线，只会引发多头更凶猛的反扑。</p>
+<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>可以搞的股票应该是多头趋势的启动点上，不同操作级别有着不同的波动范围和持仓时间。所以应该需要有一根均线来区分股票的强弱，只搞强势的票！</p>
+<h4 id="牛熊分界线（日线图）"><a href="#牛熊分界线（日线图）" class="headerlink" title="牛熊分界线（日线图）"></a>牛熊分界线（日线图）</h4><p>中线：250天线</p>
+<p>短线：60天线</p>
+<p>超短：30天线</p>
+<h4 id="操盘级别"><a href="#操盘级别" class="headerlink" title="操盘级别"></a>操盘级别</h4><p>中长线：周线图</p>
+<p>中短线：日线图</p>
+<p>短线：30分钟图</p>
+<p>超短：5分钟图</p>
+<h4 id="介入时机"><a href="#介入时机" class="headerlink" title="介入时机"></a>介入时机</h4><p>介入股票最好在均线粘合的时候</p>
+<p>所以最佳买点应该是5天线和10天线缠绕在牛熊分界线上</p>
+<p>介入时，首先要想好是短线还是中线。</p>
+<p>如果是中线，就要有至少两个月以上的操作期。</p>
+<p>如果是短线，第一、二次冲击年线都是最好的短差机会。</p>
+<h4 id="抛股票原则"><a href="#抛股票原则" class="headerlink" title="抛股票原则"></a>抛股票原则</h4><p>对于缓慢推升的股票，一旦出现加速上涨的情况，就要时刻注意出货的机会</p>
+<p>对于第一波就火爆上涨的股票，调整后第二波的上涨一旦出现背驰或放巨量的，一定要小心，找机会走人。</p>
+<h2 id="牛市中寻找牛股"><a href="#牛市中寻找牛股" class="headerlink" title="牛市中寻找牛股"></a>牛市中寻找牛股</h2><p>放量突破年线然后缩量回调年线的老股</p>
+<p>牛市第一波涨的就是成分股，所以牛市中一定要严重关注成分股</p>
+<p>板块轮动都是在大盘调整中启动的</p>
+<p>调整正是寻找下一次上涨好股票的时候，至少可以利用调整换股或打差价</p>
+<p>避开大的回档，借回档踏准轮动节奏</p>
+<h2 id="均线的关系"><a href="#均线的关系" class="headerlink" title="均线的关系"></a>均线的关系</h2><h3 id="飞吻：短期均线略略走平后，继续按原来趋势的方向进行下去"><a href="#飞吻：短期均线略略走平后，继续按原来趋势的方向进行下去" class="headerlink" title="飞吻：短期均线略略走平后，继续按原来趋势的方向进行下去"></a>飞吻：短期均线略略走平后，继续按原来趋势的方向进行下去</h3><p>出现的几率比较少，一般都是在趋势特别强烈的时候，而太火爆的趋势是不太可能太长久的，所以其后的震荡经常出现。</p>
+<h3 id="唇吻：短期均线靠近长期均线但不跌破或升破，然后按原来趋势继续下去"><a href="#唇吻：短期均线靠近长期均线但不跌破或升破，然后按原来趋势继续下去" class="headerlink" title="唇吻：短期均线靠近长期均线但不跌破或升破，然后按原来趋势继续下去"></a>唇吻：短期均线靠近长期均线但不跌破或升破，然后按原来趋势继续下去</h3><p>任何一段基本的趋势过程中最常见到的方式，特别在空头趋势中，基本都是这种方式，一旦出现唇吻反弹基本就该结束了，在多头趋势中，调整结束的概率也很大。但也要预防唇吻变湿吻。</p>
+<h3 id="湿吻：短期均线跌破或升破长期均线，甚至出现反复缠绕，如胶似漆"><a href="#湿吻：短期均线跌破或升破长期均线，甚至出现反复缠绕，如胶似漆" class="headerlink" title="湿吻：短期均线跌破或升破长期均线，甚至出现反复缠绕，如胶似漆"></a>湿吻：短期均线跌破或升破长期均线，甚至出现反复缠绕，如胶似漆</h3><p>一段趋势后出现的较大调整中，还有就是在趋势出现转折时，这种情况也很常见，特别是在空头情况下，如果出现短、中、长各类均线来一个NP的湿吻，那么往往意味着行情要出现重大转折，要变天了，空头要变成多头了。</p>
+<p><strong>注意：</strong> 任何的行情转折，在很大几率上都是由湿吻引发的，这里分两种情况：</p>
+<p>一种是先湿吻，然后按原来趋势来一个大的高潮，制造一个陷阱，再转折</p>
+<p>另一种是反复湿吻，构造一个转折性箱型，其后的高潮，就是体位的转化了</p>
+<p>空头的情况下，一旦出现湿吻，就要密切注意了，特别是这个湿吻是在一个长期空头后出现的，就要更加注意了，其后的下跌往往是介入的良机，因为空头陷阱的概率简直太大了</p>
+<p><strong>必须提醒，这一点对趋势形成的第一次湿吻不成立。但湿吻之后必有高潮，唯一的区别只是体位的区别，关键判断的体位而不是高潮的有无</strong></p>
+<h3 id="吻的概念"><a href="#吻的概念" class="headerlink" title="吻的概念"></a>吻的概念</h3><p>高点、低点是有其级别的，在30分钟图上看到的高点，可能在周线上什么都没看到。为此，必须要均线系统来过滤，也就是前面常说的“吻”的概念，只有在“吻”前后出现的高、低点才有意义</p>
+<h3 id="吻的产生"><a href="#吻的产生" class="headerlink" title="吻的产生"></a>吻的产生</h3><p>如果一个走势，连短线均线都不能突破，那期间出现的高、低点，肯定只是低级别图表上的，在本级别图表没有意义</p>
+<p>当走势突破短期均线却不能突破长期均线，就会形成“飞吻”</p>
+<p>当走势突破长期均线马上形成陷阱，就会形成“唇吻”</p>
+<p>当走势突破长期均线出现一定反复，就会形成“湿吻”</p>
+<p>由此可见，“吻”的分类是基于对原趋势的反抗程度，“飞吻”是基本没有任何反抗力，“唇吻”的力度也一般，而“湿吻”，就意味着力度有了足够的强度，而一切的转折，基本都是从“湿吻”开始的</p>
+<h3 id="转折一般只有两种"><a href="#转折一般只有两种" class="headerlink" title="转折一般只有两种"></a>转折一般只有两种</h3><p>一、“湿吻”后继续原趋势形成陷阱后回头制造出转折</p>
+<p>二、出现盘整，以时间换空间地形成转折</p>
+<p>第一种情况最大的标志就是所谓的背驰了。必须注意：没有趋势，没有背驰。在盘整中是无所谓背驰的，这点是必须特别明确的</p>
+<p>还有一点必须注意的，这里的所有判断都只关系到两条均线与走势，和任何技术指标都无关</p>
+<h2 id="操作系统"><a href="#操作系统" class="headerlink" title="操作系统"></a>操作系统</h2><p>任何妄求在投资中的绝对无风险，都是痴心妄想。</p>
+<p>唯一的办法，就是设置一个系统，使得无位次、“不患”的风险在该系统中成为有位次、“患”的系统，这是长期战胜市场的唯一办法。</p>
+<p>必须根据自己的实际情况，例如资金，操作水平等等，设置一套分类评价系统，然后根据该系统，对所有可能的情况都设置一套相应的应对程序，这样，一切的风险都以一种可操作的方式被操作了。</p>
+<p>而操作者唯一要干的事情，就是一旦出现相应的情况，采取相应的操作。</p>
+<p>对于股票来说，实际操作无非三种：买，卖，持有。当然，在实际中，还有一个量的问题，这和资金管理有关</p>
+<p>那么任何投资操作，都演化成这样一个简单的数学问题：N种完全分类的风险情况，对应三种（买，卖，持有）操作的选择</p>
+<p>短线判断大盘调整的一个简单方法就是沪深指数的背离，一旦出现，调整或至少是震荡将很快发生</p>
+<h3 id="均线系统"><a href="#均线系统" class="headerlink" title="均线系统"></a>均线系统</h3><p>对于一个简单的，5日均线与10日均线构成的买卖系统，首先，两者体位构成一个完全分类，女上位是牛，男上位是熊</p>
+<p>还有一种是互相缠绕的情况，这种情况最终都要演化成女上位或男上位， <strong>只有两种性质：中继或转折</strong></p>
+<p>相应，一个最简单的操作系统就此产生，就是在体位互相缠绕完成后介入，对于多头来说，这样一个系统无非面临两个结果，变为女上位成功，变为男上位失败。</p>
+<p>由于缠绕若是中继就延续原体位，若转折就改变体位，因此对于多头来说， <strong>值得介入的只有两种情况：男上位转折，女上位中继，空头反之</strong></p>
+<p>如果是女上位的情况，一旦出现缠绕，唯一需要应付的就是这缠绕究竟是中继还是转折</p>
+<p>没有任何方法可以百分百确定该问题，但是还有很多方法使得判断的准确率足够高。例如：</p>
+<p>女上位趋势出现的第一次缠绕是中继的可能性极大，如果是第三、四次出现，这个缠绕是转折的可能性就会加大</p>
+<p>还有，出现第一次缠绕前，5日线的走势必须是十分有力的。（不能是疲软的玩意儿，这样的缠绕极大可能是中继）其后至少会有一次上升的过程出现</p>
+<p>缠绕出现前的成交量不能放的过大，一旦过大，骗线出现的几率就会大大增加，如果量突然放太大而又萎缩过快，一般即使没有骗线，缠绕的时间也会增加，而且成交量也会出现两次收缩的情况</p>
+<p><strong>任何不在两个买点买入的行为都是不可以原谅的，因为这是原则的错误，而不是高低的区别</strong></p>
+<p>选择了一个买卖系统，就一定要按照这个原则了</p>
+<p>相应的均线参数可以根据资金量等情况给予调节，资金量越大，参数也相应越大，这要自己好好摸索</p>
+<p>这点对于短线依然有效，只是把日线改为分钟线就可以了</p>
+<p>一旦买入，就一直持有等待第一个卖点，也就是女上位缠绕后出现背驰，以及第二个卖点也就是男上位的第一个缠绕高点把东西卖了，这样就完成了一个完整的操作</p>
+<p><strong>注意：</strong> 如果对背驰已经非常熟悉了，最好当然是第一类买点，否则买的时候一般最好在第二个买点，而卖尽量在第一个卖点，这是买和卖不同的地方。</p>
+<p>第二类买点对背驰不熟悉的人好一点，</p>
+<h3 id="止损"><a href="#止损" class="headerlink" title="止损"></a>止损</h3><p>其实，从来不存在真正的止蚀问题，只存在股票是否依然在能搞的范围内的问题，只有这种意义下才存在止蚀：一只股票的走势从能搞变成不能搞</p>
+<p>唯一退出的原因只是股票的走势已经不能搞了，与盈亏无关</p>
+<p>对于第一个买点，一旦上涨时依然出现男上位的缠绕，那么一定要退出。为什么？</p>
+<p>因为第一个买点买入的基础在于男上位最后一个缠绕后出现背驰，而现在又出现男上位的缠绕，意味着前面引导买入程序启动的缠绕并不是最后一个缠绕，也就是程序判断上出现问题，因此必须退出</p>
+<p>一般情况下，这种退出一定是盈利的，但这并不能成为不退出的理由。甚至不排除这种情况，就是退出后，缠绕经过以时间换空间的折腾慢慢变成女上位，最后还大幅上涨了（这种情况即使出现，也可以根据第二个买点的原则重新介入，所以真正的机会并不会丢失），但即使这样，也绝对不能因为这种可能的情况有侥幸心理</p>
+<p>因为还有更大的可能是缠绕后出现加速下跌</p>
+<p>对于第二个买点，一旦该缠绕中出现跌破前面男上位的最低位，就意味着买入程序出现问题，必须在任何一个反弹中把股票出清</p>
+<p>在这种情况下，不排除后面出现上涨，但理由如上，任何操作，没有百分百准确的，一旦出现特殊情况，一定要先退出来，这是在投资生涯中能长期存活的最重要一点</p>
+<p><strong>投资是一个长期的事业，别抱着赌博的心态企图一次成功，只要有这种心态，最终的结局一定悲惨</strong></p>
+<h3 id="第一类买点：男上位最后一吻后出现的背驰式下跌构成"><a href="#第一类买点：男上位最后一吻后出现的背驰式下跌构成" class="headerlink" title="第一类买点：男上位最后一吻后出现的背驰式下跌构成"></a>第一类买点：男上位最后一吻后出现的背驰式下跌构成</h3><p>男上位寻找最后一次缠绕的转折情况，其后如果出现急跌却背驰，那是最佳的买入时机</p>
+<p>然而，没有人百分百确认那是最后一次缠绕，一般，男上位后的第一次缠绕肯定不是，从第二次开始都有可能</p>
+<p>如何判断，最有力的就是利用好背驰制造的空头陷阱</p>
+<p>风险在于：把中继判断为转折，把背驰判断错了</p>
+<h3 id="第二类买点：女上位第一吻后出现的下跌构成"><a href="#第二类买点：女上位第一吻后出现的下跌构成" class="headerlink" title="第二类买点：女上位第一吻后出现的下跌构成"></a>第二类买点：女上位第一吻后出现的下跌构成</h3><p>女上位后第一次缠绕形成的低位</p>
+<p>风险在于：把转折判断成中继</p>
+<p>第二类买点如何精确地把握，如果在大级别女上位后第一吻的调整不构成明显的下跌走势，因为对于第二类买点的背驰走法就无法出现，这时候就要降低K线级别，从次级别图上寻找最佳买点</p>
+<h4 id="定律1：-大级别的第二类买点由次一级别相应走势的第一类买点构成"><a href="#定律1：-大级别的第二类买点由次一级别相应走势的第一类买点构成" class="headerlink" title="定律1： 大级别的第二类买点由次一级别相应走势的第一类买点构成"></a>定律1： 大级别的第二类买点由次一级别相应走势的第一类买点构成</h4><p>例如：周线上的第二类买点由日线上相应走势的第一类买点构成</p>
+<p>有了这个缠中说缠买点定律，所有的买点都可以归结到第一类买点</p>
+<h3 id="背驰"><a href="#背驰" class="headerlink" title="背驰"></a>背驰</h3><p>如何判断背驰走势结束，最简单的就是当MACD绿柱子缩短，而股价继续创新低</p>
+<p>对于MACD单纯看柱子上的背驰还不行，还要看黄线DEA和白线DIFF的走势</p>
+<p>黄白线在0轴之上就是多头行情，之下就是空头行情</p>
+<h4 id="缠中说缠趋势力度"><a href="#缠中说缠趋势力度" class="headerlink" title="缠中说缠趋势力度"></a>缠中说缠趋势力度</h4><p>前一“吻”的结束与后一“吻”开始由短线均线与长期均线相交所形成的面积</p>
+<p>在前后两个同向趋势中，当缠中说缠趋势力度比上一次缠中说缠趋势力度要弱，就形成背驰</p>
+<h5 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h5><p>按这个定义，是最稳妥的办法，但唯一的缺点是必须等再次接吻后才能判断，这时候，走势离真正的转折点会已经有一段距离了。</p>
+<p>如何解决这个问题：第一个办法，看低一级别的图，从中按该种办法找出相应的转折点。这样和真正的低点基本没太大的距离</p>
+<p>还有一个办法，技巧比较高，首先在定义个概念</p>
+<h4 id="缠中说缠趋势平均力度"><a href="#缠中说缠趋势平均力度" class="headerlink" title="缠中说缠趋势平均力度"></a>缠中说缠趋势平均力度</h4><p>当下与前一“吻”的结束时短线均线与长期均线形成的面积除以时间</p>
+<p>因为这个概念是即时的，马上就可以判断当下的缠中说缠趋势平均力度与前一次缠中说缠趋势平均力度的强弱对比</p>
+<p>一旦这次比上次弱，就可以判断背驰即将形成，然后再根据短线均线与长期均线的距离，一旦延伸长度缩短，就意味着真正的低部马上形成</p>
+<p>按这种方法，真正的转折点基本就可以完全同时抓住</p>
+<h5 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h5><p>风险稍微大点，且需要的技巧要高点，对市场感觉要好点</p>
+<h4 id="MACD定律"><a href="#MACD定律" class="headerlink" title="MACD定律"></a>MACD定律</h4><p>第一类买点都是在0轴之下背驰形成的，第二类买点都是第一次上0轴后回抽确认形成的</p>
+<p>卖点行情就反过来</p>
+<h3 id="短差程序"><a href="#短差程序" class="headerlink" title="短差程序"></a>短差程序</h3><p>大级别买点介入的，在次级别第一类卖点出现时，可以先减仓，其后在次级别第一类买点出现时回补</p>
+<p>列入：对于周线买点介入的，就应该利用日线的第一类卖点减仓，其后在第一类买点回补</p>
+<p>日线上的第一类买点，可能两年才出现一次，而5分钟上的，可能两天就能出现一次</p>
+<p>一定要注意级别</p>
+<ol>
+<li><p>离开级别，无所谓趋势</p>
+</li>
+<li><p>没有趋势，没有背驰</p>
+</li>
+<li><p>趋势、盘整等，都必须要图上有明显的高低点。没有明显高低点的，只能构成趋势或者盘整中的一段</p>
+</li>
+</ol>
+<h2 id="趋势"><a href="#趋势" class="headerlink" title="趋势"></a>趋势</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>市场走势只有三种分类：上涨，下跌，盘整</p>
+<p>所有上涨、下跌、盘整都建立在一定的周期图表上</p>
+<h4 id="上涨"><a href="#上涨" class="headerlink" title="上涨"></a>上涨</h4><p>最近一个高点比前一高点高，且最近一个低点比前一低点高</p>
+<h4 id="下跌"><a href="#下跌" class="headerlink" title="下跌"></a>下跌</h4><p>最近一个高点比前一高点低，且最近一个低点比前一低点低</p>
+<h4 id="盘整"><a href="#盘整" class="headerlink" title="盘整"></a>盘整</h4><p>最近一个高点比前一高点高，且最近一个低点比前一低点低</p>
+<p>最近一个高点比前一高点低，且最近一个低点比前一低点高</p>
+<h3 id="走势"><a href="#走势" class="headerlink" title="走势"></a>走势</h3><p>上涨、下跌、盘整三种基本走势，有六种组合可能代表着三类不同的走势：</p>
+<h4 id="陷阱式"><a href="#陷阱式" class="headerlink" title="陷阱式"></a>陷阱式</h4><p>上涨 + 下跌</p>
+<p>下跌 + 上涨</p>
+<h4 id="反转式"><a href="#反转式" class="headerlink" title="反转式"></a>反转式</h4><p>上涨 + 盘整 + 下跌</p>
+<p>下跌 + 盘整 + 上涨</p>
+<h4 id="中继式"><a href="#中继式" class="headerlink" title="中继式"></a>中继式</h4><p>上涨 + 盘整 + 上涨</p>
+<p>下跌 + 盘整 + 下跌</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>有买入价值的</p>
+<p>下跌 + 上涨</p>
+<p>下跌 + 盘整 + 上涨</p>
+<p>上涨 + 盘整 + 上涨</p>
+<p>没有买入价值的</p>
+<p>上涨 + 下跌</p>
+<p>上涨 + 盘整 + 下跌</p>
+<p>下跌 + 盘整 + 下跌</p>
+<p>由此不难发现，如果在一个下跌走势中买入，其后只会遇到一种没买入价值的走势，就是下跌 + 盘整 + 下跌，这比在上涨时买入要少一种情况</p>
+<p>而在下跌时买入，唯一需要躲避的风险有两个</p>
+<p>一、该段跌势未尽</p>
+<p>二、该段跌势虽尽，但盘整后出现下一轮跌势</p>
+<p>对下跌走势用背驰来找第一买点，就是要避开上面的第一个风险</p>
+<p>而当买入后，将面对的是第二个风险。如何避开？就是其后一旦出现盘整走势，必须先减仓退出</p>
+<p>为什么不全部退出，因为盘整后出现的结果有两种：上涨、下跌，一旦出现下跌就意味着亏损，而且盘整也会耗费时间，对于中小资金来说，完全没必要</p>
+<p>根据上面分析，可以马上设计一种行之有效的买卖方法：在第一类买点买入后，一旦出现盘整走势，无论后面如何，都马上退出</p>
+<p>这种买卖法的实质，就是在六种最基本的走势中，只参与唯一的一种：下跌 + 上涨</p>
+<p>对于资金量不大的，这是最有效的一种买卖方法</p>
+<h4 id="下跌-上涨"><a href="#下跌-上涨" class="headerlink" title="下跌 + 上涨"></a>下跌 + 上涨</h4><p>连接下跌前面的可能走势只有两种：上涨和盘整</p>
+<p>如果是上涨 + 下跌 + 上涨，那意味着这种走势在上一级别的图形中是一个盘整，因此这种走势可以归纳在盘整的操作中</p>
+<p>换言之，对于只操作下跌 + 上涨买卖的，上涨 + 下跌 + 上涨走势不考虑，也就是说，当你希望用下跌 + 上涨买卖方法介入一只出现第一类买点的股票，如果其前面的走势是上涨 + 下跌，则不考虑</p>
+<p>注意：不考虑不意味着这种情况没有盈利的可能，而只是这种情况可以归纳到盘整类型的操作中，但下跌 + 上涨买卖方法是拒绝参与盘整的</p>
+<p>如此一来，按该种方法，可选择的股票又少了，只剩下这样一种情况，就是 <strong>盘整 + 下跌 + 上涨</strong></p>
+<p>从上面分析可以很清楚地看到，对于下跌 + 上涨买卖方法来说，必须是这样一种情况：就是一个前面是盘整 + 下跌型的走势后出现第一类买点</p>
+<p>显然，这个下跌是跌破前面盘整的，否则就不会构成盘整 + 下跌型，只会仍是盘整</p>
+<p>那么在该盘整前的走势，也只有两种：上涨、下跌。对于上涨 + 盘整 + 下跌的，也实质上构成高一级别的盘整</p>
+<p>因此对于下跌 + 上涨买卖方法来说也不能参与这种情况，因此也就是只剩下这样一种情况：下跌 + 盘整 + 下跌</p>
+<p>综上所述，对于下跌 + 上涨买卖方法来说，对股票的选择就只有一种情况，就是：出现第一类买点且之前走势是下跌 + 盘整 + 下跌类型</p>
+<h5 id="介入的标准程序"><a href="#介入的标准程序" class="headerlink" title="介入的标准程序"></a>介入的标准程序</h5><p>一、首先只选择出现“下跌 + 盘整 + 下跌”走势</p>
+<p>二、在该走势的第二段下跌出现第一类买点时介入</p>
+<p>三、介入后，一旦出现盘整走势，坚决退出。注意，这个退出肯定不会亏钱的，因为可以利用低一级别的第一类卖点退出，是肯定要盈利的</p>
+<p>为什么要退出，因为它不符合“下跌 + 上涨”买卖不参与盘整的标准，盘整的坏处是浪费时间，而且盘整后存在一半的可能是下跌，对于小资金来说，根本没必要参与</p>
+<p>一定要记住，操作一定要按标准来，这样才是最有效率的</p>
+<p>如果买入后不出现盘整，那就要彻底恭喜你了，因为这股票将至少回升到“下跌 + 盘整 + 下跌”的盘整区域，如果在日线或周线上出现这种走势，进而发展成为大黑马的可能性是相当大的</p>
+<h3 id="定律2"><a href="#定律2" class="headerlink" title="定律2"></a>定律2</h3><p>任何非盘整性的转折性上涨，都是在某一级别的“下跌 + 盘整 + 下跌”后形成的。下跌反之</p>
+<p>首先判别是在哪个级别出现趋势，而且是前后两个趋势，然后才有谈论背驰的可能</p>
+<p>再次强调：没有趋势，没有背驰，先把趋势搞明白</p>
+<p>背驰是两个前后趋势之间的比较</p>
+<h3 id="原理1"><a href="#原理1" class="headerlink" title="原理1"></a>原理1</h3><p>对于任何级别的图形，趋势与盘整都是要完成的</p>
+<p>注意，这个原理的重要性，对于技术分析来说，就如同光速不变对于狭义相对论一样重要</p>
+<h2 id="中枢"><a href="#中枢" class="headerlink" title="中枢"></a>中枢</h2><p>任何一个走势的当下，无论前面是盘整还是趋势，都有一个两难的问题：究竟是继续延续还是改变</p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>某级别走势类型中，被至少三个连续次级别走势类型所重叠的部分，称为缠中说缠中枢</p>
+<p>换言之，缠中说缠走势中枢就是至少三个连续次级别走势类型重叠部分所构成</p>
+<p>这里有个递归问题，就是这个级别不能无限下去，就像半吊子哲学胡诌什么“一分为二”，而“分”不是无限的，按照量子力学，物质之分是有极限的，同样级别之次也不可能无限</p>
+<p>在实际之中，对最后不能分解的级别，其缠中说缠走势中枢就不能用“至少三个连续次级别走势类型所重叠”定义，而定义为至少三个该级别单位K线重叠部分</p>
+<p>一般来说，对实际操作，都把这最低的不可分解级别设定为1分钟或5分钟线。当然，也可以设定为1秒钟线，但这都没太大区别</p>
+<h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><h4 id="缠中说缠盘整"><a href="#缠中说缠盘整" class="headerlink" title="缠中说缠盘整"></a>缠中说缠盘整</h4><p>在任何级别的任何走势中，某完成的走势类型只包含一个缠中说缠走势中枢，就称为该级别的缠中说缠盘整</p>
+<h4 id="缠中说缠趋势"><a href="#缠中说缠趋势" class="headerlink" title="缠中说缠趋势"></a>缠中说缠趋势</h4><p>在任何级别的任何走势中，某完成的走势类型至少包含两个以上依次同向的缠中说缠走势中枢，就称为该级别的缠中说缠趋势。</p>
+<p>该方向向上就称为上涨，向下就称为下跌</p>
+<h3 id="原理2"><a href="#原理2" class="headerlink" title="原理2"></a>原理2</h3><p>任何级别任何完成的走势类型，必然包含一个以上的缠中说缠走势中枢</p>
+<h3 id="定理"><a href="#定理" class="headerlink" title="定理"></a>定理</h3><p>由原理一、二以及缠中说缠走势中枢的定义，就可以严格证明</p>
+<p>缠中说缠走势分解定理一：任何级别的任何走势，都可以分解成同级别“盘整”、“下跌”与“上涨”三种走势的连接</p>
+<p>缠中说缠走势分解定理二：任何级别的任何走势类型，都至少由三段以上次级别走势类型构成</p>
+<p>缠中说缠走势中枢定理一：在趋势中，连接两个同级别“缠中说缠走势中枢”的必然是次级别以下级别的走势类型</p>
+<p>缠中说缠走势中枢定理二：在盘整中，无论是离开还是返回“缠中说缠走势中枢”的走势类型必然是次级别以下的</p>
+<p>缠中说缠走势中枢定理三：某级别“缠中说缠走势中枢”的破坏，当且仅当一个次级别走势离开该“缠中说缠走势中枢”后，其后的次级别回抽不重新回到该“缠中说缠走势中枢”内</p>
+<p>这里定理三的两个次级别走势的组合只有三种：趋势 + 盘整，趋势 + 反趋势，盘整 + 反趋势。其中趋势分为上涨和下跌，分别代表上方突破与下方跌破两种情况</p>
+<p>站在实用的角度，最用力的破坏，就是：趋势 + 盘整</p>
+<p>对于围绕中枢的运动，离开中枢是正趋势，返回的是反趋势</p>
+<p>缠中说缠走势级别延续定理一：在更大级别缠中说缠走势中枢产生前，该级别走势类型将延续。也就是说，只能是只具有该级别缠中说缠走势中枢的盘整或趋势的延续</p>
+<p>缠中说缠走势级别延续定理二：更大级别缠中说缠走势中枢产生，当且仅当围绕连续两个同级别缠中说缠走势中枢产生的波动区间产生重叠</p>
+<p>缠中说缠走势中枢中心定理一：走势中枢的延伸等价于任意区间[dn, gn]与[ZD, ZG]有重叠。换言之，若有Zn，使得dn &gt; ZG或gn &lt; ZD，则必然产生高级别的走势中枢或趋势及延续</p>
+<p>缠中说缠走势中枢中心定理二：前后同级别的两个缠中说缠走势中枢，后GG &lt; 前DD等价于下跌极其延续；后DD &gt; 前GG等价于上涨及其延续。后ZG &lt; 前ZD且后GG &gt;&#x3D; 前DD，或后ZD &gt; 前ZG且后DD &lt;&#x3D; 前GG，则等价于形成高级别的走势中枢</p>
+<h3 id="缠中说缠转折定律"><a href="#缠中说缠转折定律" class="headerlink" title="缠中说缠转折定律"></a>缠中说缠转折定律</h3><p>任何由第一、二类买卖点构成的缠中说缠买卖点，都可以归结到不同级别的第一类买卖点</p>
+<p>任何级别的上涨转折都是由某级别的第一类卖点构成的</p>
+<p>任何级别的下跌转折都是由某级别的第一类买点构成的</p>
+<p>注意：这某级别不一定是次级别，因为次级别里可以是第二类买卖点，而且还有这种情况，就是不同级别同时出现第一类买卖点，也就是出现不同级别的同步共振，所以这里只说某级别</p>
+<h3 id="第三类买点"><a href="#第三类买点" class="headerlink" title="第三类买点"></a>第三类买点</h3><p>由定理一，可以得到第三类买卖点定理：一个次级别走势类型向上离开缠中说缠走势中枢，然后以一个次级别的走势类型回试，其低点不跌破ZG，则构成第三类买点；</p>
+<p>一个次级别走势类型向下离开缠中说缠走势中枢，然后以一个次级别的走势类型回抽，其高点不升破ZD，则构成第三类卖点</p>
+<p>注意：第三类买卖点比第一、二类要后知后觉，但如果抓得好，往往不用浪费盘整的时间，比较适合短线技术较好的资金</p>
+<p>但一定要注意，并不是任何回调回抽都是第三类买卖点，必须是第一次</p>
+<p>而且，第三类买卖点后，并不必然是趋势，也有进入更大级别盘整的可能，但这种买卖之所以必然赢利，就是因为即使是盘整，也会有高点出现</p>
+<p>操作策略很简单，一旦不能出现趋势，一定要在盘整的高点出掉，这和第一、二类买点的策略是一样的</p>
+<p>一个上涨趋势确定后，不可能再有第一类与第二类买点，只可能有第三类买点</p>
+<p>如果一个股票，在周线或至少在日线上出现第三类买点了，那就一直持有等待相同级别或至少是次级别的第一类卖点出现</p>
+<p>第三类买点其实就是次次级别的第一类买点</p>
+<h2 id="放弃抓住行情最后的1-x2F-8美元，或者行情最初的1-x2F-8美元。这两头的1-x2F-8美元，是世界上最昂贵的1-x2F-8美元"><a href="#放弃抓住行情最后的1-x2F-8美元，或者行情最初的1-x2F-8美元。这两头的1-x2F-8美元，是世界上最昂贵的1-x2F-8美元" class="headerlink" title="放弃抓住行情最后的1&#x2F;8美元，或者行情最初的1&#x2F;8美元。这两头的1&#x2F;8美元，是世界上最昂贵的1&#x2F;8美元"></a>放弃抓住行情最后的1&#x2F;8美元，或者行情最初的1&#x2F;8美元。这两头的1&#x2F;8美元，是世界上最昂贵的1&#x2F;8美元</h2>
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%8A%95%E8%B5%84%E7%90%86%E8%B4%A2/">投资理财</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E7%BC%A0%E4%B8%AD%E8%AF%B4%E7%BC%A0/">缠中说缠</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/chan-merge-k.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          缠论中的K线合并处理
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/git-clear-delete-commit.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          干净的删除Git Commit记录
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>
