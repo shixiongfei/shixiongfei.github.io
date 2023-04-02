@@ -75,7 +75,7 @@ rpm -f, --file                     query/verify package(s) owning file
 
 ## RPM源码包编译安装
 
-- .src.rpm结尾的文件，这些文件是由软件的源代码包装而成的，用户要安装这类RPM软件包，必须使用命令：
+- `.src.rpm`结尾的文件，这些文件是由软件的源代码包装而成的，用户要安装这类RPM软件包，必须使用命令：
 
 ```text
 rpm --recompile xxx.src.rpm   这个命令会把源代码解包并编译、安装它，如果用户使用命令
