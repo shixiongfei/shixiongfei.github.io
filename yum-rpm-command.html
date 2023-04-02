@@ -214,7 +214,7 @@
       </p>
       <div>
         <section class="flex items-center gap-3 text-sm">
-          <time>2023-04-02 16:02:31</time>
+          <time>2023-04-02 16:22:35</time>
           <span class="text-gray-400">·</span>
           <span>3 min</span>
           <span class="text-gray-400">·</span>
@@ -232,7 +232,7 @@
 <h2 id="RPM常用参数"><a href="#RPM常用参数" class="headerlink" title="RPM常用参数"></a>RPM常用参数</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">rpm -i, --install                  install package(s)</span><br><span class="line">rpm -v, --verbose                  provide more detailed output</span><br><span class="line">rpm -h, --hash                     print hash marks as package installs (good with -v)</span><br><span class="line">rpm -e, --erase                    erase (uninstall) package</span><br><span class="line">rpm -U, --upgrade=&lt;packagefile&gt;    upgrade package(s)</span><br><span class="line">rpm －-replacepkge                 无论软件包是否已被安装，都强行安装软件包</span><br><span class="line">rpm --test                         安装测试，并不实际安装</span><br><span class="line">rpm --nodeps                       忽略软件包的依赖关系强行安装</span><br><span class="line">rpm --force                        忽略软件包及文件的冲突</span><br><span class="line"></span><br><span class="line">Query options (with -q or --query):</span><br><span class="line">rpm -a, --all                      query/verify all packages</span><br><span class="line">rpm -p, --package                  query/verify a package file</span><br><span class="line">rpm -l, --list                     list files in package</span><br><span class="line">rpm -d, --docfiles                 list all documentation files</span><br><span class="line">rpm -f, --file                     query/verify package(s) owning file</span><br></pre></td></tr></table></figure>
 
 <h2 id="RPM源码包编译安装"><a href="#RPM源码包编译安装" class="headerlink" title="RPM源码包编译安装"></a>RPM源码包编译安装</h2><ul>
-<li>.src.rpm结尾的文件，这些文件是由软件的源代码包装而成的，用户要安装这类RPM软件包，必须使用命令：</li>
+<li><code>.src.rpm</code>结尾的文件，这些文件是由软件的源代码包装而成的，用户要安装这类RPM软件包，必须使用命令：</li>
 </ul>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rpm --recompile xxx.src.rpm   这个命令会把源代码解包并编译、安装它，如果用户使用命令</span><br><span class="line">rpm --rebuild xxx.src.rpm     在安装完成后，还会把编译生成的可执行文件重新包装成i386.rpm的RPM软件包</span><br></pre></td></tr></table></figure>
 
