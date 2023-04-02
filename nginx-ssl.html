@@ -33,7 +33,7 @@
   <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
 
 
-<title>Nginx服务器http重定向到https的正确写法 | Xiongfei Shi</title>
+<title>Nginx配置SSL | Xiongfei Shi</title>
 
 
 
@@ -203,32 +203,32 @@
   <header class="overflow-hidden pt-6 pb-6 md:pt-12">
     <div class="pt-4 md:pt-6">
       <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
-        Nginx服务器http重定向到https的正确写法
+        Nginx配置SSL
       </h1>
       <p class="mb-6">
         
       </p>
       <div>
         <section class="flex items-center gap-3 text-sm">
-          <time>2018-12-17 00:24:00</time>
+          <time>2018-12-18 23:39:15</time>
           <span class="text-gray-400">·</span>
-          <span>1 min</span>
+          <span>2 min</span>
           <span class="text-gray-400">·</span>
-          <span>124 words</span>
+          <span>393 words</span>
         </section>
       </div>
     </div>
   </header>
   <!-- content -->
   <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>http重定向到https使用了nginx的重定向命令。那么应该如何写重定向？之前老版本的nginx可能使用了以下两种类似的格式。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rewrite ^/(.*)$ http://domain.com/$1 permanent;</span><br></pre></td></tr></table></figure>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>将 80 端口重定向到 https</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    listen [::]:80;</span><br><span class="line"></span><br><span class="line">    server_name *.domain.com;</span><br><span class="line"></span><br><span class="line">    return 301 https://domain.com$request_uri;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    listen [::]:80;</span><br><span class="line"></span><br><span class="line">    server_name domain.com;</span><br><span class="line"></span><br><span class="line">    return 301 https://domain.com$request_uri;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rewrite ^ http://domain.com$request_uri? permanent;</span><br></pre></td></tr></table></figure>
+<p>假定我们只希望通过主域来访问网站，则可以将<code>https://*.domain.com</code>也都重定向到<code>https://domain.com</code></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl http2;</span><br><span class="line">    listen [::]:443 ssl http2;</span><br><span class="line"></span><br><span class="line">    server_name *.domain.com;</span><br><span class="line"></span><br><span class="line">    # SSL</span><br><span class="line">    ssl_certificate /usr/local/certs/domain-com/secret.pem;</span><br><span class="line">    ssl_certificate_key /usr/local/certs/domain-com/secret.key;</span><br><span class="line"></span><br><span class="line">    return 301 https://domain.com$request_uri;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><strong>现在nginx新版本已经换了种写法，上面这些已经不再推荐。</strong></p>
-<p>下面是nginx http页面重定向到https页面最新支持的写法：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen      80;</span><br><span class="line">    server_name    my.domain.com;</span><br><span class="line">    return      301 https://$server_name$request_uri;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen      443 ssl;</span><br><span class="line">    server_name    my.domain.com;</span><br><span class="line"></span><br><span class="line">    [....]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我们假设将<code>/api/getip</code>反向代理到<code>4100</code>服务端口上，并且同时将所有访问<code>/post/xxxx</code>或者<code>/post/xxxx/</code>地址的操作都重定向为<code>xxxx.html</code></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl http2;</span><br><span class="line">    listen [::]:443 ssl http2;</span><br><span class="line"></span><br><span class="line">    server_name domain.com;</span><br><span class="line">    root /usr/local/www/public;</span><br><span class="line"></span><br><span class="line">    # SSL</span><br><span class="line">    ssl_certificate /usr/local/certs/domain-com/secret.pem;</span><br><span class="line">    ssl_certificate_key /usr/local/certs/domain-com/secret.key;</span><br><span class="line"></span><br><span class="line">    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</span><br><span class="line">    ssl_ciphers ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS;</span><br><span class="line">    ssl_prefer_server_ciphers on;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        index index.html;</span><br><span class="line">        rewrite ^/post/(.*)/$ /$1.html permanent;</span><br><span class="line">        rewrite ^/post/(.*)$ /$1.html permanent;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /api/getip &#123;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">        proxy_set_header Host $http_host;</span><br><span class="line">        proxy_set_header X-NginX-Proxy true;</span><br><span class="line">        proxy_pass http://127.0.0.1:4100/;</span><br><span class="line">        proxy_redirect default;</span><br><span class="line">        proxy_connect_timeout 60s;</span><br><span class="line">        proxy_read_timeout 120s;</span><br><span class="line">        proxy_send_timeout 120s;</span><br><span class="line">        client_max_body_size 50m;</span><br><span class="line">        client_body_buffer_size 256k;</span><br><span class="line">        proxy_buffer_size 256k;</span><br><span class="line">        proxy_buffers 4 256k;</span><br><span class="line">        proxy_busy_buffers_size 256k;</span><br><span class="line">        proxy_temp_file_write_size 256k;</span><br><span class="line">        proxy_max_temp_file_size 128m;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
   </article>
   <!-- tag -->
@@ -249,16 +249,16 @@
   <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
     <div>
       
-        <a href="/nginx-ssl.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+        <a href="/roots-of-lisp.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
           <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
-          Nginx配置SSL
+          Lisp之根源
         </a>
       
     </div>
     <div>
       
-        <a href="/nginx-nodejs-proxy.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
-          Nginx反向代理NodeJS
+        <a href="/nginx-redirect-https.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          Nginx服务器http重定向到https的正确写法
           <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
         </a>
       
