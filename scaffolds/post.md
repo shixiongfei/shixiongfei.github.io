@@ -1,5 +1,7 @@
 ---
 title: {{ title }}
+author: shixiongfei
 date: {{ date }}
-tags:
+categories: 
+tags: []
 ---
