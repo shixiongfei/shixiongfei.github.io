@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>Erlang极简学习笔记&lt;08&gt;——常用数据结构篇Erlang极简学习笔记&lt;08&gt;——常用数据结构篇 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        Erlang极简学习笔记<08>——常用数据结构篇Erlang极简学习笔记<08>——常用数据结构篇
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2019-06-11 22:32:00</time>
+          <span class="text-gray-400">·</span>
+          <span>9 min</span>
+          <span class="text-gray-400">·</span>
+          <span>2.5k words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><ul>
+<li><p>记录(record)是一种拼凑物。他们是在语言实现完毕后临时添加上去的，因此使用起来有些不方便。但是，如果数据结构比较小，并且想直接通过名字去访问属性字段，那么使用记录还是很合适的。记录的这种使用方式和C语言中的结构很像</p>
+</li>
+<li><p>记录以模块属性的形式声明</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(records)</span>.</span><br><span class="line"><span class="keyword">-compile</span><span class="params">(export_all)</span>.</span><br><span class="line"></span><br><span class="line"><span class="keyword">-record</span><span class="params">(reboot, &#123;name,</span></span><br><span class="line"><span class="params">                  type=industrial,</span></span><br><span class="line"><span class="params">                  hobbies,</span></span><br><span class="line"><span class="params">                  details=[]&#125;)</span></span><br><span class="line"></span><br><span class="line">first_rebot<span class="params">()</span> -&gt;</span><br><span class="line">    #rebot&#123;</span><br><span class="line">        name=&quot;Mechatron&quot;,</span><br><span class="line">        type=handmade,</span><br><span class="line">        details=[&quot;Moved by a small man inside&quot;]</span><br><span class="line">    &#125;.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Eshell</span><br><span class="line">&gt; c(records).</span><br><span class="line">&gt; records:first_robot().</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Erlang的记录只是元组之上的语法糖</p>
+</li>
+<li><p>Erlang shell提供了一条命令 <code>rr(Module)</code> ，可以加载 <code>Module</code> 中定义的记录</p>
+</li>
+<li><p>读取记录字段值的方法有两种：专用的点语法以及模式匹配</p>
+</li>
+<li><p>点语法提取记录的值。语法不是很漂亮，因为记录在本质上就是元组的缘故</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Eshell</span><br><span class="line">&gt; rr(records).</span><br><span class="line">&gt; Crusher = #rebot&#123;name=<span class="string">&quot;Crusher&quot;</span>, hobbies=[<span class="string">&quot;Crushing people&quot;</span>, <span class="string">&quot;petting cats&quot;</span>]&#125;.</span><br><span class="line">&gt; Crusher#rebot.hobbies.</span><br><span class="line">[<span class="string">&quot;Crushing people&quot;</span>,<span class="string">&quot;petting cats&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以在函数头中对它们进行模式匹配，也可以在卫语句中。实际编码中，我们不需要去匹配元组中的所有元素，甚至在编写函数时也不必知道元组中到底有多少元素。我们只需匹配我们用到的字段即可</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-record</span><span class="params">(user, &#123;id, name, group, age&#125;)</span>.</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">admin_panel</span><span class="params">(#user&#123;name=Name, group=admin&#125;)</span> -&gt;</span></span><br><span class="line">    Name ++ <span class="string">&quot; is allowed!&quot;</span>;</span><br><span class="line"><span class="function"><span class="title">admin_panel</span><span class="params">(#user&#123;name=Name&#125;)</span> -&gt;</span></span><br><span class="line">    Name ++ <span class="string">&quot; is not allowed&quot;</span>.</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">adult_section</span><span class="params">(U = #user&#123;&#125;)</span> <span class="title">when</span> U#<span class="title">user</span>.<span class="title">age</span> &gt;= 18 -&gt;</span></span><br><span class="line">    allowed;</span><br><span class="line"><span class="function"><span class="title">adult_section</span><span class="params">(_)</span> -&gt;</span></span><br><span class="line">    forbidden.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Eshell</span><br><span class="line"></span><br><span class="line">&gt; c(records).</span><br><span class="line">&gt; rr(records).</span><br><span class="line">&gt; records:admin_panel(#user&#123;id=<span class="number">1</span>, name=<span class="string">&quot;fred&quot;</span>, group=admin, age=<span class="number">96</span>&#125;).</span><br><span class="line"><span class="string">&quot;fred is allowed!&quot;</span></span><br><span class="line">&gt; records:admin_panel(#user&#123;id=<span class="number">2</span>, name=<span class="string">&quot;you&quot;</span>, group=users, age=<span class="number">66</span>&#125;).</span><br><span class="line"><span class="string">&quot;you is not allowed&quot;</span></span><br><span class="line">&gt; records:adult_section(#user&#123;id=<span class="number">21</span>, name=<span class="string">&quot;Bill&quot;</span>, group=users, age=<span class="number">72</span>&#125;).</span><br><span class="line">allowed</span><br><span class="line">&gt; records:adult_section(#user&#123;id=<span class="number">22</span>, name=<span class="string">&quot;Noah&quot;</span>, group=users, age=<span class="number">13</span>&#125;).</span><br><span class="line">forbidden</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>更新记录的语法有些特殊，其实这只是一种为了调用底层 <code>erlang:setelement/3</code> 函数的编译技巧</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">repairman</span><span class="params">(Rob)</span> -&gt;</span></span><br><span class="line">    Details = Rob#robot.details,</span><br><span class="line">    NewRob = Rob#robot&#123;details=[<span class="string">&quot;Repaired by repairman&quot;</span> | Details]&#125;,</span><br><span class="line">    &#123;repaired, NewRob&#125;.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Eshell</span><br><span class="line">&gt; c(records).</span><br><span class="line">&gt; rr(records).</span><br><span class="line">&gt; records:repairman(#robot&#123;name=<span class="string">&quot;Ulbert&quot;</span>, hobbies=[<span class="string">&quot;trying to have fellings&quot;</span>]&#125;).</span><br><span class="line">&#123;repaired,#robot&#123;name = <span class="string">&quot;Ulbert&quot;</span>,type = industrial,</span><br><span class="line">                  hobbies = [<span class="string">&quot;trying to have fellings&quot;</span>],</span><br><span class="line">                  details = [<span class="string">&quot;Repaired by repairman&quot;</span>]&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果记录很有用，但是又想避免重复定义记录，那么可以使用头文件在多个模块之间共享记录定义，这是Erlang程序员常用的方法。Erlang的头文件和C中的类似</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% 这是一个.hrl头文件</span></span><br><span class="line"><span class="keyword">-record</span><span class="params">(included, &#123;</span></span><br><span class="line"><span class="params">    some_field,</span></span><br><span class="line"><span class="params">    some_default = <span class="string">&quot;yeah!&quot;</span>,</span></span><br><span class="line"><span class="params">    unimaginative_name</span></span><br><span class="line"><span class="params">&#125;)</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>要在模块中包含这个头文件，只需要增加一行 <code>-include(...).</code></li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-include</span><span class="params">(<span class="string">&quot;records.hrl&quot;</span>)</span>.</span><br><span class="line"></span><br><span class="line"><span class="comment">%% 增加测试函数</span></span><br><span class="line"><span class="function"><span class="title">included</span><span class="params">()</span> -&gt;</span> #included&#123;some_field=<span class="string">&quot;Some Value&quot;</span>&#125;.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Eshell</span><br><span class="line">&gt; c(records).</span><br><span class="line">&gt; records:included().</span><br><span class="line">&#123;included,<span class="string">&quot;Some Value&quot;</span>,<span class="string">&quot;yeah!&quot;</span>,undefined&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Erlang提供了多种键&#x2F;值存储结构，有适合小数据量存储的有序字典( <code>orddict</code> )，还有适合大数据量存储的字典( <code>dict</code> )和通用平衡书( <code>GB</code> 树)</p>
+</li>
+<li><p>有序字典( <code>orddict</code> )所存储的数据项必须是严格的 <code>&#123;Key, Value&#125;</code> 形式，每个键都只能出现一次</p>
+</li>
+<li><p>键&#x2F;值存储常用的CRUD(创建、读取、更新和删除)、 <code>orddict:store/3</code> 、 <code>orddict:find/2</code> 、 <code>orddict:fetch/2</code> 以及 <code>orddict:erase/2</code> ，可以使用 <code>orddict:new/0</code> 或者 <code>orddict:from_list/1</code> 创建一个有序字典</p>
+</li>
+<li><p>一般来讲，对于小于75个元素的数据量来说，有序字典在复杂度和效率之间做到了很好的平衡。如果超过了这个数据量，应该切换到其他的键&#x2F;值存储</p>
+</li>
+<li><p>字典( <code>dict</code> )的接口和有序字典( <code>orddict</code> )完全一致： <code>dict:store/3</code> 、 <code>dict:find/2</code> 、 <code>dict:fetch/2</code> 以及 <code>dict:erase/2</code> 。字典中也具有有序字典的所有其他函数，如 <code>dict:map/2</code> 和 <code>dict:fold/2</code></p>
+</li>
+<li><p><code>GB</code> 树是由 <code>gb_trees</code> 模块实现的，其中包含的函数要比 <code>dict</code> 中多，在数据结构的使用上提供了更多的直接控制手段</p>
+</li>
+<li><p><code>gb_trees</code> 有两种主要的工作模式：一种针对彻底了解自己数据的情况(称之为智能模式)，还有一种针对不能对数据数据做假设的情况(称之为简单模式)</p>
+</li>
+<li><p>在简单模式中，数据操作函数为 <code>gb_trees:enter/2</code> 、 <code>gb_trees:lookup/2</code> 和 <code>gb_trees:delete_any/2</code></p>
+</li>
+<li><p>在智能模式中，相应的函数为 <code>gb_trees:insert/3</code> 、 <code>gb_trees:get/2</code> 、 <code>gb_trees:update/3</code> 和 <code>gb_trees:delete/2</code></p>
+</li>
+<li><p>还有一个 <code>gb_trees:map/2</code> 函数，它和 <code>lists:map/2</code> 等价，不过操作的对象是树</p>
+</li>
+<li><p>简单模式函数相比智能模式函数存在劣势的原因在于 <code>GB</code> 树是平衡树，每当插入一个新元素(或者删除一批元素时)，树都需要平衡自己。这需要时间和内存。智能模式函数默认已知晓键值在树中的存在情况。有了这种假设，就可以略过所有的安全检查，从而达到更快的执行速度</p>
+</li>
+<li><p>集合是值唯一的一组元素，集合之间可以进行比较和其他操作——判断元素是否属于两个集合、不属于任何一个集合或者只在其中一个集合中等</p>
+</li>
+<li><p>Erlang中主要有个4个集合处理模块</p>
+</li>
+<li><p><code>ordsets</code> 模块集合被实现为一种有序列表。它们主要适用于小集合，是最慢的一种集合，不过它的实现是所有集合中最简单、最容易理解的一种。该模块的一些标准函数有 <code>ordsets:new/0</code> 、 <code>ordsets:is_element/2</code> 、 <code>ordsets:add_element/2</code> 、 <code>ordsets:del_element/2</code> 、 <code>ordsets:union/1</code> 和 <code>ordsets:intersection/1</code></p>
+</li>
+<li><p><code>sets</code> 模块实现使用的底层数据结构和 <code>dict</code> 使用的类似。 <code>sets</code> 模块的接口和 <code>ordsets</code> 完全一样，不过支持的数据规模要大一些。和 <code>dict</code> 一样， <code>sets</code> 更擅长读密集型的处理，如：检查某个元素是否在集合中</p>
+</li>
+<li><p><code>gb_sets</code> 模块的底层实现结构是一颗 <code>GB</code> 树，和 <code>gb_trees</code> 模块的使用类似。 <code>gb_sets</code> 和 <code>sets</code> 的关系与 <code>gb_trees</code> 和 <code>dict</code> 的关系一样：在非读取操作方面， <code>gb_sets</code> 要更快一些，提供的控制手段也更多一些。 <code>gb_sets</code> 在实现了和 <code>sets</code> 、 <code>ordsets</code> 同样接口的同时，还增加了其他一些函数。和 <code>gb_trees</code> 一样， <code>gb_sets</code> 中也分智能模式函数和简单模式函数，也有迭代器以及对最小值和最大值的快速访问函数</p>
+</li>
+<li><p><code>sofs</code> 是用来创建集合的集合。这个模块使用有序列表实现，这个列表被放置在一个包含元数据信息的元组中。如果想完全控制集合和集合之间的关系，强制集合类型或者有其他类似要求时，可以使用这个模块。当使用数学意义上的集合概念，而又不仅仅是值唯一的元素时，这个模块非常有用</p>
+</li>
+<li><p>来自Erlang&#x2F;OTP团队的Bjorn Gustavsson，同时也是Wings3D项目的程序员，建议在大多数情况下尽量使用 <code>gb_sets</code> ，当需要一种清晰的表示，想在自己的代码中操作这种表示时，使用 <code>ordsets</code> ，当需要 <code>=:=</code> 操作符时，使用 <code>sets</code></p>
+</li>
+<li><p>有向图( <code>directed graph</code> )是一个和数学关系密切的数据结构。Erlang中提供两个实现模块： <code>digraph</code> 和 <code>digraph_utils</code></p>
+</li>
+<li><p><code>digraph</code> 模块主要实现了有向图的构造和修改功能——操作边和顶点、寻找路径和环等</p>
+</li>
+<li><p><code>digraph_utils</code> 模块则实现了图的遍历功能(后序和前序)、环、树形图以及树性质检测，寻找邻居顶点等功能</p>
+</li>
+<li><p>由于有向图和集合论关系密切，因此 <code>sofs</code> 模块中包含了一些函数，用来在集合族和有向图之间进行双向转换</p>
+</li>
+<li><p><code>queue</code> 模块实现了一个双向、先进先出(FIFO)的队列( <code>queue</code> )</p>
+</li>
+<li><p>队列的实现方式是：使用了两个列表，分别用来进行元素的快速入队和出队。因为单个列表无法同时在两端做到高效的元素增加和删除，所以 <code>queue</code> 模块采用了这样的实现思路：如果有两个列表，就用一个列表来增加元素，另一个列表用来删除元素。于是，一个列表变成了队列的一端，可以向其增加元素，另一个列表变成了队列的另一端，可以从中取出元素。当第二个列表为空时，可以把第一个列表反转，并把它变成提取元素的新列表。对于队列生存期间的所有操作的平均性能来说，这种实现是比较高效的</p>
+</li>
+<li><p><code>queue</code> 模块中的函数被分为3组具有不同复杂性的接口(或者API)</p>
+<ul>
+<li><p>原始API中包含了队列实现的基本函数，包括创建空队列的 <code>new/0</code> 、插入新元素的 <code>in/2</code> ，以及移除元素的 <code>out/1</code> 。其中也包含有像把队列换成列表、反转队列、检查某个特定值是否在队列中之类的函数</p>
+</li>
+<li><p>扩展API主要增加了一些内省能力和灵活性。可以用它来进行一些诸如在不移除第一个元素的情况下查看队列的头元素( <code>get/1</code> 或者 <code>peek/1</code> )、直接移除元素而不关心它的值( <code>drop/1</code> )之类的操作。虽然这些函数并不是队列的必要操作，但是总体来说它们还是很有用的</p>
+</li>
+<li><p>Okasaki API有点奇怪。它的实现来自Chris Okasaki的Purely Functional Data Structures(Cambridge University Press, 1999)一书。这个API所提供的操作函数和其他API中的类似，不过，其中有些函数名是反着写的，整个实现也有些奇怪。除非有特殊的原因，否则不要使用这个API</p>
+</li>
+</ul>
+</li>
+<li><p>Erlang的顺序(函数式)编程至此已经全部介绍完毕。接下去的内容才真正开始我们的Erlang之旅——并发与进程</p>
+</li>
+</ul>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E7%BC%96%E7%A8%8B/">编程</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/Erlang/">Erlang</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/segment-feature.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          文本分词质量、文本特征评价以及降维处理
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/learn-ruby.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          Ruby极速入门
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>

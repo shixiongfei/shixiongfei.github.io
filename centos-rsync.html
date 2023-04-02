@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>CentOS使用rsync搭建镜像服务器 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        CentOS使用rsync搭建镜像服务器
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2019-05-08 22:37:00</time>
+          <span class="text-gray-400">·</span>
+          <span>3 min</span>
+          <span class="text-gray-400">·</span>
+          <span>555 words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="安装配置Web服务"><a href="#安装配置Web服务" class="headerlink" title="安装配置Web服务"></a>安装配置Web服务</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">yum install httpd</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> /home/_mirrors</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">chmod</span> -R 755 /home/_mirrors</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ln</span> -s /home/_mirrors /var/www/mirrors</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /etc/httpd/conf/httpd.conf</span></span><br><span class="line">    Alias /mirrors &quot;/var/www/mirrors&quot;</span><br><span class="line">    &lt;Directory &quot;/var/www/mirrors&quot;&gt;</span><br><span class="line">        Options Indexes MultiViews FollowSymLinks</span><br><span class="line">        AllowOverride None</span><br><span class="line">        Order deny,allow</span><br><span class="line">        Allow from all</span><br><span class="line">    &lt;/Directory&gt;</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">systemctl restart httpd.service</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="安装rsync"><a href="#安装rsync" class="headerlink" title="安装rsync"></a>安装rsync</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">yum install rsync</span></span><br></pre></td></tr></table></figure>
+
+<p>常用yum源收集</p>
+<ul>
+<li><p>CentOS</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.centos.org/download/mirrors/">http://www.centos.org/download/mirrors/</a></li>
+<li>rsync:&#x2F;&#x2F;mirrors.yun-idc.com&#x2F;centos&#x2F;</li>
+</ul>
+</li>
+<li><p>EPEL</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://admin.fedoraproject.org/mirrormanager/mirrors">https://admin.fedoraproject.org/mirrormanager/mirrors</a></li>
+<li>rsync:&#x2F;&#x2F;dl.fedoraproject.org&#x2F;fedora-epel</li>
+</ul>
+</li>
+<li><p>RepoForge</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://repoforge.org/faq/">http://repoforge.org/faq/</a></li>
+<li><a target="_blank" rel="noopener" href="http://mirror-status.repoforge.org/">http://mirror-status.repoforge.org</a></li>
+<li>rsync:&#x2F;&#x2F;ftp.riken.jp&#x2F;repoforge&#x2F;</li>
+</ul>
+</li>
+<li><p>MariaDB</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en/mariadb/mirroring-mariadb/">https://mariadb.com/kb/en/mariadb/mirroring-mariadb/</a></li>
+<li>rsync.osuosl.org::mariadb</li>
+</ul>
+</li>
+<li><p>Percona</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.percona.com/blog/2014/02/14/using-percona-rsync-repositories-set-local-centos-mirror/">https://www.percona.com/blog/2014/02/14/using-percona-rsync-repositories-set-local-centos-mirror/</a></li>
+<li>rsync:&#x2F;&#x2F;rsync.percona.com&#x2F;rsync&#x2F;</li>
+</ul>
+</li>
+</ul>
+<h2 id="自动同步脚本"><a href="#自动同步脚本" class="headerlink" title="自动同步脚本"></a>自动同步脚本</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> /home/_mirrors/centos</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> /home/_mirrors/epel</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> /home/_mirrors/repoforge</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> /home/_mirrors/mariadbs</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> /home/_mirrors/percona</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /home/_mirrors/yum_rsync.sh</span></span><br><span class="line">    #!/bin/bash</span><br><span class="line"></span><br><span class="line">    rsync -vai4CH --safe-links --delay-updates --delete rsync://mirrors.yun-idc.com/centos/ --exclude-from=/home/_mirrors/centos_exclude.list /home/_mirrors/centos/</span><br><span class="line">    rsync -vai4CH --safe-links --delay-updates --delete rsync://dl.fedoraproject.org/fedora-epel --exclude-from=/home/_mirrors/epel_exclude.list /home/_mirrors/epel/</span><br><span class="line">    rsync -vai4CH --safe-links --delay-updates --delete rsync://ftp.riken.jp/repoforge/ --exclude-from=/home/_mirrors/repoforge_exclude.list /home/_mirrors/repoforge/</span><br><span class="line">    rsync -vai4CH --safe-links --delay-updates --delete rsync.osuosl.org::mariadb --exclude-from=/home/_mirrors/mariadb_exclude.list /home/_mirrors/mariadb/</span><br><span class="line">    rsync -vai4CH --safe-links --delay-updates --delete rsync://rsync.percona.com/rsync/ --exclude-from=/home/_mirrors/percona_exclude.list /home/_mirrors/percona/</span><br></pre></td></tr></table></figure>
+
+<h2 id="剔除不需要同步的内容"><a href="#剔除不需要同步的内容" class="headerlink" title="剔除不需要同步的内容"></a>剔除不需要同步的内容</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /home/_mirrors/centos_exclude.list</span></span><br><span class="line">    2/</span><br><span class="line">    2.1/</span><br><span class="line">    3/</span><br><span class="line">    3.1/</span><br><span class="line">    3.3/</span><br><span class="line">    3.4/</span><br><span class="line">    3.5/</span><br><span class="line">    3.6/</span><br><span class="line">    3.7/</span><br><span class="line">    3.8/</span><br><span class="line">    3.9/</span><br><span class="line">    4/</span><br><span class="line">    4.0/</span><br><span class="line">    4.1/</span><br><span class="line">    4.2/</span><br><span class="line">    4.3/</span><br><span class="line">    4.4/</span><br><span class="line">    4.5/</span><br><span class="line">    4.6/</span><br><span class="line">    4.7/</span><br><span class="line">    4.8/</span><br><span class="line">    4.9/</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /home/_mirrors/epel_exclude.list</span></span><br><span class="line">    4/</span><br><span class="line">    4AS/</span><br><span class="line">    4ES/</span><br><span class="line">    4WS/</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /home/_mirrors/repoforge_exclude.list</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /home/_mirrors/mariadb_exclude.list</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /home/_mirrors/percona_exclude.list</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="配置自动执行任务"><a href="#配置自动执行任务" class="headerlink" title="配置自动执行任务"></a>配置自动执行任务</h2><ul>
+<li>每8小时同步一次镜像，使用flock确保任务不会被重复执行</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> PATH=<span class="variable">$PATH</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /home/_mirrors/auto_sync.sh</span></span><br><span class="line">    #!/bin/bash</span><br><span class="line"></span><br><span class="line">    PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/lishu/.local/bin:/home/lishu/bin</span><br><span class="line">    export PATH</span><br><span class="line"></span><br><span class="line">    flock -xn /var/lock/auto-yum-rsync.lock /home/_mirrors/yum_rsync.sh &gt;&gt; /var/log/yum_rsync.log</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">service crond status</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">crontab -e</span></span><br><span class="line">    * */8 * * * /home/_mirrors/auto_sync.sh</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">crontab -l</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="配置YUM源"><a href="#配置YUM源" class="headerlink" title="配置YUM源"></a>配置YUM源</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /etc/yum.repos.d/*.repo</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">CentOS源</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">mirrorlist</span></span><br><span class="line">baseurl=http://127.0.0.1/centos/$releasever/os/$basearch/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">EPEL源</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">mirrorlist</span></span><br><span class="line">baseurl=http://127.0.0.1/epel/7/$basearch</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">RepoForge源</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">mirrorlist</span></span><br><span class="line">baseurl=http://127.0.0.1/repoforge/redhat/el7/en/$basearch/rpmforge</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">MariaDB源</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">mirrorlist</span></span><br><span class="line">baseurl=http://127.0.0.1/mariadb/10.0/centos7-amd64/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Percona源</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">mirrorlist</span></span><br><span class="line">baseurl=http://127.0.0.1/percona/centos/$releasever/os/$basearch/</span><br></pre></td></tr></table></figure>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/Linux/">Linux</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/CentOS/">CentOS</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/debian-vsftpd.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          Debian安装vsftpd
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/js-async-await-foreach.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          async/await与forEach
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>

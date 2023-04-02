@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>Erlang极简学习笔记&lt;01&gt;——启程篇 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        Erlang极简学习笔记<01>——启程篇
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2019-03-31 21:24:00</time>
+          <span class="text-gray-400">·</span>
+          <span>11 min</span>
+          <span class="text-gray-400">·</span>
+          <span>2.7k words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><ul>
+<li><p>Erlang是一门函数式编程语言。Erlang的核心特征是容错，并发只是容错这个约束下的一个副产品</p>
+</li>
+<li><p>对于同样的参数，函数永远要返回同样的值，这个概念称为引用透明性(referential transparency)</p>
+</li>
+<li><p>Erlang采用了actor模型，每个actor都是虚拟机中的一个独立进程</p>
+</li>
+<li><p>Erlang中只能创建出相互之间完全没有共享、只能通过消息通信的actor（进程）。每次消息交互都是显示的、可追踪的和安全的</p>
+</li>
+<li><p>Erlang不关心输入的是浮点数还是整数，算术运算符对两种类型都有效</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span> + <span class="number">15</span>.</span><br><span class="line"><span class="number">49</span> * <span class="number">100</span>.</span><br><span class="line"><span class="number">5</span> / <span class="number">2</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果需要整除或者余数，要使用 <code>div</code> 和 <code>rem</code></li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">5</span> <span class="keyword">div</span> <span class="number">2</span>.</span><br><span class="line"><span class="number">5</span> <span class="keyword">rem</span> <span class="number">2</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>算术计算遵循标准优先级规则</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">50</span> * <span class="number">100</span> - <span class="number">4999</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>以不为10的基数表示整数，需要以 <code>Base#Value</code> 这种形式输入数值(Base必须在2到36之间)</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2#101010</span>.</span><br><span class="line"><span class="number">8#0677</span>.</span><br><span class="line"><span class="number">16#AE</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>变量必须以大写字符开始，一个变量只能绑定一次，并且改变任何变量的值都是绝对不允许的</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">One = <span class="number">1</span>.</span><br><span class="line">Two = One + One.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>变量还可以以下划线(_)开始，但是依照惯例，这种变量仅用于不想关心其值的情况</p>
+</li>
+<li><p><code>=</code> 操作符的行为表现其实是模式匹配（pattern matching）</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span> = <span class="number">1</span> + <span class="number">1</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>在eshell中可以使用 <code>f(Variable).</code> 函数删除一个变量，可以使用 <code>f().</code> 删除所有变量。这两个函数专门用来辅助代码实验，所以只能在shell中使用</p>
+</li>
+<li><p>原子以小写字符开始，如果不以小写字符开头或者其中包含有除字母、数字、下划线以及@符号之外的其他符号，那么必须被放到两个单引号(‘)之间</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">atom.</span><br><span class="line">atom@erlang.</span><br><span class="line">&#x27;Atoms can be cheated!&#x27;.</span><br><span class="line">atom = &#x27;atom&#x27;.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>每个原子都会被引用到一个原子表中，原子表不被垃圾回收，原子表会消耗内存(32位系统4字节，64位系统8字节)，系统最大原子个数1048577个</p>
+</li>
+<li><p>不要动态创建原子，在实际开发中应确保所有原子都是手动输入的</p>
+</li>
+<li><p>有些原子是保留字，这些原子不能使用</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">after</span>、<span class="keyword">and</span>、<span class="keyword">andalso</span>、<span class="keyword">band</span>、<span class="keyword">begin</span>、<span class="keyword">bnot</span>、<span class="keyword">bor</span>、<span class="keyword">bsl</span>、bsr、<span class="keyword">bxor</span>、<span class="keyword">case</span>、<span class="keyword">catch</span>、<span class="keyword">cond</span>、<span class="keyword">div</span>、<span class="keyword">end</span>、<span class="keyword">fun</span>、<span class="keyword">if</span>、<span class="keyword">let</span>、<span class="keyword">not</span>、<span class="keyword">of</span>、or、<span class="keyword">orelse</span>、<span class="keyword">query</span>、<span class="keyword">receive</span>、<span class="keyword">rem</span>、<span class="keyword">try</span>、<span class="keyword">when</span> 和 <span class="keyword">xor</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>布尔操作符 <code>and</code> 和 <code>or</code> 对操作符两边的参数都会去求值。如果想要一个短路操作符(只在必要时，才去求右值)，可以使用 <code>andalso</code> 和 <code>orelse</code></li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">false</span> or <span class="literal">true</span>.</span><br><span class="line"><span class="literal">true</span> <span class="keyword">xor</span> <span class="literal">false</span>.</span><br><span class="line"><span class="keyword">not</span> <span class="literal">false</span>.</span><br><span class="line"><span class="function"><span class="title">not</span> <span class="params">(true and true)</span>.</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Erlang使用 <code>=:=</code> 和 <code>=/=</code> 来做相等性和不等性测试</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">5</span> =:= <span class="number">5</span>.</span><br><span class="line"><span class="number">1</span> =:= <span class="number">0</span>.</span><br><span class="line"><span class="number">1</span> =/= <span class="number">0</span>.</span><br><span class="line"><span class="number">5</span> =:= <span class="number">5.0</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Erlang做比较时，会区分浮点数和整数。如果不想区分可以使用 <code>==</code> 和 <code>/=</code></li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">5</span> == <span class="number">5.0</span>.</span><br><span class="line"><span class="number">5</span> /= <span class="number">5.0</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>根据经验，你应该始终使用 <code>=:=</code> 和 <code>=/=</code> ，只有在明确知道确实不需要精确相等性时才换成 <code>==</code> 和 <code>/=</code></p>
+</li>
+<li><p>其他比较操作符： <code>&lt;</code> (小于)、 <code>&gt;</code> (大于)、 <code>&gt;=</code> (大于等于)和 <code>=&lt;</code> (小于等于)。 <strong>注意最后一个！</strong></p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> &lt; <span class="number">2</span>.</span><br><span class="line"><span class="number">1</span> &gt;= <span class="number">1</span>.</span><br><span class="line"><span class="number">1</span> =&lt; <span class="number">1</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>比较操作中，数据类型之间的大小顺序是： <code>number &lt; atom &lt; reference &lt; fun &lt; port &lt; pid &lt; tuple &lt; list &lt; bit string</code></p>
+</li>
+<li><p>Erlang元组书写形式： <code>&#123;Element1, Element2, ..., ElementN&#125;</code> 。获取元组中元素可以使用模式匹配</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Point = &#123;<span class="number">3</span>, <span class="number">4</span>&#125;.</span><br><span class="line">&#123;X, Y&#125; = Point.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Erlang列表的书写形式： <code>[Element1, Element2, ..., ElementN]</code> ，列表可以混合放入多种数据类型</p>
+</li>
+<li><p>Erlang中没有字符串数据类型。字符串就是列表</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">97</span>, <span class="number">98</span>, <span class="number">99</span>].</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>++</code> 操作符可以把列表粘合起来， <code>--</code> 操作符可以从列表中删除元素。 <code>++</code> 和 <code>--</code> 操作符都是右结合的，这意味着多个 <code>++</code> 或 <code>--</code> 操作是从右向左进行的</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>] ++ [<span class="number">4</span>, <span class="number">5</span>].</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>] -- [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].</span><br><span class="line"></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>] -- [<span class="number">1</span>, <span class="number">2</span>] -- [<span class="number">3</span>].</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>] -- [<span class="number">1</span>, <span class="number">2</span>] -- [<span class="number">2</span>].</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>列表第一个元素称为头(head)，剩余部分称为尾(tail)。可以用内建函数(BIF)获取他们</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">hd</span><span class="params">([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span>.</span></span><br><span class="line"><span class="function"><span class="title">tl</span><span class="params">([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span>.</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>BIF通常是一些不能用纯Erlang实现的函数，因此会用C或者其他任何实现Erlang的语言编写。也有一些BIF本可以用Erlang实现，但是为了让这些常用的操作性更高，就用C实现了。例如： <code>length(List)</code></p>
+</li>
+<li><p>可以使用模式匹配来分离列表的头部和尾部</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[Head|Tail] = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>构建列表还可以使用 <code>|</code> 操作符， <code>|</code> 操作符又称为 <code>cons</code> 操作符（构造器），仅凭 <code>cons</code> 操作符和值就能构建出任何列表</p>
+</li>
+<li><p>任何列表都可以使用这个形式构建： <code>[Term1| [Term2| [...| [TermN]]]]</code></p>
+</li>
+<li><p>列表推导式（list comprehension）可以用来构建或修改列表。和其他列表操作方式相比，它们会让程序既短小又易于理解</p>
+</li>
+<li><p>列表推导式的形式： <code>NewList = [Expression || Pattern &lt;- List, Condition1, Condition2, ..., ConditionN]</code> ，其中 <code>Pattern &lt;- List</code> 部分称为生成器表达式</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">2</span>*N || N &lt;- [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]].</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>列表推导式中还可以使用具有布尔返回值的操作来增加约束条件</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[X || X &lt;- [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>], X <span class="keyword">rem</span> <span class="number">2</span> =:= <span class="number">0</span>].</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>列表推导式还可以同时使用多个生成器表达式。下面这个表达式会执行 <code>1+3</code> ,  <code>1+4</code> ,  <code>2+3</code> ,  <code>2+4</code> 这4个操作</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[X+Y || X &lt;- [<span class="number">1</span>, <span class="number">2</span>], Y &lt;- [<span class="number">3</span>, <span class="number">4</span>]]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>所以列表表达式更通用的形式应该是： <code>NewList = [Expression || GeneratorExp1, GeneratorExp2, ..., GeneratorExpN, Condition1, Condition2, ..., ConditionN]</code></p>
+</li>
+<li><p>列表表达式也可以把生成器表达式和模式匹配放一起当成过滤器来使用</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Weather = [&#123;toronto, rain&#125;, &#123;montreal, storms&#125;, &#123;london, fog&#125;, &#123;paris, sun&#125;, &#123;boston, fog&#125;, &#123;vancouver, snow&#125;].</span><br><span class="line">FoggyPlace = [X || &#123;X, fog&#125; &lt;- Weather].</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Erlang中的位语法会把二进制数据用 <code>&lt;&lt;</code> 和 <code>&gt;&gt;</code> 括起来，并把数据分隔成多个易理解的区段，区段之间用逗号分隔。每一段都是一个二进制位序列（不一定要在字节边界上，尽管默认情况下会这样）</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Color = <span class="number">16#F09A29</span>.</span><br><span class="line">Pixel = &lt;&lt;Color:<span class="number">24</span>&gt;&gt;.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>同样可以使用模式匹配从二进制数据中提取内容</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Pixels = &lt;&lt;<span class="number">213</span>, <span class="number">45</span>, <span class="number">132</span>, <span class="number">64</span>, <span class="number">76</span>, <span class="number">32</span>, <span class="number">76</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">234</span>, <span class="number">32</span>, <span class="number">15</span>&gt;&gt;.</span><br><span class="line">&lt;&lt;Pix1:<span class="number">24</span>, Pix2:<span class="number">24</span>, Pix3:<span class="number">24</span>, Pix4:<span class="number">24</span>&gt;&gt; = Pixels.</span><br><span class="line"></span><br><span class="line">&lt;&lt;R:<span class="number">8</span>, G:<span class="number">8</span>, B:<span class="number">8</span>&gt;&gt; = &lt;&lt;Pixel:<span class="number">24</span>&gt;&gt;.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果只想取第一个颜色，可以使用Erlang的语法糖 <code>Rest/binary</code> 。 <code>Rest/binary</code> 是一种特别的表示法，它可以将剩余的二进制数据都放到Rest变量中。所以 <code>&lt;&lt;Pattern, Rest/binary&gt;&gt;</code> 和 <code>[Head|Tail]</code> 是非常相似的</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;R:<span class="number">8</span>, Rest/binary&gt;&gt; = Pixels.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>一个二进制区段的描述，Erlang允许有多种方式</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Value</span><br><span class="line">Value:Size</span><br><span class="line">Value/TypeSpecifierList</span><br><span class="line">Value:Size/TypeSpecifierList</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>其中如果没有指定TypeSpecifierList，那么Size的单位永远是位</p>
+</li>
+<li><p>TypeSpecifierList由下面的一个或多个组成，之间用连字符(-)分隔</p>
+<ul>
+<li><p>类型： <code>integer</code> ,  <code>float</code> ,  <code>binary</code> ,  <code>bytes</code> ,  <code>bitstring</code> ,  <code>bits</code> ,  <code>utf8</code> ,  <code>utf16</code> ,  <code>utf32</code></p>
+<ul>
+<li>如果不指定类型，Erlang默认使用 <code>integer</code> 类型。其中 <code>bytes</code> 是 <code>binary</code> 的缩写， <code>bits</code> 是 <code>bitstring</code> 的缩写</li>
+</ul>
+</li>
+<li><p>符号类型： <code>signed</code> ,  <code>unsigned</code></p>
+<ul>
+<li>默认是 <code>unsigned</code> ，只有当类型为 <code>integer</code> 时，这个字段才有意义</li>
+</ul>
+</li>
+<li><p>字节序： <code>big</code> ,  <code>little</code> 和 <code>native</code></p>
+<ul>
+<li>字节序默认是 <code>big</code> ，因为它是网络协议编码中使用的标准字节序。只有当类型为 <code>integer</code> ,  <code>utf16</code> ,  <code>utf32</code> 或者 <code>float</code> 时，字节序才有意义</li>
+</ul>
+</li>
+<li><p>单位：写成 <code>unit:Integer</code> 这样的形式</p>
+<ul>
+<li><p>单位指的是每个区段的大小。取值范围为1<code>256。对于 </code>integer<code>, </code>float<code>和</code>bitstring<code>类型来说，单位默认值是1；对于</code>binary&#96; 类型，单位默认值为8。utf系列无需定义unit</p>
+</li>
+<li><p><strong>注意：</strong> Size和单位的乘积等于要提取的区段中的位数，并且必须能被8整除。单位的大小通常用来确保字节对齐</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;<span class="number">25</span>:<span class="number">4</span>/unit:<span class="number">8</span>&gt;&gt;.</span><br><span class="line">&lt;&lt;<span class="number">25</span>:<span class="number">2</span>/unit:<span class="number">16</span>&gt;&gt;.</span><br><span class="line">&lt;&lt;<span class="number">25</span>:<span class="number">1</span>/unit:<span class="number">32</span>&gt;&gt;.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Erlang会接受 <code>&lt;&lt;25:Size/unit:Unit&gt;&gt;</code> 的形式，并用Size乘以Unit算出这个值所需的空间，空间的大小要能被8整除</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt;X1/unsigned&gt;&gt; == &lt;&lt;-<span class="number">44</span>&gt;&gt;.</span><br><span class="line">&lt;&lt;X2/signed&gt;&gt; = &lt;&lt;-<span class="number">44</span>&gt;&gt;.</span><br><span class="line">&lt;&lt;X3/integer-signed-little&gt;&gt; = &lt;&lt;-<span class="number">44</span>&gt;&gt;.</span><br><span class="line">&lt;&lt;N:<span class="number">8</span>/unit:<span class="number">1</span>&gt;&gt; = &lt;&lt;<span class="number">72</span>&gt;&gt;.</span><br><span class="line">&lt;&lt;N/integer&gt;&gt; = &lt;&lt;<span class="number">72</span>&gt;&gt;.</span><br><span class="line">&lt;&lt;Y:<span class="number">4</span>/little-unit:<span class="number">8</span>&gt;&gt; = &lt;&lt;<span class="number">72</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>&gt;&gt;.</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Erlang提供了标准的二进制操作： <code>bsl</code> （按左移位）， <code>bsr</code> （按右移位）， <code>band</code> ， <code>bor</code> ， <code>bxor</code> 以及 <code>bnot</code></p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2#00100</span> = <span class="number">2#00010</span> <span class="keyword">bsl</span> <span class="number">1</span>.</span><br><span class="line"><span class="number">2#00001</span> = <span class="number">2#00010</span> bsr <span class="number">1</span>.</span><br><span class="line"><span class="number">2#10101</span> = <span class="number">2#10001</span> <span class="keyword">bor</span> <span class="number">2#00101</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>二进制字符串在语言中的实现方式，和用列表实现的字符串使用的方式完全一样，只是在空间使用上更加高效</p>
+</li>
+<li><p>普通字符串与链表类似，二进制字符串更像C语言中的数组</p>
+</li>
+<li><p>二进制字符串的形式： <code>&lt;&lt;&quot;This is a binary string!&quot;&gt;&gt;</code> 。其缺点是，它的模式匹配和操作方法没有列表这么简单。因此，通常当所存储的文本无需频繁操作或空间效率是个实际问题时，才会使用二进制字符串</p>
+</li>
+<li><p>二进制推导式（binary comprehension）之于位语法就等同于列表推导式之于列表：在处理二进制数据时，可以让代码短小精悍</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt; &lt;&lt;X&gt;&gt; || &lt;&lt;X&gt;&gt; &lt;= &lt;&lt;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&gt;&gt;, X <span class="keyword">rem</span> <span class="number">2</span> == <span class="number">0</span> &gt;&gt;.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>语法层面的变化就是：标准列表推导式中的 <code>&lt;-</code> 变成了 <code>&lt;=</code> （用于二进制生成器），使用的是二进制数据（&lt;&lt;&gt;&gt;），而不是列表数据（[]）</p>
+</li>
+<li><p>相比之前的代码，这里有个更强大的用法</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Pixels = &lt;&lt;<span class="number">213</span>, <span class="number">45</span>, <span class="number">132</span>, <span class="number">64</span>, <span class="number">76</span>, <span class="number">32</span>, <span class="number">76</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">234</span>, <span class="number">32</span>, <span class="number">15</span>&gt;&gt;.</span><br><span class="line">RGB = [ &#123;R, G, B&#125; || &lt;&lt;R:<span class="number">8</span>, G:<span class="number">8</span>, B:<span class="number">8</span>&gt;&gt; &lt;= Pixels ].</span><br><span class="line">&lt;&lt; &lt;&lt;R:<span class="number">8</span>, G:<span class="number">8</span>, B:<span class="number">8</span>&gt;&gt; || &#123;R, G, B&#125; &lt;- RGB &gt;&gt;.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果生成器返回的是二进制数，那么就必须要对结果二进制数中的元素给出明确的二进制类型定义</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt; &lt;&lt;Bin/binary&gt;&gt; || Bin &lt;- [&lt;&lt;<span class="number">3</span>, <span class="number">7</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">7</span>&gt;&gt;] &gt;&gt;.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>默认情况下Erlang会认为放入二进制数中以及二进制数中提取的值都是整数（8位无符号）</p>
+</li>
+<li><p>还可以在二进制推导式中使用二进制生成器</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&lt; &lt;&lt;(X+<span class="number">1</span>)/integer&gt;&gt; || &lt;&lt;X&gt;&gt; &lt;= &lt;&lt;<span class="number">3</span>, <span class="number">7</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">7</span>&gt;&gt; &gt;&gt;.</span><br></pre></td></tr></table></figure>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E7%BC%96%E7%A8%8B/">编程</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/Erlang/">Erlang</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/yum-repo.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          YUM添加第三方软件仓库
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/linux-rabbitvsc.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          Linux安装RabbitVCS
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>

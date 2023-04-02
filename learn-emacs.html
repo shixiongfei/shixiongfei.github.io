@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>Emacs入坑笔记 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        Emacs入坑笔记
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2019-11-07 22:54:00</time>
+          <span class="text-gray-400">·</span>
+          <span>7 min</span>
+          <span class="text-gray-400">·</span>
+          <span>1.8k words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="功能按键"><a href="#功能按键" class="headerlink" title="功能按键"></a>功能按键</h2><p>  <code>M(eta)</code> ，在 Mac 下为 <code>Option</code> 键</p>
+<p>  <code>s(uper)</code> ，在 Mac 环境下为左 <code>Command</code> 键</p>
+<p>  <code>S(hift)</code></p>
+<p>  <code>C(trl)</code></p>
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><p>  <code>C-x C-f</code> 打开文件</p>
+<p>  <code>C-x C-s</code> 保存文件</p>
+<p>  <code>C-x C-c</code> 退出Emacs</p>
+<p>  <code>M-w</code> 复制</p>
+<p>  <code>C-w</code> 剪切</p>
+<p>  <code>C-y</code> 粘贴</p>
+<p>  <code>M-x</code> 执行命令</p>
+<p>  <code>C-x C-b</code> 切换Buffer</p>
+<p>  <code>C-c p f</code> 目录查找文件</p>
+<p>  <code>C-c s</code> 交换2个Window</p>
+<p>  <code>M-c</code> 光标位置开始的首字母改为大写</p>
+<p>  <code>M-u</code> 光标位置开始的单词改为大写</p>
+<p>  <code>M-l</code> 光标位置开始的单词改为小写</p>
+<p>  <code>C-x C-u</code> 选定区域改为大写</p>
+<p>  <code>C-x C-l</code> 选定区域改为小写</p>
+<h2 id="Emacs-Lisp"><a href="#Emacs-Lisp" class="headerlink" title="Emacs Lisp"></a>Emacs Lisp</h2><p>  <code>C-x C-e</code> 执行最后一个表达式</p>
+<p>  <code>C-c C-z</code> 打开Elisp REPL</p>
+<p>  <code>C-c C-c</code> 执行Elisp代码块</p>
+<p>  <code>C-c C-b</code> 执行整个Buffer</p>
+<h2 id="Common-Lisp-Slime"><a href="#Common-Lisp-Slime" class="headerlink" title="Common Lisp(Slime)"></a>Common Lisp(Slime)</h2><p>  <code>M-p</code> 上一条被输入 REPL 执行的表达式</p>
+<p>  <code>M-.</code> 跳转到符号定义处</p>
+<p>  <code>C-x 4 .</code> 在新窗口中跳转到其定义，和上面命令不同的就是会在新 Buffer 中打开</p>
+<p>  <code>C-x 5 .</code> 跳转并在另一个窗口中编辑，和上面命令不同的就是会新开一个 Emacs 窗口</p>
+<p>  <code>M-,</code> 回到执行的光标处</p>
+<p>  <code>C-c-:</code> 从 MiniBuffer 读取表达式并求值</p>
+<p>  <code>C-M-x</code> 执行当前 toplevel 的 form</p>
+<p>  <code>C-x C-e</code> 对光标之前的 S 表达式求值</p>
+<p>  <code>C-c C-r</code> 对选中的表达式求值</p>
+<p>  <code>C-c C-p</code> 类似 <code>C-x C-e</code>，但它会把求值结果打印到一个新的 Buffer 中</p>
+<p>  <code>C-c E</code> 单独编辑可以被 <code>setf</code> 的值，会启动一个临时 Buffer 编辑，然后 <code>C-c C-c</code> 应用这个新值，可以避免在 REPL 下手动写 <code>setf</code> 设置</p>
+<p>  <code>C-c C-u</code> 取消函数的定义，这个很有用，可以让 core 中定义的函数失效</p>
+<p>  <code>C-M-i</code> 或 <code>Tab</code> 自动补全</p>
+<p>  <code>C-c C-d d</code> 显示光标所在的符号的描述信息</p>
+<p>  <code>C-c C-d f</code> 显示光标所在的函数的描述信息</p>
+<p>  <code>C-c C-d a</code> 搜索符号的文档字符串（显示全部匹配），默认包括外部变量</p>
+<p>  <code>C-c C-d z</code> 如果要默认包含所有内部符号</p>
+<p>  <code>C-c C-d p</code> 显示包内的结果，等于还可以查找有哪些包</p>
+<p>  <code>C-c C-d h</code> 显示光标所在处符号的 Hyperspec 文档</p>
+<p>  <code>C-c C-d `</code> 查找 format 里控制符的文档</p>
+<p>  <code>C-c C-d #</code> 查找读取宏的文档</p>
+<p>  <code>C-c C-m</code> 将光标处的宏展开一次（一层）</p>
+<p>  <code>C-c M-m</code> 将光标处的宏完全展开</p>
+<p>  <code>C-c C-b</code> 中断 Lisp 进程（比如中断死循环等等）</p>
+<p>  <code>M-x slime-restart-inferior-lisp</code> 重启 REPL</p>
+<p>  <code>M-x slime-sync-package-and-default-directory</code> 同步到当前包的工作目录，比如在编辑另外个目录下的文件，现在要 REPL 切换到该目录下</p>
+<p>  <code>C-c C-p</code> 设置当前 REPL 所在包</p>
+<p>  <code>M-x slime-cd</code> 改变 REPL 目录</p>
+<p>  <code>M-x slime-pwd</code> 打印出当前目录</p>
+<p>  <code>M-x slime-toggle-profile-fdefinition</code> 触发对某个函数的分析</p>
+<p>  <code>M-x slime-profile-package</code> 分析某个包里的函数</p>
+<p>  <code>M-x slime-profile-by-substring</code> 分析所有名字含某个字符串的函数</p>
+<p>  <code>M-x slime-unprofile-all</code> 停止所有分析</p>
+<p>  <code>M-x slime-profile-report</code> 报告分析结果</p>
+<p>  <code>M-x slime-profile-reset</code> 重置分析报告</p>
+<p>  <code>M-x slime-profiled-functions</code> 显示当前正在分析的函数</p>
+<p>  <code>C-c C-c</code> 编译光标所在的 toplevel 形式</p>
+<p>  <code>C-c C-k</code> 编译文件，然后加载</p>
+<p>  <code>C-c M-k</code> 编译文件，只编译不加载</p>
+<p>  <code>C-c C-l</code> 调用 load 函数加载</p>
+<p>  <code>M-x slime-compile-region</code> 编译选中的表达式</p>
+<p>  <code>C-c M-d</code> 显示光标处函数的汇编代码</p>
+<p>  <code>C-c C-t</code> 对光标的函数 trace</p>
+<p>  <code>M-x slime-untrace-all</code> 停止 trace</p>
+<p>  <code>C-c C-w c</code> 显示某函数被哪些函数调用</p>
+<p>  <code>C-c C-w w</code> 显示该函数调用了哪些函数</p>
+<p>  <code>C-c C-w r</code> 显示某全局变量被引用的情况</p>
+<p>  <code>C-c C-w b</code> 显示某全局变量被其他函数绑定情况</p>
+<p>  <code>C-c C-w s</code> 显示对某全局变量的赋值</p>
+<p>  <code>C-c C-w m</code> 显示某个宏被其他函数调用情况</p>
+<p>  <code>M-x slime-who-specializes</code> 获得某个类的所有方法</p>
+<p>  <code>C-c &lt;</code> 列出某个函数的所有调用者</p>
+<p>  <code>C-c &gt;</code> 列出一个函数调用的所有函数</p>
+<h2 id="Scheme"><a href="#Scheme" class="headerlink" title="Scheme"></a>Scheme</h2><p>  <code>C-c C-z</code> 打开 Geiser REPL</p>
+<p>  <code>C-c C-c</code> 执行当前定义</p>
+<p>  <code>C-c C-\</code> 插入 λ</p>
+<p>  <code>M-.</code> 查看接口定义</p>
+<p>  <code>M-,</code> 返回查看定义前的位置</p>
+<h2 id="Racket"><a href="#Racket" class="headerlink" title="Racket"></a>Racket</h2><p>  <code>C-c C-c</code> 运行 Racket REPL</p>
+<p>  <code>C-c C-z</code> 打开 Racket REPL</p>
+<p>  <code>C-M-y</code> 插入 λ</p>
+<p>  <code>C-x C-e</code> 发送最后一个 S 表达式到 REPL</p>
+<p>  <code>C-M-x</code> 发送当前定义到 REPL</p>
+<p>  <code>C-c C-d</code> 查询 Racket 官方文档</p>
+<p>  <code>C-c C-p</code> 改变 S 表达式括号形状 <code>() [] &#123;&#125;</code></p>
+<p>  <code>C-M-.</code> 查看模块定义</p>
+<p>  <code>M-.</code> 查看接口定义</p>
+<p>  <code>M-,</code> 返回查看定义前的位置</p>
+<h2 id="Clojure-Cider"><a href="#Clojure-Cider" class="headerlink" title="Clojure(Cider)"></a>Clojure(Cider)</h2><p>  <code>C-c C-x C-j C-j</code> 启动 Cider nREPL</p>
+<p>  <code>C-c C-z</code> 切换 Buffer 和 nREPL，如果使用 <code>C-u</code> 前缀会将 nREPL 的命名空间切换到与当前 Buffer 匹配的命名空间</p>
+<p>  <code>C-c C-k</code> 运行当前整个 Buffer</p>
+<p>  <code>C-c C-e</code> 运行当前光标所在的前一个表达式</p>
+<p>  <code>C-c M-p</code> 将当前光标所在的前一个表达式输出到 nREPL 中</p>
+<p>  <code>C-c C-c</code> 运行当前光标所在的顶层表达式</p>
+<p>  <code>C-c C-b</code> 中断当前代码执行</p>
+<p>  <code>C-c C-m</code> 对当前光标位置的表达式执行 <code>macroexpand-1</code></p>
+<p>  <code>C-c M-m</code> 对当前光标位置的表达式执行 <code>macroexpand-all</code></p>
+<p>  <code>C-c C-l</code> 执行加载源代码文件</p>
+<p>  <code>C-c C-d d</code> 查询当前光标位置表达式的文档</p>
+<p>  <code>C-c C-d j</code> 在默认浏览器里查看当前光标位置表达的 JavaDoc</p>
+<p>  <code>C-c C-d a</code> Apropos 搜索 functions&#x2F;vars</p>
+<p>  <code>C-c M-i</code> Inspect 当前光标位置的表达式</p>
+<p>  <code>C-c C-u</code> 清除符号定义</p>
+<p>  <code>C-c M-t v</code> 开启函数 Tracing</p>
+<p>  <code>C-c M-t n</code> 开启命名空间 Tracing</p>
+<p>  <code>M-.</code> 跳转到定义处</p>
+<p>  <code>M-,</code> 返回之前的跳转处</p>
+<p>  <code>C-c C-t</code> 测试相关指令</p>
+<p>  <code>C-u C-M-x</code> 打开调试器</p>
+<p>  <code>C-M-x</code> 撤销调试器</p>
+<p>  <code>C-c C-= v</code> 开启函数 Profiling</p>
+<p>  <code>C-c C-= n</code> 开启命名空间 Profiling</p>
+<p>  <code>C-c C-= s</code> 展示 Profiling 报表</p>
+<p>  <code>C-c C-t C-p</code> 运行当前项目所有测试用例</p>
+<p>  <code>C-c C-t C-n</code> 运行当前命名空间下的所有测试用例</p>
+<p>  <code>C-c C-t C-l</code> 运行当前所有已加载的测试用例</p>
+<h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><p>  <code>M-.</code> 跳到函数声明</p>
+<p>  <code>M-,</code> 跳回光标处</p>
+<p>  <code>C-c C-o</code> 折叠&#x2F;展开当前代码块</p>
+<p>  <code>C-c C-f</code> 折叠&#x2F;展开所有函数块</p>
+<p>  <code>C-c C-t</code> 折叠&#x2F;展开所有注释</p>
+<p>  <code>C-c C-m</code> 代码反射</p>
+<p>  <code>C-c C-d</code> 插入注释文档</p>
+<h2 id="Org-mode"><a href="#Org-mode" class="headerlink" title="Org-mode"></a>Org-mode</h2><p>  <code>C-c &#39;</code> 打开 major mode 来编辑 src 里的源码</p>
+<p>  <code>C-c C-c</code> 执行 <code>... </code> 之间的代码</p>
+<p>  <code>C-c x</code> 导出项目HTML</p>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/Emacs/">Emacs</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/oop-scheme.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          使用Scheme模拟类和对象
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/celebrity-quotes.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          名句收录(持续更新)
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>

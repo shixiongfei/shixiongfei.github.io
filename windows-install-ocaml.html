@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>Windows安装WSL+OCaml开发环境 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        Windows安装WSL+OCaml开发环境
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2020-08-03 16:49:00</time>
+          <span class="text-gray-400">·</span>
+          <span>3 min</span>
+          <span class="text-gray-400">·</span>
+          <span>818 words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>在 Windows 上尝试多种 OCaml 开发环境方案后，最后还是选择WSL方案。</p>
+<p>这里做个简单记录，以备日后查用。</p>
+<h2 id="启用-WSL"><a href="#启用-WSL" class="headerlink" title="启用 WSL"></a>启用 WSL</h2><p>进入“控制面板” - “程序和功能” - “启用或关闭Windows功能” - “适用于 Linux 的 Windows 子系统” - “确定”</p>
+<h2 id="下载-Fedora-系统镜像"><a href="#下载-Fedora-系统镜像" class="headerlink" title="下载 Fedora 系统镜像"></a>下载 Fedora 系统镜像</h2><p>其实最初我打算安装的是 CentOS 系统，但是装完后发现系统有不少问题。整个系统极容易卡死失去响应，基本属于完全无法正常使用的状况。</p>
+<p>然后抱着死马当活马医的心态，尝试了下 Fedora，倒是出乎意料的顺利，有点意外。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fedora-cloud/docker-brew-fedora/raw/33/x86_64/fedora-33-x86_64-20200709.tar.xz">下载 Fedora 镜像</a></p>
+<h2 id="安装-Choco"><a href="#安装-Choco" class="headerlink" title="安装 Choco"></a>安装 Choco</h2><p>根据<a target="_blank" rel="noopener" href="https://chocolatey.org/install">官网提示</a>，在 PowerShell (管理员权限运行)中运行如下命令：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$</span> <span class="built_in">Set-ExecutionPolicy</span> Bypass <span class="literal">-Scope</span> <span class="keyword">Process</span> <span class="literal">-Force</span>; [<span class="type">System.Net.ServicePointManager</span>]::SecurityProtocol = [<span class="type">System.Net.ServicePointManager</span>]::SecurityProtocol <span class="operator">-bor</span> <span class="number">3072</span>; <span class="built_in">iex</span> ((<span class="built_in">New-Object</span> System.Net.WebClient).DownloadString(<span class="string">&#x27;https://chocolatey.org/install.ps1&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装-LxRunOffline"><a href="#安装-LxRunOffline" class="headerlink" title="安装 LxRunOffline"></a>安装 LxRunOffline</h2><p>继续在 PowerShell 中执行下列命令</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$</span> choco install lxrunoffline</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-LxRunOffline-安装-Fedora"><a href="#使用-LxRunOffline-安装-Fedora" class="headerlink" title="使用 LxRunOffline 安装 Fedora"></a>使用 LxRunOffline 安装 Fedora</h2><p>刚装完 LxRunOffline 可能需要重启下 PowerShell，然后继续在 PowerShell 中执行下列命令：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$</span> LxRunOffline install <span class="literal">-n</span> fedora <span class="literal">-d</span> 目标路径 <span class="operator">-f</span> fedora<span class="literal">-33-x86_64-20200709</span>.tar.xz</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>-n 是安装的系统名称，可自定义；</li>
+<li>-d 是安装系统的目录；</li>
+<li>-f 是之前下载的镜像路径；</li>
+</ul>
+<h2 id="启动-Fedora"><a href="#启动-Fedora" class="headerlink" title="启动 Fedora"></a>启动 Fedora</h2><p>可以用以下方式启动：</p>
+<ol>
+<li><code>LxRunOffline run -n fedora</code></li>
+<li><code>wsl -d fedora</code></li>
+</ol>
+<h2 id="创建用户并修改默认登陆用户"><a href="#创建用户并修改默认登陆用户" class="headerlink" title="创建用户并修改默认登陆用户"></a>创建用户并修改默认登陆用户</h2><p>进入 WSL Fedora 系统进行修改密码及添加用户操作</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">dnf install passwd</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">passwd        <span class="comment"># 修改root密码</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">adduser shixf</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">passwd shixf  <span class="comment"># 修改添加的用户密码</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /etc/sudoers</span></span><br><span class="line">  root ALL=(ALL) ALL</span><br><span class="line">  shixf ALL=(ALL) ALL    # 添加这行新建的用户就拥有root权限了</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cat</span> /etc/passwd        <span class="comment"># 看下新建的用户ID并记下来，后面会用到</span></span></span><br></pre></td></tr></table></figure>
+
+<p>在 PowerShell 中修改 WSL 默认用户</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$</span> LxRunOffline su <span class="literal">-n</span> fedora <span class="literal">-v</span> <span class="number">1000</span></span><br></pre></td></tr></table></figure>
+
+<p>重启 WSL 就变成新用户了</p>
+<h2 id="Fedora-安装-opam-依赖工具"><a href="#Fedora-安装-opam-依赖工具" class="headerlink" title="Fedora 安装 opam 依赖工具"></a>Fedora 安装 opam 依赖工具</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">dnf install diffutils</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">dnf install git</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">dnf install rsync</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="安装-opam-及初始化"><a href="#安装-opam-及初始化" class="headerlink" title="安装 opam 及初始化"></a>安装 opam 及初始化</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">dnf install opam</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">opam init --disable-sandboxing  <span class="comment"># WSL下不disable sanboxing无法正常初始化opam</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">opam install merlin</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">opam install utop</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">opam install batteries</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="安装-Emacs"><a href="#安装-Emacs" class="headerlink" title="安装 Emacs"></a>安装 Emacs</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">dnf install dbus-x11  <span class="comment"># WSL会有dbus的问题，目前没有找到解决方案</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">dnf install emacs</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="安装-X-Server"><a href="#安装-X-Server" class="headerlink" title="安装 X Server"></a>安装 X Server</h2><p>为了正常使用 Emacs，Windows 上需要安装一个 X Server，多次尝试之后，发现还是 Cygwin X 比较好。</p>
+<p>到 <a target="_blank" rel="noopener" href="https://cygwin.org/">Cygwin 官网</a>下载<a target="_blank" rel="noopener" href="https://cygwin.com/setup-x86_64.exe">安装程序</a>，安装的时候需要勾选下列几个 <a target="_blank" rel="noopener" href="https://x.cygwin.com/docs/ug/setup.html">Cygwin&#x2F;X</a> 相关的包：</p>
+<ul>
+<li>xorg-server (必选)</li>
+<li>xinit (必选)</li>
+<li>xorg-docs (可选)</li>
+<li>xlaunch (可选)</li>
+</ul>
+<p>安装完之后可以通过下面这个命令来启动 X Server (为了方便可以建一个快捷方式)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">C:\cygwin64\bin\XWin.exe :0 -multiwindow -listen tcp -noprimary</span></span><br></pre></td></tr></table></figure>
+
+<p>最后一步需要配置一下 WSL，告诉 WSL X Server已经在本地启动。配置方法只需将环境变量 <code>DISPLAY</code> 置为 <code>127.0.0.1:0</code> 即可。这里我将配置添加到 <code>./bashrc</code> 中，让 <code>bash</code> 每次自动设置环境变量。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> <span class="string">&quot;export DISPLAY=&#x27;127.0.0.1:0&#x27;&quot;</span> &gt;&gt; ~/.bashrc</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">source</span> ~/.bashrc</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="启动-Emacs"><a href="#启动-Emacs" class="headerlink" title="启动 Emacs"></a>启动 Emacs</h2><p>先启动 X Server，然后在 WSL 中输入</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">emacs</span></span><br></pre></td></tr></table></figure>
+
+<p>至此，如果一切配置正确的话，就可以看到独立窗口的 Emacs 进程。Emacs 的相关配置就请自行搞定了！</p>
+<p>Good Luck!</p>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E7%BC%96%E7%A8%8B/">编程</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/Windows/">Windows</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/OCaml/">OCaml</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/WSL/">WSL</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/interquarter-calculation.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          四分法剔除极端值
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/learn-smalltalk.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          Smalltalk学习记录
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>债券投资基本概念 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        债券投资基本概念
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2019-05-19 23:32:00</time>
+          <span class="text-gray-400">·</span>
+          <span>8 min</span>
+          <span class="text-gray-400">·</span>
+          <span>2.4k words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="债券的票面利率"><a href="#债券的票面利率" class="headerlink" title="债券的票面利率"></a>债券的票面利率</h2><ul>
+<li>债券票面利率越高,债券利息收入就越高,债券收益也就越高。</li>
+<li>债券的票面利率取决于债券发行时的市场利率、债券期限、发行者信用水平、债券的流动性水平等因素。<ul>
+<li>发行时市场利率越高,票面利率就越高；</li>
+<li>债券期限越长,票面利率就越高；</li>
+<li>发行者信用水平越高,票面利率就越低；</li>
+<li>债券的流动性越高,票面利率就越低。</li>
+</ul>
+</li>
+</ul>
+<h2 id="债券的净价与全价"><a href="#债券的净价与全价" class="headerlink" title="债券的净价与全价"></a>债券的净价与全价</h2><ul>
+<li><code>净价 = 全价 - 应计利息</code></li>
+<li><code>应计利息 = 票面利率 / 365天 * 已计息天数 * 债券面值</code><ul>
+<li>票面利率：固定利率国债是指发行票面利率,浮动利率国债是指本付息期计息利率。</li>
+<li>年度天数：1年按365天计算,闰年2月29日不计算利息。</li>
+<li>已计息天：数是指起息日至交割当日实际日历天数。</li>
+</ul>
+</li>
+</ul>
+<h2 id="到期收益率"><a href="#到期收益率" class="headerlink" title="到期收益率"></a>到期收益率</h2><ul>
+<li>到期收益是指将债券持有到偿还期所获得的收益，包括到期的全部利息。</li>
+<li>到期收益率又称最终收益率，是投资购买国债的内部收益率，即可以使投资购买国债获得的未来现金流量的现值等于债券当前市价的贴现率。</li>
+<li>它相当于投资者按照当前市场价格购买并且一直持有到满期时可以获得的年平均收益率。</li>
+<li>基本公式：$PV &#x3D; \sum_{t &#x3D; 1}^{n - 1} \frac{Ct} {(1 + r) ^ t} + \frac{F} {(1 + r) ^ n} &#x3D; \frac{C1} {(1 + r) ^ 1} + \frac{C2} {(1 + r) ^ 2} + … + \frac{Cn} {(1 + r) ^ n} + \frac{F} {(1 + r) ^ n}$<ul>
+<li>r：到期收益率</li>
+<li>PV：债券当前市场价格</li>
+<li>F：债券的面值</li>
+<li>C：按票面利率每年支付的利息</li>
+</ul>
+</li>
+<li>短期债券公式：<ul>
+<li>息票债券的计算：$Y &#x3D; \frac{(I + M - PV)} {(PV \times t)} \times 100%$<ul>
+<li>Y：到期收益率</li>
+<li>PV：债券买入价</li>
+<li>M：债券面值</li>
+<li>t：剩余的付息年数</li>
+<li>I：当期债券票面年利息</li>
+</ul>
+</li>
+<li>一次还本付息债券到期收益率的计算：$PV &#x3D; \frac{I} {(1 + Y) ^ 1} + \frac{I} {(1 + Y) ^ 2} + … + \frac{I} {(1 + Y) ^ t} + \frac{M} {(1 + Y) ^ t}$<ul>
+<li>Y：到期收益率</li>
+<li>PV：债券买入价</li>
+<li>M：债券面值</li>
+<li>t：剩余的付息年数</li>
+<li>I：当期债券票面年利息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>长期债券公式：$PV &#x3D; \frac{I} {(1 + Y) ^ 1} + \frac{I} {(1 + Y) ^ 2} + … + \frac{I} {(1 + Y) ^ t} + \frac{M} {(1 + Y) ^ t}$<ul>
+<li>Y：到期收益率</li>
+<li>PV：债券买入价</li>
+<li>M：债券面值</li>
+<li>t：剩余的付息年数</li>
+<li>I：当期债券票面年利息</li>
+</ul>
+</li>
+</ul>
+<h2 id="债券收益率"><a href="#债券收益率" class="headerlink" title="债券收益率"></a>债券收益率</h2><ul>
+<li>债券收益率就是衡量债券投资收益通常使用的一个指标，是债券收益与其投入本金的比率，通常用年利率表示。</li>
+<li>债券的投资收益不同于债券利息，债券利息仅指债券票面利率与债券面值的乘积，它只是债券投资收益的一个组成部分。</li>
+<li>除了债券利息以外，债券的投资收益还包括价差和利息再投资所得的利息收入，其中价差可能为负值。</li>
+<li>决定债券收益率的主要因素，有债券的票面利率、期限、面值、持有时间、购买价格和出售价格。</li>
+<li>计算公式1：对处于最后付息周期的附息债券（包括固定利率债券和浮动利率债券）、贴现债券和剩余流通期限在一年以内（含一年）的到期一次还本付息债券，到期收益率采取单利计算。 $y &#x3D; \frac{FV - PV} {PV} \div \frac{D} {365}$<ul>
+<li>y：到期收益率</li>
+<li>FV：到期本息和<ul>
+<li>贴现债券 <code>FV＝100</code> ，到期一次还本付息债券 <code>FV = M + N * C</code> ，附息债券 <code>FV = M + C / f</code></li>
+<li>M：债券面值</li>
+<li>N：债券偿还期限（年）</li>
+<li>C：债券票面年利息</li>
+<li>f：债券每年的利息支付频率</li>
+</ul>
+</li>
+<li>PV：债券全价（包括成交净价和应计利息）</li>
+<li>D：债券交割日至债券兑付日的实际天数</li>
+</ul>
+</li>
+<li>计算公式2：剩余流通期限在一年以上的零息债券的到期收益率采取复利计算。 $y &#x3D; \sqrt{\frac{M + N \times C} {PV}} - 1$<ul>
+<li>y：到期收益率</li>
+<li>PV：债券全价</li>
+<li>C：债券票面年利息</li>
+<li>M：债券面值</li>
+<li>N：债券的剩余流通期限（年），等于债券交割日至到期兑付日的实际天数除以365</li>
+</ul>
+</li>
+<li>计算公式3：剩余流通期限在一年以上的到期一次还本付息债券的到期收益率采取复利计算。 $y &#x3D; \sqrt[L]{\frac{M + N \times C} {PV}} - 1$<ul>
+<li>y：到期收益率</li>
+<li>PV：债券全价</li>
+<li>C：债券票面年利息</li>
+<li>M：债券面值</li>
+<li>N：债券偿还期限（年）</li>
+<li>L：债券的剩余流通期限（年），等于债券交割日至到期兑付日的实际天数除以365</li>
+</ul>
+</li>
+<li>计算公式4：不处于最后付息周期的固定利率附息债券和浮动利率债券的到期收益率采取复利计算。 $PV &#x3D; \sum_{t &#x3D; 1}^{n - 1} \frac{C &#x2F; f} {(1 + y &#x2F; f) ^{w + t}} + \frac{M} {(1 + y &#x2F; f) ^{w + n - 1}} &#x3D; \frac{C &#x2F; f} {(1 + y &#x2F; f) ^{w + 1}} + \frac{C &#x2F; f} {(1 + y &#x2F; f) ^{w + 2}} + … + \frac{C &#x2F; f} {(1 + y &#x2F; f) ^{w + n - 1}} + \frac{M} {(1 + y &#x2F; f) ^{w + n - 1}}$<ul>
+<li>y：到期收益率</li>
+<li>PV：债券全价</li>
+<li>f：债券每年的利息支付频率</li>
+<li>W ＝ D &#x2F; (365 &#x2F; f)<ul>
+<li>D：从债券交割日距下一次付息日的实际天数</li>
+</ul>
+</li>
+<li>M：债券面值</li>
+<li>n：剩余的付息次数</li>
+<li>C：当期债券票面年利息，在计算浮动利率债券时，每期需要根据参数C的变化对公式进行调整。</li>
+</ul>
+</li>
+<li>上述计算只是停留在理论上的计算，在实际操作过程当中，收益率的计算要考虑购买成本、交易成本、通货膨胀和税收成本因素，需要对上述计算公式作相应的调整。</li>
+</ul>
+<h2 id="市场利率与债券价格"><a href="#市场利率与债券价格" class="headerlink" title="市场利率与债券价格"></a>市场利率与债券价格</h2><ul>
+<li>由债券收益率的计算公式可知,市场利率的变动与债券价格的变动呈反向关系,即当市场利率升高时债券价格下降,市场利率降低时债券价格上升。</li>
+<li>市场利率的变动引起债券价格的变动,从而给债券的买卖带来差价。<ul>
+<li>市场利率升高,债券买卖差价为正数,债券的投资收益增加。</li>
+<li>市场利率降低,债券买卖差价为负数,债券的投资收益减少。</li>
+</ul>
+</li>
+<li>随着市场利率的升降,投资者如果能适时地买进卖出债券,就可获取更大的债券投资收益。</li>
+<li>当然,如果投资者债券买卖的时机不当,也会使得债券的投资收益减少。</li>
+<li>与债券面值和票面利率相联系,当债券价格高于其面值时,债券收益率低于票面利率。反之,则高于票面利率。</li>
+</ul>
+<h2 id="债券的投资成本"><a href="#债券的投资成本" class="headerlink" title="债券的投资成本"></a>债券的投资成本</h2><ul>
+<li>债券投资的成本大致有购买成本、交易成本和税收成本三部分。<ul>
+<li>购买成本是投资人买入债券所支付的金额(购买债券的数量与债券价格的乘积,即本金)；</li>
+<li>交易成本包括经纪人佣金、成交手续费和过户手续费等。</li>
+</ul>
+</li>
+<li>目前国债的利息收入是免税的,但企业债的利息收入还需要缴税,机构投资人还需要缴纳营业税,税收也是影响债券实际投资收益的重要因素。</li>
+<li>债券的投资成本越高,其投资收益也就越低。</li>
+<li>因此债券投资成本是投资者在比较选择债券时所必须考虑的因素,也是在计算债券的实际收益率时必须扣除的。</li>
+</ul>
+<h2 id="市场供求、货币政策和财政政策"><a href="#市场供求、货币政策和财政政策" class="headerlink" title="市场供求、货币政策和财政政策"></a>市场供求、货币政策和财政政策</h2><ul>
+<li>市场供求、货币政策和财政政策会对债券价格产生影响,从而影响到投资者购买债券的成本。</li>
+<li>因此市场供求、货币政策和财政政策也是我们考虑投资收益时所不可忽略的因素。</li>
+</ul>
+<h2 id="债券投资收益的确认与计量"><a href="#债券投资收益的确认与计量" class="headerlink" title="债券投资收益的确认与计量"></a>债券投资收益的确认与计量</h2><ul>
+<li>长期债券投资属于债权性质的投资，其投资收益的大小与持有时间长短有直接的关系。由于长期债券投资这种投资形式，投资企业持有债券的时间较长，因而，在存续期内，要按期预计本期已实现的投资收益。也就是说，长期债券投资的投资收益必须在债券存续期内按照一定的标准在各期予以确认。当转让(或出售)长期债券时，应在转让时确认投资收益或投资损失。</li>
+<li>长期债券投资收益应按企业持有债券时间和债券票面规定的利率来确定企业位得投资收益，但溢价或折价购入长期债券时，投资收益会因摊销溢价或折价而受到影响。</li>
+<li>当企业溢价购入长期债券时，每期投资收益应按本期预计的投资收益加上本期应摊销的溢价入账；当企业折价购入长期债券时，每项投资应按本期预计的投资收益减去本期应摊销的折价入账。</li>
+<li>另外，企业转让(或出售)长期债券时，应按转让(或出售)长期债券所取得的收入扣除购买债券时实际成本、债券持有利息及转让费用后来确定企业应得的投资收益。</li>
+</ul>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%8A%95%E8%B5%84%E7%90%86%E8%B4%A2/">投资理财</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E5%80%BA%E5%88%B8%E6%8A%95%E8%B5%84/">债券投资</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/learn-erlang-exception.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          Erlang极简学习笔记<07>——错误和异常篇
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/stock-fundamental.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          股票基本面概念
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>

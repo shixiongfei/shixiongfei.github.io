@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>Erlang极简学习笔记&lt;03&gt;——函数篇 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        Erlang极简学习笔记<03>——函数篇
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2019-04-20 00:28:00</time>
+          <span class="text-gray-400">·</span>
+          <span>3 min</span>
+          <span class="text-gray-400">·</span>
+          <span>827 words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><ul>
+<li>Erlang中定义函数时可以使用模式匹配，形式如下：</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">function</span><span class="params">(X)</span> -&gt;</span></span><br><span class="line">  Expression;</span><br><span class="line"><span class="function"><span class="title">function</span><span class="params">(Y)</span> -&gt;</span></span><br><span class="line">  Expression;</span><br><span class="line"><span class="function"><span class="title">function</span><span class="params">(_)</span> -&gt;</span></span><br><span class="line">  Expression.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>其中的每一条函数声明都被称作一个函数子句（function clause）。函数子句之间必须用分号 <code>;</code> 分隔，所有函数子句一起形成一个完整的函数定义，最后一个函数子句必须以句点 <code>.</code> 结尾</p>
+</li>
+<li><p>在Erlang中变量的值永远不能改变！</p>
+</li>
+<li><p>如果给一个已经绑定的变量赋值，除非这个新值和变量原有的值相同，否则就会引发错误</p>
+</li>
+<li><p>在函数头中可以使用 <code>=</code> 操作符，这样可以在匹配元组内部元素（ <code>&#123;X, Y&#125;</code> ）的同时，匹配整个元组</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">point</span><span class="params">(Point = &#123;X, Y&#125;)</span> -&gt;</span></span><br><span class="line">  io:format(<span class="string">&quot;Point: ~p~n&quot;</span>, [Point]),</span><br><span class="line">  io:format(<span class="string">&quot; X: ~p, Y: ~p~n&quot;</span>, [X, Y]).</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>卫语句是附加在函数头中的语句，能够让模式匹配更具表达力</p>
+</li>
+<li><p>卫表达式有一条基本规则，想要成功，它必须返回 <code>true</code> 。如果返回了 <code>false</code> 或者抛出了异常，就表明卫语句失败</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">old_enough</span><span class="params">(X)</span> <span class="title">when</span> X &gt;= 16, X =&lt; 104 -&gt;</span> <span class="literal">true</span>;</span><br><span class="line"><span class="function"><span class="title">old_enough</span><span class="params">(_)</span> -&gt;</span> <span class="literal">false</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在卫表达式中，逗号（ <code>,</code> ）的作用和操作符 <code>andalso</code> 类似，分号（ <code>;</code> ）和 <code>orelse</code> 类似</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">wrong_age</span><span class="params">(X)</span> <span class="title">when</span> X &lt; 16; Y &gt; 104 -&gt;</span> <span class="literal">true</span>;</span><br><span class="line"><span class="function"><span class="title">wrong_age</span><span class="params">(_)</span> -&gt;</span> <span class="literal">false</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>函数可以带有任意多个由逗号分隔的卫表达式，这些卫表达式必须都是成功，整个卫语句才能通过</p>
+</li>
+<li><p>卫语句除了使用比较和布尔操作，还可以使用算术运算符( <code>A*B/C &gt;= 0</code> )和判断数据类型的函数( <code>is_integer/1</code> ,  <code>is_atom/1</code> )</p>
+</li>
+<li><p>卫语句有一个缺点，考虑到副作用方面的原因，卫语句中不能使用用户自定义函数</p>
+</li>
+<li><p><code>if</code> 语句又称为卫模式(guard pattern)， <code>if</code> 语句的作用和卫语句类似，和卫语句的语法也一样，但是它在函数子句头之外使用</p>
+</li>
+<li><p>Erlang中的 <code>if</code> 和其他大多数语言中见到的 <code>if</code> 不同，和那些 <code>if</code> 语句相比，Erlang版本的 <code>if</code> 像个怪物</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(what_the_if)</span>.</span><br><span class="line"><span class="keyword">-export</span><span class="params">([heh_fine/<span class="number">0</span>])</span>.</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">heh_fine</span><span class="params">()</span> -&gt;</span></span><br><span class="line">  <span class="keyword">if</span> <span class="number">1</span> =:= <span class="number">1</span> -&gt;</span><br><span class="line">    works</span><br><span class="line">  <span class="keyword">end</span>,</span><br><span class="line">  <span class="keyword">if</span> <span class="number">1</span> =:= <span class="number">2</span>; <span class="number">1</span> =:= <span class="number">1</span> -&gt;</span><br><span class="line">    works</span><br><span class="line">  <span class="keyword">end</span>,</span><br><span class="line">  <span class="keyword">if</span> <span class="number">1</span> =:= <span class="number">2</span>, <span class="number">1</span> =:= <span class="number">1</span> -&gt;</span><br><span class="line">    fails</span><br><span class="line">  <span class="keyword">end</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Erlang中每个表达式都必须有返回值， <code>if</code> 表达式也不例外</p>
+</li>
+<li><p>当Erlang无法让卫表达式成功时就会崩溃</p>
+</li>
+<li><p>其他语言中的 <code>else</code> 在Erlang会使用 <code>true</code></p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">oh_god</span><span class="params">(N)</span> -&gt;</span></span><br><span class="line">  <span class="keyword">if</span> N =:= <span class="number">2</span> -&gt; might_success;</span><br><span class="line">    <span class="literal">true</span> -&gt; always_does <span class="comment">%%这是Erlang if 的 else!</span></span><br><span class="line">  <span class="keyword">end</span>.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Erlang的 <code>if</code> 表达式可以有多个卫语句。再次强调！任何表达式都必须要有返回值</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">help_me</span><span class="params">(Animal)</span> -&gt;</span></span><br><span class="line">  Talk = <span class="keyword">if</span> Animal == cat -&gt; <span class="string">&quot;meow&quot;</span>;</span><br><span class="line">    Animal == beef -&gt; <span class="string">&quot;mooo&quot;</span>;</span><br><span class="line">    Animal == dog -&gt; <span class="string">&quot;bark&quot;</span>;</span><br><span class="line">    Animal == tree -&gt; <span class="string">&quot;bark&quot;</span>;</span><br><span class="line">    <span class="literal">true</span> -&gt; <span class="string">&quot;fgdadfgna&quot;</span></span><br><span class="line">  <span class="keyword">end</span>,</span><br><span class="line">  &#123;Animal, <span class="string">&quot;says&quot;</span> ++ Talk ++ <span class="string">&quot;!&quot;</span>&#125;.</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Erlang中没有像null值（如：Lisp中的 <code>nil</code> ，C中的 <code>NULL</code> 或者Python中的 <code>None</code> ）这样的东西</p>
+</li>
+<li><p><code>case...of</code> 表达式就像函数头，可以使用复杂的模式匹配，还可以使用卫语句</p>
+</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">beach</span><span class="params">(Temperature)</span> -&gt;</span></span><br><span class="line">  <span class="keyword">case</span> Temperature <span class="keyword">of</span></span><br><span class="line">    &#123;celsius, N&#125; <span class="keyword">when</span> N &gt;= <span class="number">20</span>, N =&lt; <span class="number">45</span> -&gt;</span><br><span class="line">      &#x27;favorable&#x27;;</span><br><span class="line">    &#123;kelvin, N&#125; <span class="keyword">when</span> N &gt;= <span class="number">293</span> , N =&lt; <span class="number">318</span> -&gt;</span><br><span class="line">      &#x27;scientifically favorable&#x27;;</span><br><span class="line">    &#123;fahrenheit, N&#125; <span class="keyword">when</span> N &gt;= <span class="number">68</span>, N =&lt; <span class="number">113</span> -&gt;</span><br><span class="line">      &#x27;favorable in the US&#x27;;</span><br><span class="line">    _ -&gt;</span><br><span class="line">      &#x27;avoid beach&#x27;</span><br><span class="line">  <span class="keyword">end</span>.</span><br></pre></td></tr></table></figure>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E7%BC%96%E7%A8%8B/">编程</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/Erlang/">Erlang</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/python-pypi.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          将Python代码打包放到PyPI上
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/debian-ssh-safety.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          Debian提高SSH安全
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>

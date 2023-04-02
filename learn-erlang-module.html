@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>Erlang极简学习笔记&lt;02&gt;——模块篇 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        Erlang极简学习笔记<02>——模块篇
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2019-04-12 22:06:00</time>
+          <span class="text-gray-400">·</span>
+          <span>6 min</span>
+          <span class="text-gray-400">·</span>
+          <span>1.6k words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><ul>
+<li><p>模块（module）是一个具有名字的文件，其中包含一组函数。Erlang中的所有函数都必须定义在模块中</p>
+</li>
+<li><p>Erlang模块中BIF函数和其他函数不同，在启动Erlang时，它们会被自动引入</p>
+</li>
+<li><p>模块中的其他所有函数都必须用 <code>Module:Function(Arguments)</code> 这样的形式调用</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lists:seq(<span class="number">1</span>, <span class="number">4</span>).</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编写模块时，可以定义两种东西：函数(function)和属性(attribute)</p>
+</li>
+<li><p>属性是元数据，用来描述模块自身，如模块的名字、外部可见的函数、模块的作者等</p>
+</li>
+<li><p>所有模块属性都采用 <code>-Name(Attribute).</code> 的形式</p>
+</li>
+<li><p><code>-module(Name).</code> 这个属性永远是文件的第一个属性（也是第一条语句），其中 <code>Name</code> 是一个原子</p>
+</li>
+<li><p>注意！ <code>-module</code> 属性中定义的模块名必须和模块文件的名字一致。如果名字不一致，模块将无法编译</p>
+</li>
+<li><p><code>.erl</code> 是标准的Erlang源文件扩展名</p>
+</li>
+<li><p><code>-export([Function1/Arity, Function2/Arity, ..., FunctionN/Arity]).</code> 用来定义模块中的哪些函数可以被其他模块调用</p>
+</li>
+<li><p><code>Atity</code> 是函数的元数，表示这个函数可以接收的参数个数</p>
+</li>
+<li><p>不同元数可以使用相同的函数名</p>
+</li>
+<li><p><code>add(X, Y)</code> 和 <code>add(X, Y, Z)</code> 就是不同的函数，可以分别表示为 <code>add/2</code> 和 <code>add/3</code></p>
+</li>
+<li><p>函数定义的语法遵循 <code>Name(Args) -&gt; Body.</code> 这样的形式。 <code>Name</code> 必须是一个原子， <code>Body</code> 可以是一个或者多个用逗号分隔的Erlang表达式，函数以一个句点结束</p>
+</li>
+<li><p>注意！Erlang的没有 <code>return</code> 关键字，函数中最后一个表达式的执行结果会被自动作为返回值</p>
+</li>
+<li><p>Erlang中只有单行注释，注释以 <code>%</code> 起始</p>
+</li>
+<li><p>在Erlang社区中，概括性注释通常使用3个百分号(%%%)，独立行中的注释使用2个百分号(%%)，代码之后的行内注释使用单个百分号(%)</p>
+</li>
+<li><p><code>-import(Module, [Function1/Arity, Function2/Arity, ..., FunctionN/Arity]).</code> 用来引入模块</p>
+</li>
+<li><p>注意！引入模块会降低代码的可读性，所以Erlang社区强烈反对在代码中使用 <code>-import</code> 属性</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(useless)</span></span><br><span class="line"><span class="keyword">-export</span><span class="params">([add/<span class="number">2</span>, hello/<span class="number">0</span>, greet_and_add_two/<span class="number">1</span>])</span></span><br><span class="line"></span><br><span class="line">add<span class="params">(A, B)</span> -&gt;</span><br><span class="line">  A + B.</span><br><span class="line"></span><br><span class="line"><span class="comment">%% io:format/1 是标准的文本输出函数</span></span><br><span class="line"><span class="function"><span class="title">hello</span><span class="params">()</span> -&gt;</span></span><br><span class="line">  io:format(<span class="string">&quot;Hello, world!~n&quot;</span>).</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">greet_and_add_two</span><span class="params">(X)</span> -&gt;</span></span><br><span class="line">  hello(),</span><br><span class="line">  add(X, <span class="number">2</span>).</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Erlang代码会被编译成字节码，这样VM就能执行它了</p>
+</li>
+<li><p>在命令行中调用Erlang编译器</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">erlc useless.erl</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果在shell或者模块中，可以像这样编译代码</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">compile:file(Filename)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>还有一种方法，在开发代码时经常使用，就是在shell中编译： <code>c()</code></p>
+</li>
+<li><p>默认情况下，shell只会在它的启动目录和标准库中去查找文件</p>
+</li>
+<li><p><code>cd/1</code> 函数专门用于Erlang shell，可以更换shell当前目录，这样寻找文件方便些</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">cd</span><span class="params">(<span class="string">&quot;/path/to/where/you/saved/the-module/&quot;</span>)</span>.</span></span><br><span class="line"><span class="function"><span class="title">c</span><span class="params">(useless)</span>.</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>代码编译成功后会产生一个 <code>.beam</code> 文件</p>
+</li>
+<li><p>Erlang中的函数和表达式必须要有返回值</p>
+</li>
+<li><p>Erlang提供了很多编译选项，用来对一个模块的编译方式进行控制。例如常用的：</p>
+<ul>
+<li><p>-debug_info</p>
+<ul>
+<li>调试器、代码覆盖率统计以及静态分析之类的Erlang工具都使用模块中的调试信息来完成工作。建议这个编译选项一直开启</li>
+</ul>
+</li>
+<li><p>-{outdir,Dir}</p>
+<ul>
+<li>默认情况下，Erlang编译器会将 <code>.beam</code> 文件放置到当前目录。可以用这个选项指定编译文件的存放路径</li>
+</ul>
+</li>
+<li><p>-export_all</p>
+<ul>
+<li>这个选项会让编译器忽略文件中已定义的 <code>-export</code> 模块属性，把文件中所有函数都导出。通常用在测试和开发阶段</li>
+</ul>
+</li>
+<li><p>-{d,Macro} 和 {d,Macro,Value}</p>
+<ul>
+<li>这个选项定义了一个可以在模块中使用的宏，其中Macro是个原子。这个选项在单元测试中用得最多，因为它能确保模块中的测试函数只在明确需要时才会被创建和导出。如果元祖中没有定义第三个元素， <code>Value</code> 会被默认设置为 <code>true</code></li>
+</ul>
+</li>
+<li><p>shell中使用编译选项</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">compile:file(useless, [debug_info, export_all]).</span><br><span class="line"><span class="function"><span class="title">c</span><span class="params">(useless, [debug_info, export_all])</span>.</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>还可以在模块内部通过模块属性来定义编译选项</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-compile</span><span class="params">([debug_info, export_all])</span>.</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>可以使用 <code>hipe</code> 模块来编译成本地码，据说可以提速20%</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hipe:c(Module, OptionsList).</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在shell中调用 <code>c(Module, [native]).</code> 也能编译成本地码</p>
+</li>
+<li><p>Erlang的宏和C语言的 <code>#define</code> 语句类似，主要用来定义简短的函数和常量</p>
+</li>
+<li><p>Erlang中的宏是通过模块属性来定义的</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-define</span><span class="params">(MACRO, some_value)</span>.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后你就可以在模块的任意函数中使用宏 <code>?MACRO</code> 了，这个宏在代码编译前会被替换成 <code>some_value</code></p>
+</li>
+<li><p>函数宏的定义方法类似</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-define</span><span class="params">(sub(X,Y), X-Y)</span>.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>调用函数宏和调用其他宏一样就行了</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?sub(<span class="number">23</span>, <span class="number">47</span>).</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Erlang中有一些预定义的宏：</p>
+<ul>
+<li><code>?MODULE</code> 会被替换成当前模块的名字，是一个原子；</li>
+<li><code>?FILE</code> 会被替换成当前文件的名字，是一个字符串；</li>
+<li><code>?LINE</code> 会被替换成该宏所在的代码行的行号；</li>
+</ul>
+</li>
+<li><p>和C语言一样，检测某个宏是否已经在代码中定义使用属性 <code>-ifdef(MACRO).</code> 、 <code>-else</code> 和 <code>-endif</code></p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-ifdef</span><span class="params">(DEBUGMODE)</span>.</span><br><span class="line"><span class="keyword">-define</span><span class="params">(DEBUG(S)</span>, io:format<span class="params">(<span class="string">&quot;dbg: &quot;</span> ++ S)</span>).</span><br><span class="line"><span class="keyword">-else</span>.</span><br><span class="line"><span class="keyword">-define</span><span class="params">(DEBUG(S)</span>, ok).</span><br><span class="line"><span class="keyword">-endif</span>.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Erlang同样可以实现条件编译</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-ifdef</span><span class="params">(TEST)</span>.</span><br><span class="line"><span class="function"><span class="title">my_test_function</span><span class="params">()</span> -&gt;</span></span><br><span class="line">  rum_some_tests().</span><br><span class="line"><span class="keyword">-endif</span>.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译模块时定义指定宏</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">c</span><span class="params">(Module, [&#123;d, &#x27;DEBUGMODE&#x27;&#125;, &#123;d, &#x27;TEST&#x27;&#125;])</span>.</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>模块属性是描述模块自身的元数据。编译一个模块时，编译器会提取出大部分模块属性并把它们保存在 <code>module_info/0</code> 函数中</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useless:module_info().</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以使用 <code>module_info/1</code> 函数来获取一些特定信息</p>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">useless:module_info(attributes).</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果你在module中增加了 <code>-author(&quot;An Erlang Champ&quot;).</code> ，那么它会出现在和 <code>vsn</code> 同样的区段中</p>
+</li>
+<li><p><code>vsn</code> 是一个自动生成的唯一值，用来区分代码的不同版本。它通常用在代码热加载以及某些发布管理工具中</p>
+</li>
+<li><p>可以通过在模块中增加 <code>-vsn(VersionNumber)</code> 属性来自行指定一个 <code>vsn</code> 值</p>
+</li>
+<li><p>关于模块设计一定要牢记：一定要避免环形依赖。如果模块B调用了模块A，那么模块A就不应该再去调用模块B。这样的依赖关系最终会导致代码难以维护</p>
+</li>
+<li><p>事实上，如果代码依赖于太多的模块，即使它们之间并不构成环形依赖，也会让代码变的难以维护</p>
+</li>
+</ul>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E7%BC%96%E7%A8%8B/">编程</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/Erlang/">Erlang</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/debian-bluetooth.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          Debian下蓝牙使用
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/investment-wisdom-in-tao-te-jing.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          《道德经》中的投资智慧
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>

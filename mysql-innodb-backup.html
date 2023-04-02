@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>MySQL InnoDB备份方案 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        MySQL InnoDB备份方案
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2019-05-13 22:40:00</time>
+          <span class="text-gray-400">·</span>
+          <span>9 min</span>
+          <span class="text-gray-400">·</span>
+          <span>2.1k words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="XtraBackup介绍"><a href="#XtraBackup介绍" class="headerlink" title="XtraBackup介绍"></a>XtraBackup介绍</h2><p>Percona XtraBackup是开源免费的MySQL数据库热备份软件，它能对InnoDB和XtraDB存储引擎的数据库非阻塞地备份（对于MyISAM的备份同样需要加表锁）。XtraBackup支持所有的Percona Server、MySQL、MariaDB和Drizzle。</p>
+<p>XtraBackup优势：</p>
+<ol>
+<li>无需停止数据库进行InnoDB热备</li>
+<li>增量备份MySQL</li>
+<li>流压缩传输到其它服务器</li>
+<li>能比较容易地创建主从同步</li>
+<li>备份MySQL时不会增大服务器负载</li>
+</ol>
+<h2 id="创建mysql备份用户"><a href="#创建mysql备份用户" class="headerlink" title="创建mysql备份用户"></a>创建mysql备份用户</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mysql -uroot -p123456 -e <span class="string">&quot;CREATE USER &#x27;backup&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;123456&#x27;&quot;</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mysql -uroot -p123456 -e <span class="string">&quot;GRANT RELOAD, LOCK TABLES, REPLICATION CLIENT, CREATE TABLESPACE, SUPER ON *.## TO &#x27;backup&#x27;@&#x27;%&#x27;&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="mysql完整热备份与恢复"><a href="#mysql完整热备份与恢复" class="headerlink" title="mysql完整热备份与恢复"></a>mysql完整热备份与恢复</h2><p>完整备份</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --user=backup --password=123456 /data/vbackup/hotbackup/full --no-timestamp --parallel=2</span></span><br></pre></td></tr></table></figure>
+
+<p>备份恢复准备</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --apply-log --use-memory=10G /data/vbackup/hotbackup/full</span></span><br></pre></td></tr></table></figure>
+
+<p>恢复备份</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">service mysql stop    <span class="comment"># 停止mysql,清空MySQL的datadir</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mv</span> /usr/local/mysql/data /usr/local/mysql/data.old</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> -p /usr/local/mysql/data</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --copy-back --rsync /data/vbackup/hotbackup/full    <span class="comment"># 恢复备份数据</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">chown</span> -R mysql:mysql /usr/local/mysql/data    <span class="comment"># 修改datadir的权限</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="mysql增量热备份"><a href="#mysql增量热备份" class="headerlink" title="mysql增量热备份"></a>mysql增量热备份</h2><p>创建基础备份(全备份)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --user=backup --password=123456  /data/vbackup/hotbackup/base --no-timestamp --parallel=2</span></span><br></pre></td></tr></table></figure>
+
+<p>基于基础备份,创建增量备份inc_one</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --user=backup --password=123456 --incremental /data/vbackup/hotbackup/inc_one --incremental-basedir=/data/vbackup/hotbackup/base --no-timestamp --parallel=2</span></span><br></pre></td></tr></table></figure>
+
+<p>基于增量备份inc_one，创建增量备份inc_two</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --user=backup --password=123456 --incremental /data/vbackup/hotbackup/inc_two --incremental-basedir=/data/vbackup/hotbackup/inc_one --no-timestamp --parallel=2</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="mysql增量热备份恢复"><a href="#mysql增量热备份恢复" class="headerlink" title="mysql增量热备份恢复"></a>mysql增量热备份恢复</h2><p>准备基础备份(应用基础备份xtrabackup日志中的提交的事务，但不回滚未提交的事务)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --apply-log --redo-only --use-memory=10G /data/vbackup/hotbackup/base</span></span><br></pre></td></tr></table></figure>
+
+<p>将增量备份inc_one应用到基础备份</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --apply-log --redo-only --use-memory=10G /data/vbackup/hotbackup/base/ --incremental-dir=/data/vbackup/hotbackup/inc_one/</span></span><br></pre></td></tr></table></figure>
+
+<p>将增量备份inc_two应用到基础备份</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --apply-log --use-memory=10G /data/vbackup/hotbackup/base/ --incremental-dir=/data/vbackup/hotbackup/inc_two</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>注：当准备基础备份和合并增量备份(最后一个增量备份除外)的时候，需要使用 <code>--redo-only</code> 参数。</li>
+</ul>
+<p>当所有的增量备份合并完成之后，再一次准备全备份,回滚未提交的事务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --apply-log --use-memory=10G /data/vbackup/hotbackup/base/</span></span><br></pre></td></tr></table></figure>
+
+<p>恢复全备份并启动mysql</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">service mysql stop</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">rm</span> -rf /usr/local/mysql/data.old &amp;&amp; <span class="built_in">mv</span> /usr/local/mysql/data /usr/local/mysql/data.old</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> -p /usr/local/mysql/data</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --copy-back --rsync /data/vbackup/hotbackup/base/</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">chown</span> -R mysql:mysql /usr/local/mysql/data</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">service mysql start</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="innobackupex部分备份"><a href="#innobackupex部分备份" class="headerlink" title="innobackupex部分备份"></a>innobackupex部分备份</h2><p>innobackupex部分备份，有以下三个参数可选择</p>
+<ol>
+<li><code>--databases=&quot;database1[.table1] ...&quot;</code><ul>
+<li>比如: <code>--databases=&quot;employees sales.orders&quot;</code></li>
+</ul>
+</li>
+<li><code>--tables-file=tables.txt</code><ul>
+<li>tables.txt文件每一行有一个database.table</li>
+</ul>
+</li>
+<li><code>--include=regexp,</code><ul>
+<li>比如: <code>--include=&#39;^database(1|2)\.reports&#39;</code></li>
+</ul>
+</li>
+</ol>
+<p>在准备“部分备份”和拷贝恢复“部分备份”到一个空的datadir之后，请确保datadir中有”mysql”数据库，否则mysql无法启动。</p>
+<p>如果没有，则需要先创建系统的数据库再启动:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mysql_install_db --user=mysql</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="innobackupex从库热备份"><a href="#innobackupex从库热备份" class="headerlink" title="innobackupex从库热备份"></a>innobackupex从库热备份</h2><p>在主从复制环境中的”从库”做热备份的时候,可以使用 <code>--slave-info</code> 和 <code>--safe-slave-backup</code> 参数。</p>
+<p>在备份的时候使用 <code>--slave-info</code> 会将Master的binary log的文件名和偏移位置记录打印出来，同时也保存到xtrabackup_slave_info文件中。<br><code>--safe-slave-backup</code> 则会暂停Slave的SQL线程，等待到没有打开的临时表的时候开始备份。备份结束后SQL线程会自动启动，这样就可以确保一致性的复制状态。</p>
+<h2 id="XtraBackup流备份与压缩备份"><a href="#XtraBackup流备份与压缩备份" class="headerlink" title="XtraBackup流备份与压缩备份"></a>XtraBackup流备份与压缩备份</h2><h3 id="tar流备份及压缩"><a href="#tar流备份及压缩" class="headerlink" title="tar流备份及压缩"></a>tar流备份及压缩</h3><p>将完全备份直接存储到tar压缩包,并将它进行gzip压缩</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --user=backup --password=123456 --stream=tar ./ | gzip - &gt; backup.tar.gz</span></span><br></pre></td></tr></table></figure>
+
+<p>完全备份并gzip压缩发送到远程机器</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --user=backup --password=123456 --stream=tar ./ | gzip | ssh root@192.168.1.192 <span class="string">&quot;cat - &gt; /data/tarbackup/backup.tar.gz&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>解压缩(必须使用 -i 参数)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">tar -izxvf backup.tar.gz -C ./data/</span></span><br></pre></td></tr></table></figure>
+
+<p>注：解压之后的数据仍然需要进行 apply-log 之后才可以用于恢复</p>
+<h3 id="xbstream流备份及压缩"><a href="#xbstream流备份及压缩" class="headerlink" title="xbstream流备份及压缩"></a>xbstream流备份及压缩</h3><p>将备份压缩到名为”backup.xbstream”的压缩包</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --user=backup --password=123456 --stream=xbstream ./ &gt; backup.xbstream</span></span><br></pre></td></tr></table></figure>
+
+<p>解压backup.xbstream到.&#x2F;backup&#x2F;</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">xbstream -x &lt; backup.xbstream -C ./backup/</span></span><br></pre></td></tr></table></figure>
+
+<p>多线程并行文件拷贝和qpress并行快速压缩备份,然后直接发送到远程机器并进行xbstream解压保存</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --user=backup --password=123456 --compress --compress-threads=8 --parallel=4 --stream=xbstream ./ | ssh root@192.168.1.192 <span class="string">&quot;xbstream -x -C /data/mysql/backup&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>远程机器上对xbstream解压后的备份文件中的qpress压缩文件进行解压</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> /data/mysql/backup</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="keyword">for</span> f <span class="keyword">in</span> `find ./ -iname <span class="string">&quot;*\.qp&quot;</span>`; <span class="keyword">do</span> qpress -dT2 <span class="variable">$f</span>  $(<span class="built_in">dirname</span> <span class="variable">$f</span>) &amp;&amp; <span class="built_in">rm</span> -f <span class="variable">$f</span>; <span class="keyword">done</span></span></span><br></pre></td></tr></table></figure>
+
+<p>注：解压之后的数据仍然需要进行 apply-log 之后才可以用于恢复。</p>
+<h3 id="xbstream流增量备份"><a href="#xbstream流增量备份" class="headerlink" title="xbstream流增量备份"></a>xbstream流增量备份</h3><p>创建基础全备份,发送到远程机器并解压</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --user=backup --password=123456 --parallel=4 --stream=xbstream ./ | ssh root@192.168.1.192 <span class="string">&quot;xbstream -x -C /data/www/mysql/incremental/base&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>查看基础备份的checkpoint信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ssh root@192.168.1.192 -C <span class="string">&quot;cat /data/www/mysql/incremental/base/xtrabackup_checkpoints&quot;</span></span></span><br><span class="line">    backup_type = full-backuped</span><br><span class="line">    from_lsn = 0</span><br><span class="line">    to_lsn = 1807243286</span><br><span class="line">    last_lsn = 1807243286</span><br></pre></td></tr></table></figure>
+
+<p>基于基础备份,创建增量备份one</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">innobackupex --user=backup --password=123456 --parallel=4 --incremental --incremental-lsn=1807243286 --stream=xbstream ./ | ssh root@192.168.1.192 <span class="string">&quot;xbstream -x -C /data/www/mysql/incremental/one&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>注：关于增量备份的日志应用和备份恢复，请参考上文的”mysql增量热备份恢复”部分</p>
+<h3 id="xtrabackup选项注释"><a href="#xtrabackup选项注释" class="headerlink" title="xtrabackup选项注释"></a>xtrabackup选项注释</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">--print-defaults显示默认选项。Xtrabackup默认情况会去读my.cnf文件，读取顺序是/etc/my.cnf /etc/mysql/my.cnf /usr/local/etc/my.cnf ~/.my.cnf</span><br><span class="line">--no-defaults 忽略任何my.cnf文件选项</span><br><span class="line">--defaults-file=#读取指定的my.cnf文件</span><br><span class="line">--defaults-extra-file=#再读取另外一个文件</span><br><span class="line">--target-dir=name目的目录，默认目录在./xtrabackup_backupfiles/，相对于datadir目录</span><br><span class="line">--backup 备份</span><br><span class="line">--stats 计算datadir目录统计信息</span><br><span class="line">--prepare 从backup恢复</span><br><span class="line">--export 在恢复时，创建文件导入到另一个数据库</span><br><span class="line">--apply-log-only在恢复时，停止恢复进程不进行LSN只使用log</span><br><span class="line">--print-param 打印出参数</span><br><span class="line">--use-memory=#buffer_pool_size值</span><br><span class="line">--suspend-at-end在备份时，创建xtrabackup_suspended文件，直到备份完成后删掉</span><br><span class="line">--throttle=# 限制IO总数</span><br><span class="line">--log-stream 记录标准输出信息xtrabackup_logfile</span><br><span class="line">--extra-lsndir=name仅适用于backup，保存另一份xtrabackup_checkpoints文件</span><br><span class="line">--incremental-lsn=name仅适用于backup，增量备份</span><br><span class="line">--incremental-basedir=name仅适用于backup，增量备份目录</span><br><span class="line">--incremental-dir=name仅适用于prepare，恢复指定目录下的.delta文件和日志文件</span><br><span class="line">--tables=name 过滤某些表</span><br><span class="line">--tables_file=name过滤database.table列表文件</span><br><span class="line">--create-ib-logfile</span><br><span class="line">-h,--datadir=name datadir目录</span><br><span class="line">-t,--tmpdir=name tmpdir目录</span><br><span class="line">--parallel=# 默认为1.传输数据文件的并行线程数。没有任何流模式的影响</span><br><span class="line">--innodb_* 有关innodb参数</span><br></pre></td></tr></table></figure>
+
+<h3 id="innobackupex选项注释"><a href="#innobackupex选项注释" class="headerlink" title="innobackupex选项注释"></a>innobackupex选项注释</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">--defaults-file=[MY.CNF]该选项传递给xtrabackup子进程，从指定文件读取缺省选项</span><br><span class="line">--apply-log 从备份恢复。</span><br><span class="line">--redo-only 该选项强制跳过rollback阶段，只进行redo。这是有必要使用的，如果备份后，要使用增量改变的。</span><br><span class="line">--copy-back 从备份目录拷贝数据和索引文件到datadir目录</span><br><span class="line">--remote-host=HOSTNAME备份到远程主机上，使用ssh</span><br><span class="line">--stream=[tar|cpio(notimplemented)] 指定备份标准输出格式</span><br><span class="line">--tmpdir=DIRECTORY默认与tmpdir相同。使用—remote-host或—stream参数后，传输日志文件将存放在临时目录下</span><br><span class="line">--use-memory=MB选项传递给xtrabackup子进程。恢复使用内存大小</span><br><span class="line">--parallel=NUMBER-OF-THREADS选项传递给xtrabackup子进程，指定数据传输线程总数。默认为1</span><br><span class="line">--throttle=IOS选项传递给xtrabackup子进程，限制IO线程数量</span><br><span class="line">--sleep=MS 选项传递给xtrabackup子进程。每拷贝1MB数据暂停多少MS时间</span><br><span class="line">--compress[=LEVEL]选项传递给xtrabackup子进程。压缩级别在0-9.1快速压缩，9最佳压缩，0不压缩。默认为1.</span><br><span class="line">--include=REGEXP选项传递给xtrabackup子进程。使用正则进行匹配</span><br><span class="line">--databases=LIST指定备份数据库</span><br><span class="line">--tables-file=FILE</span><br><span class="line">--uncompress选项传递给xtrabackup子进程。对压缩过的InnoDB数据文件不进行压缩</span><br><span class="line">--export 仅使用于prepare选项。选项传递给xtrabackup子进程。</span><br><span class="line">--user=NAME</span><br><span class="line">--password=WORD</span><br><span class="line">--host=HOST</span><br><span class="line">--port=PORT</span><br><span class="line">--slave-info 备份复制从服务端，主从信息记录在ibbackup_slave_info文件中</span><br><span class="line">--socket=SOCKET</span><br><span class="line">--no-timestamp不在备份根目录下创建以当前时间戳为名称的新的备份目录</span><br><span class="line">--ibbackup=IBBACKUP-BINARYibbackup二进制路径</span><br><span class="line">--no-lock 禁止表级锁。全部是InnoDB引擎表和不关系二进制日志位置下使用</span><br><span class="line">--scpopt=SCP-OPTIONS指定scp参数</span><br></pre></td></tr></table></figure>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/MySQL/">MySQL</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/MariaDB/">MariaDB</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/mysql-innodb-optimize.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          MySQL InnoDB优化
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/learn-erlang-higher-order.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          Erlang极简学习笔记<06>——高阶函数篇
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>

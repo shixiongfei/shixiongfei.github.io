@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>MySQL性能测试 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        MySQL性能测试
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2019-04-24 00:11:00</time>
+          <span class="text-gray-400">·</span>
+          <span>7 min</span>
+          <span class="text-gray-400">·</span>
+          <span>1.6k words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>mysqlslap测试</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mysqlslap [options]</span></span><br><span class="line">    --auto-generate-sql, -a</span><br><span class="line">        自动生成测试表和数据，表示用mysqlslap工具自己生成的SQL脚本来测试并发压力。</span><br><span class="line">    --auto-generate-sql-load-type=type</span><br><span class="line">        测试语句的类型。代表要测试的环境是读操作还是写操作还是两者混合的。取值包括：read，key，write，update和mixed(默认)。</span><br><span class="line">    --auto-generate-sql-add-auto-increment</span><br><span class="line">        代表对生成的表自动添加auto_increment列，从5.1.18版本开始支持。</span><br><span class="line">    --number-char-cols=N, -x N</span><br><span class="line">        自动生成的测试表中包含多少个字符类型的列，默认1</span><br><span class="line">    --number-int-cols=N, -y N</span><br><span class="line">        自动生成的测试表中包含多少个数字类型的列，默认1</span><br><span class="line">    --number-of-queries=N</span><br><span class="line">        总的测试查询次数(并发客户数×每客户查询次数)</span><br><span class="line">    --query=name, -q</span><br><span class="line">        使用自定义脚本执行测试，例如可以调用自定义的一个存储过程或者sql语句来执行测试。</span><br><span class="line">    --create-schema</span><br><span class="line">        代表自定义的测试库名称，测试的schema，MySQL中schema也就是database。</span><br><span class="line">    --commint=N</span><br><span class="line">        多少条DML后提交一次。</span><br><span class="line">    --compress, -C</span><br><span class="line">        如果服务器和客户端支持都压缩，则压缩信息传递。</span><br><span class="line">    --concurrency=N, -c N</span><br><span class="line">        表示并发量，也就是模拟多少个客户端同时执行select。可指定多个值，以逗号或者--delimiter参数指定的值做为分隔符。例如：--concurrency=100,200,500。</span><br><span class="line">    --engine=engine_name, -e engine_name</span><br><span class="line">        代表要测试的引擎，可以有多个，用分隔符隔开。例如：--engines=myisam,innodb。</span><br><span class="line">    --iterations=N, -i N</span><br><span class="line">        测试执行的迭代次数，代表要在不同并发环境下，各自运行测试多少次。</span><br><span class="line">    --only-print</span><br><span class="line">        只打印测试语句而不实际执行。</span><br><span class="line">    --detach=N</span><br><span class="line">        执行N条语句后断开重连。</span><br><span class="line">    --debug-info, -T</span><br><span class="line">        打印内存和CPU的相关信息。</span><br></pre></td></tr></table></figure>
+
+<p>单线程测试</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mysqlslap -a -uroot -p123456</span></span><br></pre></td></tr></table></figure>
+
+<p>多线程测试，模拟100并发</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mysqlslap -a -c 100 -uroot -p123456</span></span><br></pre></td></tr></table></figure>
+
+<p>迭代测试，迭代10次</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mysqlslap -a -i 10 -uroot -p123456</span></span><br></pre></td></tr></table></figure>
+
+<p>测试同时不同的存储引擎的性能进行对比</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mysqlslap -a --concurrency=50,100 --number-of-queries 1000 --iterations=5 --engine=myisam,innodb --debug-info -uroot -p123456</span></span><br></pre></td></tr></table></figure>
+
+<p>执行一次测试，分别50和100个并发，执行1000次总查询</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mysqlslap -a --concurrency=50,100 --number-of-queries 1000 --debug-info -uroot -p123456</span></span><br></pre></td></tr></table></figure>
+
+<p>50和100个并发分别得到一次测试结果(Benchmark)，并发数越多，执行完所有查询的时间越长。为了准确起见，可以多迭代测试几次</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mysqlslap -a --concurrency=50,100 --number-of-queries 1000 --iterations=5 --debug-info -uroot -p123456</span></span><br></pre></td></tr></table></figure>
+
+<p>sysbench测试</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sysbench [general-options] ... --<span class="built_in">test</span>=&lt;test-name&gt; [test-options] ... <span class="built_in">command</span></span></span><br><span class="line">    General options:</span><br><span class="line">        --num-threads=N               创建测试线程的数目。默认为1.</span><br><span class="line">        --max-requests=N              请求的最大数目。默认为10000，0代表不限制。</span><br><span class="line">        --max-time=N                  最大执行时间，单位是s。默认是0,不限制。</span><br><span class="line">        --forced-shutdown=STRING      超过max-time强制中断。默认是off。</span><br><span class="line">        --thread-stack-size=SIZE      每个线程的堆栈大小。默认是32K。</span><br><span class="line">        --init-rng=[on|off]           在测试开始时是否初始化随机数发生器。默认是off。</span><br><span class="line">        --test=STRING                 指定测试项目名称。</span><br><span class="line">        --debug=[on|off]              是否显示更多的调试信息。默认是off。</span><br><span class="line">        --validate=[on|off]           在可能情况下执行验证检查。默认是off。</span><br><span class="line">        --help=[on|off]               帮助信息。</span><br><span class="line">        --version=[on|off]            版本信息。</span><br><span class="line"></span><br><span class="line">    Compiled-in tests:</span><br><span class="line">        fileio                        File I/O test</span><br><span class="line">        cpu                           CPU performance test</span><br><span class="line">        memory                        Memory functions speed test</span><br><span class="line">        threads                       Threads subsystem performance test</span><br><span class="line">        mutex                         Mutex performance test</span><br><span class="line"></span><br><span class="line">    oltp options:</span><br><span class="line">        --oltp-test-mode=STRING       执行模式&#123;simple,complex(advanced transactional),nontrx(non-transactional),sp&#125;。默认是complex</span><br><span class="line">        --oltp-reconnect-mode=STRING  重新连接模式&#123;session(不使用重新连接。每个线程断开只在测试结束),transaction(在每次事务结束后重新连接),query(在每个SQL语句执行完重新连接),random(对于每个事务随机选择以上重新连接模式)&#125;。默认是session</span><br><span class="line">        --oltp-sp-name=STRING         存储过程的名称。默认为空</span><br><span class="line">        --oltp-read-only=[on|off]     只读模式。Update，delete，insert语句不可执行。默认是off</span><br><span class="line">        --oltp-skip-trx=[on|off]      省略begin/commit语句。默认是off</span><br><span class="line">        --oltp-range-size=N           查询范围。默认是100</span><br><span class="line">        --oltp-point-selects=N        number of point selects [10]</span><br><span class="line">        --oltp-simple-ranges=N        number of simple ranges [1]</span><br><span class="line">        --oltp-sum-ranges=N           number of sum ranges [1]</span><br><span class="line">        --oltp-order-ranges=N         number of ordered ranges [1]</span><br><span class="line">        --oltp-distinct-ranges=N      number of distinct ranges [1]</span><br><span class="line">        --oltp-index-updates=N        number of index update [1]</span><br><span class="line">        --oltp-non-index-updates=N    number of non-index updates [1]</span><br><span class="line">        --oltp-nontrx-mode=STRING     查询类型对于非事务执行模式&#123;select, update_key, update_nokey, insert, delete&#125; [select]</span><br><span class="line">        --oltp-auto-inc=[on|off]      AUTO_INCREMENT是否开启。默认是on</span><br><span class="line">        --oltp-connect-delay=N        在多少微秒后连接数据库。默认是10000</span><br><span class="line">        --oltp-user-delay-min=N       每个请求最短等待时间。单位是ms。默认是0</span><br><span class="line">        --oltp-user-delay-max=N       每个请求最长等待时间。单位是ms。默认是0</span><br><span class="line">        --oltp-table-name=STRING      测试时使用到的表名。默认是sbtest</span><br><span class="line">        --oltp-table-size=N           测试表的记录数。默认是10000</span><br><span class="line">        --oltp-dist-type=STRING       分布的随机数&#123;uniform(均匀分布),Gaussian(高斯分布),special(空间分布)&#125;。默认是special</span><br><span class="line">        --oltp-dist-iter=N            产生数的迭代次数。默认是12</span><br><span class="line">        --oltp-dist-pct=N             值的百分比被视为&#x27;special&#x27; (for special distribution)。默认是1</span><br><span class="line">        --oltp-dist-res=N             &#x27;special&#x27;的百分比值。默认是75</span><br><span class="line"></span><br><span class="line">    General database options:</span><br><span class="line">        --db-driver=STRING            指定数据库驱动程序(&#x27;help&#x27; to get list of available drivers)</span><br><span class="line">        --db-ps-mode=STRING           编制报表使用模式&#123;auto, disable&#125; [auto]</span><br><span class="line"></span><br><span class="line">    Compiled-in database drivers:</span><br><span class="line">        mysql - MySQL driver</span><br><span class="line"></span><br><span class="line">    mysql options:</span><br><span class="line">        --mysql-host=[LIST,...]       MySQL server host [localhost]</span><br><span class="line">        --mysql-port=N                MySQL server port [3306]</span><br><span class="line">        --mysql-socket=STRING         MySQL socket</span><br><span class="line">        --mysql-user=STRING           MySQL user [sbtest]</span><br><span class="line">        --mysql-password=STRING       MySQL password []</span><br><span class="line">        --mysql-db=STRING             MySQL database name [sbtest]</span><br><span class="line">        --mysql-table-engine=STRING   storage engine to use for the test table &#123;myisam,innodb,bdb,heap,ndbcluster,federated&#125; [innodb]</span><br><span class="line">        --mysql-engine-trx=STRING     whether storage engine used is transactional or not &#123;yes,no,auto&#125; [auto]</span><br><span class="line">        --mysql-ssl=[on|off]          use SSL connections, if available in the client library [off]</span><br><span class="line">        --myisam-max-rows=N           max-rows parameter for MyISAM tables [1000000]</span><br><span class="line">        --mysql-create-options=STRING additional options passed to CREATE TABLE []</span><br></pre></td></tr></table></figure>
+
+<p>安装sysbench</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> ~</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">yum install zlib-devel MariaDB-devel openssl-devel</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git <span class="built_in">clone</span> https://github.com/akopytov/sysbench.git</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> sysbench</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">./autogen.sh</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">./configure</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make &amp;&amp; make install</span></span><br></pre></td></tr></table></figure>
+
+<p>准备测试</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> ~/sysbench/sysbench/</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sysbench --<span class="built_in">test</span>=tests/db/oltp.lua --db-driver=mysql --num-threads=16 --mysql-table-engine=innodb --mysql-host=localhost --mysql-db=test_db --oltp-table-size=10000000 --oltp_tables_count=10 --mysql-user=root --mysql-password=123456 prepare</span></span><br></pre></td></tr></table></figure>
+
+<p>执行测试</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> ~/sysbench/sysbench/</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sysbench --<span class="built_in">test</span>=tests/db/oltp.lua --db-driver=mysql --num-threads=16 --mysql-table-engine=innodb --mysql-host=localhost --mysql-db=test_db --oltp-table-size=10000000 --oltp_tables_count=10 --oltp-read-only=off --mysql-user=root --mysql-password=123456 --report-interval=10 --max-time=3600 run</span></span><br></pre></td></tr></table></figure>
+
+<p>清理测试</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> ~/sysbench/sysbench/</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sysbench --<span class="built_in">test</span>=tests/db/oltp.lua --db-driver=mysql --num-threads=16 --mysql-table-engine=innodb --mysql-host=localhost --mysql-db=test_db --oltp-table-size=10000000 --oltp_tables_count=10 --mysql-user=root --mysql-password=123456 cleanup</span></span><br></pre></td></tr></table></figure>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/MySQL/">MySQL</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/MariaDB/">MariaDB</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/gunicorn-flask.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          Gunicorn运行Flask程序
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/mariadb-master-slave.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          MariaDB配置主从
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>

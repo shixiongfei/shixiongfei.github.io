@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>Ruby极速入门 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        Ruby极速入门
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2019-06-07 22:42:00</time>
+          <span class="text-gray-400">·</span>
+          <span>22 min</span>
+          <span class="text-gray-400">·</span>
+          <span>5.4k words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>因为工作关系需要用到Ruby和Rails，于是在端午假期里花了点时间快速的学习了下。这里做一个简单的记录。</p>
+<h2 id="基础数据类型"><a href="#基础数据类型" class="headerlink" title="基础数据类型"></a>基础数据类型</h2><p>在Ruby中，所有的一切都是对象。每个对象都有一个唯一的对象标识符(object identifier，缩写为object ID)</p>
+<h3 id="整数类型-numbers"><a href="#整数类型-numbers" class="headerlink" title="整数类型(numbers)"></a>整数类型(numbers)</h3><p>整数是 <code>Fixnum</code> 类和 <code>Bignum</code> 类的对象。 <code>Fixnum</code> 对象可以容纳比本机字节长少一位的整数。当一个 <code>Fixnum</code> 超过这个范围时，它将会自动转换成 <code>Bignum</code> 对象， <code>Bignum</code> 对象的表示范围仅受可用内存大小的限制。如果 <code>Bignum</code> 对象的操作结果可以用 <code>Fixnum</code> 表示，那么结果将以 <code>Fixnum</code> 类型返回</p>
+<p>整数由一个可选的符号标记、一个可选的进制指示符( <code>0</code> 代表八进制， <code>0d</code> 代表十进制， <code>0x</code> 代表十六进制， <code>0b</code> 代表二进制)和一个相应进制的字符串组成。数字串中的下划线会被忽略</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">123456</span>                  =&gt; <span class="number">123456</span>               <span class="comment"># Fixnum</span></span><br><span class="line"><span class="number">0d123456</span>                =&gt; <span class="number">123456</span>               <span class="comment"># Fixnum</span></span><br><span class="line"><span class="number">123_456</span>                 =&gt; <span class="number">123456</span>               <span class="comment"># Fixnum -忽略下划线</span></span><br><span class="line">-<span class="number">543</span>                    =&gt; -<span class="number">543</span>                 <span class="comment"># Fixnum -负数</span></span><br><span class="line"><span class="number">0xaabb</span>                  =&gt; <span class="number">43707</span>                <span class="comment"># Fixnum -十六进制</span></span><br><span class="line"><span class="number">0377</span>                    =&gt; <span class="number">255</span>                  <span class="comment"># Fixnum -八进制</span></span><br><span class="line">-<span class="number">0b10_1010</span>              =&gt; -<span class="number">42</span>                  <span class="comment"># Fixnum -二进制(负数)</span></span><br><span class="line"><span class="number">123_456_789_123_456_789</span> =&gt; <span class="number">123456789123456789</span>   <span class="comment"># Bignum</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="浮点数类型-floats"><a href="#浮点数类型-floats" class="headerlink" title="浮点数类型(floats)"></a>浮点数类型(floats)</h3><p>一个带有小数点或指数的数字字面量被认为是 <code>Float</code> 对象， <code>Float</code> 对象和本机上的 <code>double</code> 数据类型大小一样。小数点的前后都必须至少要有一个数字。像 <code>1.e3</code> 这样的串将试图调用 <code>Fixnum</code> 类的 <code>e3</code> 方法</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">12.34</span>                   =&gt; <span class="number">12.34</span></span><br><span class="line">-<span class="number">0.1234e2</span>               =&gt; -<span class="number">12.34</span></span><br><span class="line"><span class="number">1234e-2</span>                 =&gt; <span class="number">12.34</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="字符串-strings"><a href="#字符串-strings" class="headerlink" title="字符串(strings)"></a>字符串(strings)</h3><p>Ruby提供了多种机制来生成字面量字符串。每种机制都产生 <code>String</code> 类型的对象。不同机制的区别在于如何分隔字符串以及字面量内容中会进行哪些替换</p>
+<p>单引号引起来的字符串字面量执行的替换最少。例如 <code>&#39;stuff&#39;</code> 和 <code>%q/stuff/</code> ，这两者都会将 <code>\\</code> 转换为单个反斜杠， <code>\&#39;</code> 转换为单引号。所有其他的反斜杠都不会进行转换</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;hello&#x27;</span>                     =&gt; hello</span><br><span class="line"><span class="string">&#x27;a backslash \&#x27;\\\&#x27;&#x27;</span>        =&gt; a backslash <span class="string">&#x27;\&#x27;</span></span><br><span class="line"><span class="string">%q/simple string/           =&gt; simple string</span></span><br><span class="line"><span class="string">%q(nesting (really) works)  =&gt; nesting (really) works</span></span><br><span class="line"><span class="string">%q no_blanks_here ;         =&gt; no_blanks_here</span></span><br></pre></td></tr></table></figure>
+
+<p>双引号字符串，例如 <code>&quot;stuff&quot;</code> ， <code>%Q/stuff/</code> 和 <code>%/stuff/</code> 还执行额外的替换</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">123</span></span><br><span class="line"><span class="string">&quot;\123mile&quot;</span>                  =&gt; <span class="title class_">Smile</span></span><br><span class="line"><span class="string">&quot;Say \&quot;Hello\&quot;&quot;</span>             =&gt; <span class="title class_">Say</span> <span class="string">&quot;Hello&quot;</span></span><br><span class="line">%Q!<span class="string">&quot;I said &#x27;nuts&#x27;,&quot;</span> I said! =&gt; <span class="string">&quot;I said &#x27;nuts&#x27;,&quot;</span> I said</span><br><span class="line"><span class="string">%Q&#123;Try <span class="subst">#&#123;a+<span class="number">1</span>&#125;</span>, not <span class="subst">#&#123;a-<span class="number">1</span>&#125;</span>&#125;</span>  =&gt; <span class="title class_">Try</span> <span class="number">124</span>, <span class="keyword">not</span> <span class="number">122</span></span><br><span class="line"><span class="string">%&lt;Try <span class="subst">#&#123;a+<span class="number">1</span>&#125;</span>, not <span class="subst">#&#123;a-<span class="number">1</span>&#125;</span>&gt;</span>   =&gt; <span class="title class_">Try</span> <span class="number">124</span>, <span class="keyword">not</span> <span class="number">122</span></span><br><span class="line"><span class="string">&quot;Try <span class="subst">#&#123;a+<span class="number">1</span>&#125;</span>, not <span class="subst">#&#123;a-<span class="number">1</span>&#125;</span>&quot;</span>    =&gt; <span class="title class_">Try</span> <span class="number">124</span>, <span class="keyword">not</span> <span class="number">122</span></span><br><span class="line"><span class="string">%&#123;<span class="subst">#&#123; a=<span class="number">1</span>; b=<span class="number">2</span>; a+b &#125;</span>&#125;</span>       =&gt; <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="区间-ranges"><a href="#区间-ranges" class="headerlink" title="区间(ranges)"></a>区间(ranges)</h3><p>区间使用表达式 <code>expr..expr</code> 和 <code>expr...expr</code> 来构建 <code>Range</code> 对象。两个点的形式是闭合区间(包括右端的值)，而三个点的形式是半开半闭的(不包括右端的值)</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&gt; (<span class="number">1</span>..<span class="number">5</span>).each &#123;|<span class="params">n</span>| puts n&#125;</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">5</span></span><br><span class="line">&gt; (<span class="number">1</span>...<span class="number">5</span>).each &#123;|<span class="params">n</span>| puts n&#125;</span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="number">4</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="数组-arrays"><a href="#数组-arrays" class="headerlink" title="数组(arrays)"></a>数组(arrays)</h3><p>数组类的字面量是在方括号间由逗号分隔的一连串对象引用组成。尾部逗号将被忽略。数组也可以用简写形式 <code>%w</code> 和 <code>%W</code> 来构成</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">arr = [ <span class="symbol">:fred</span>, <span class="number">10</span>, <span class="number">3.14</span>, <span class="string">&quot;this is a string&quot;</span>, <span class="string">&quot;pebbles&quot;</span>, ]</span><br><span class="line">    =&gt; [<span class="symbol">:fred</span>, <span class="number">10</span>, <span class="number">3.14</span>, <span class="string">&quot;this is a string&quot;</span>, <span class="string">&quot;pebbles&quot;</span>]</span><br><span class="line"></span><br><span class="line">arr = <span class="string">%w( fred wilma barney betty great\ gazoo )</span></span><br><span class="line">    =&gt; [<span class="string">&quot;fred&quot;</span>, <span class="string">&quot;wilma&quot;</span>, <span class="string">&quot;barney&quot;</span>, <span class="string">&quot;betty&quot;</span>, <span class="string">&quot;great gazoo&quot;</span>]</span><br><span class="line"></span><br><span class="line">arr = <span class="string">%w( Hey!\tIt is now -<span class="subst">#&#123;<span class="title class_">Time</span>.now&#125;</span>-)</span></span><br><span class="line">    =&gt; [<span class="string">&quot;Hey!\\tIt&quot;</span>, <span class="string">&quot;is&quot;</span>, <span class="string">&quot;now&quot;</span>, <span class="string">&quot;-\#&#123;Time.now&#125;-&quot;</span>]</span><br><span class="line"></span><br><span class="line">arr = <span class="string">%W( Hey!\tIt is now -<span class="subst">#&#123;<span class="title class_">Time</span>.now&#125;</span>-)</span></span><br><span class="line">    =&gt; [<span class="string">&quot;Hey!\tIt&quot;</span>, <span class="string">&quot;is&quot;</span>, <span class="string">&quot;now&quot;</span>, <span class="string">&quot;-2019-06-09 11:35:50 +0800-&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>数组对象在方括号之间提供索引便可以访问单个元素，Ruby的数组索引从零开始</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = [<span class="number">1</span>, <span class="string">&#x27;cat&#x27;</span>, <span class="number">3.14</span>]    =&gt; 三个元素数组</span><br><span class="line">a[<span class="number">0</span>]                    =&gt; <span class="number">1</span></span><br><span class="line">a[<span class="number">2</span>] = <span class="literal">nil</span>              =&gt; 设置第三个元素</span><br><span class="line">a                       =&gt; [<span class="number">1</span>, <span class="string">&quot;cat&quot;</span>, <span class="literal">nil</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="散列表-hashes"><a href="#散列表-hashes" class="headerlink" title="散列表(hashes)"></a>散列表(hashes)</h3><p>Ruby的Hash字面量是由花括号中的键&#x2F;值对列表构成，由逗号分隔键&#x2F;值对，键和值之间由 <code>=&gt;</code> 序列分隔。尾部的逗号将被忽略。并不要求一个具体的散列表中的所有 <code>key</code> 和 <code>value</code> 必须为相同类型。散列表中的键必须能够响应 <code>hash</code> 消息并返回一直散列码(hash code)，且键对应的散列码不能改变。散列表中的键也必须能用 <code>eql?</code> 来比较</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">colors = &#123;</span><br><span class="line">  <span class="string">&quot;red&quot;</span>   =&gt; <span class="number">0xf00</span>,</span><br><span class="line">  <span class="string">&quot;green&quot;</span> =&gt; <span class="number">0x0f0</span>,</span><br><span class="line">  <span class="string">&quot;blue&quot;</span>  =&gt; <span class="number">0x00f</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>散列表也使用与数组相同的方括号表示法来进行索引</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">colors[<span class="string">&quot;red&quot;</span>]           =&gt; <span class="number">3840</span></span><br><span class="line">colors[<span class="string">&quot;white&quot;</span>] = <span class="number">0xfff</span> =&gt; <span class="number">4095</span></span><br><span class="line">colors                  =&gt; &#123;<span class="string">&quot;red&quot;</span>=&gt;<span class="number">3840</span>, <span class="string">&quot;green&quot;</span>=&gt;<span class="number">240</span>, <span class="string">&quot;blue&quot;</span>=&gt;<span class="number">15</span>, <span class="string">&quot;white&quot;</span>=&gt;<span class="number">4095</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="符号-symbols"><a href="#符号-symbols" class="headerlink" title="符号(symbols)"></a>符号(symbols)</h3><p>Ruby的符号是一个对应字符串(通常是一个名字)的标识符。可以通过在名字前加一个冒号来构造该名字的符号，也可以在任意字符串字面量前加一个冒号来创建该字符串的符号。在双引号的字符串会发生替换。不管程序如何使用名字，一个具体的名字或者字符串总是产生同样的符号</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">:Object</span></span><br><span class="line"><span class="symbol">:my_variable</span></span><br><span class="line"><span class="symbol">:<span class="string">&quot;Ruby rules&quot;</span></span></span><br><span class="line">a = <span class="string">&#x27;cat&#x27;</span></span><br><span class="line"><span class="symbol">:<span class="string">&#x27;catsup&#x27;</span></span>       =&gt; <span class="symbol">:catsup</span></span><br><span class="line"><span class="symbol">:<span class="string">&quot;<span class="subst">#&#123;a&#125;</span>sup&quot;</span></span>      =&gt; <span class="symbol">:catsup</span></span><br><span class="line"><span class="symbol">:<span class="string">&#x27;<span class="subst">#&#123;a&#125;</span>sup&#x27;</span></span>      =&gt; <span class="symbol">:<span class="string">&quot;\#&#123;a&#125;sup&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>其他语言称这个过程为 <code>interning</code> ，而称符号为原子</p>
+<h3 id="正则表达式-regular-expressions"><a href="#正则表达式-regular-expressions" class="headerlink" title="正则表达式(regular expressions)"></a>正则表达式(regular expressions)</h3><p>正则表达式的字面量是 <code>Regexp</code> 类型的对象。可以通过调用 <code>Regexp.new</code> 构造函数显示创建正则表达式，也可以使用字面量形式 <code>/pattern/</code> 和 <code>%r&#123;pattern&#125;</code> 隐式创建</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/pattern/</span><br><span class="line"><span class="regexp">/pattern/options</span></span><br><span class="line">%r&#123;pattern&#125;</span><br><span class="line">%r&#123;pattern&#125;options</span><br><span class="line"><span class="title class_">Regexp</span>.new(<span class="string">&#x27;pattern&#x27;</span> [, options])</span><br></pre></td></tr></table></figure>
+
+<p>一旦有了正则表达式对象，可以使用 <code>Regexp#match(string)</code> 或匹配操作符 <code>=</code> (肯定匹配)和 <code>!</code> (否定匹配)对字符串进行匹配</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">name = <span class="string">&quot;Fats Waller&quot;</span></span><br><span class="line">name =~ <span class="regexp">/a/</span>             =&gt; <span class="number">1</span></span><br><span class="line">name =~ <span class="regexp">/z/</span>             =&gt; <span class="literal">nil</span></span><br><span class="line">/a/ =~ name             =&gt; <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>匹配操作符是有副作用的，它们会设置一些Ruby的变量。 <code>$&amp;</code> 得到与模式匹配的那部分字符串， <code>$`</code> 得到匹配之前的那部分字符串，而 <code>$&#39;</code> 得到匹配之后的那部分字符串</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$&amp;</span>                      =&gt; a            模式匹配的字符串</span><br><span class="line"><span class="variable">$`</span>                      =&gt; F            模式匹配之前的字符串</span><br><span class="line"><span class="variable">$&#x27;</span>                      =&gt; ts <span class="title class_">Waller</span>    模式匹配之后的字符串</span><br></pre></td></tr></table></figure>
+
+<h2 id="变量与常量"><a href="#变量与常量" class="headerlink" title="变量与常量"></a>变量与常量</h2><p>Ruby名字用来引用常用、变量、方法、类和模块。命名规则是第一个字符必须是大写字母、小写字母或下划线，后面跟任意个命名用字符：大写字母、小写字母、下划线或者数字的任意组合</p>
+<h3 id="局部变量名-local-variable"><a href="#局部变量名-local-variable" class="headerlink" title="局部变量名(local variable)"></a>局部变量名(local variable)</h3><p>由小写字母后跟命名用字符组合。通常来说，使用下划线而不是 <code>camelCase</code> 来书写含多个词的名字</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">three_two_one = <span class="number">321</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="实例变量名-instance-variable"><a href="#实例变量名-instance-variable" class="headerlink" title="实例变量名(instance variable)"></a>实例变量名(instance variable)</h3><p>以一个 <code>@</code> 开始，后跟一个名字。在 <code>@</code> 后用小写字母是个不错的做法</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@name</span>   <span class="variable">@_</span>    @size</span><br></pre></td></tr></table></figure>
+
+<h3 id="类变量名-class-variable"><a href="#类变量名-class-variable" class="headerlink" title="类变量名(class variable)"></a>类变量名(class variable)</h3><p>以 <code>@@</code> 开始，后跟一个名字</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@@name</span>  <span class="variable">@@_</span>   @@size</span><br></pre></td></tr></table></figure>
+
+<h3 id="常量名-const-variable"><a href="#常量名-const-variable" class="headerlink" title="常量名(const variable)"></a>常量名(const variable)</h3><p>以一个大写字母开始，后跟多个命名用字符。类名字和模块名字都是常量，所以遵循常量的命名传统。习惯上，常量对象引用一般由大写字母和下划线组成，而类和模块名字是 <code>MixedCase</code></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> <span class="title class_">Math</span></span><br><span class="line">  <span class="variable constant_">ALMOST_PI</span> = <span class="number">22.0</span>/<span class="number">7.0</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BigBlob</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="全局变量名-global-variable"><a href="#全局变量名-global-variable" class="headerlink" title="全局变量名(global variable)"></a>全局变量名(global variable)</h3><p>由美元符 <code>$</code> 后跟命名用字符组成。全局变量在程序中任何地方都可以修改，一般不推荐使用全局变量</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$temp</span> = <span class="string">&quot;this is a global variable&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="多重赋值"><a href="#多重赋值" class="headerlink" title="多重赋值"></a>多重赋值</h3><p>Ruby可以对一组变量同时赋值。如果变量前加上 <code>*</code> ，则Ruby会将未分配的值封装为数组赋值给该变量</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a, b, c = <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span></span><br><span class="line">a, b, *c = <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>    =&gt; a=<span class="number">1</span>, b=<span class="number">2</span>, c=[<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">a, *b, c = <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>    =&gt; a=<span class="number">1</span>, b=[<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>], c=<span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="条件判断"><a href="#条件判断" class="headerlink" title="条件判断"></a>条件判断</h2><h3 id="条件与真假"><a href="#条件与真假" class="headerlink" title="条件与真假"></a>条件与真假</h3><p>在Ruby中，只有 <code>false</code> 和 <code>nil</code> 为假，除此以外的所有值都代表真。另外，在Ruby中还有个约定俗成的规则，为了使程序容易理解，返回真假的方法都要以 <code>?</code> 结尾</p>
+<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>Ruby中的逻辑运算符有 <code>&amp;&amp;</code> 、 <code>||</code> 和 <code>!</code> ，同时还有意思相同，但优先级略低的逻辑运算符 <code>and</code> 、 <code>or</code> 、 <code>not</code> 。通常前者用于逻辑判断，后者用于流程控制</p>
+<p>条件1与条件2必须都为真，表达式返回真</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">条件<span class="number">1</span> &amp;&amp; 条件<span class="number">2</span></span><br><span class="line">条件<span class="number">1</span> <span class="keyword">and</span> 条件<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>条件1或条件2其中一个为真，表达式则返回真</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">条件<span class="number">1</span> |<span class="params"></span>| 条件<span class="number">2</span></span><br><span class="line">条件<span class="number">1</span> <span class="keyword">or</span> 条件<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>取相反条件，返回条件表达式的相反逻辑</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">!条件</span><br><span class="line"><span class="keyword">not</span> 条件</span><br></pre></td></tr></table></figure>
+
+<h3 id="比较操作符"><a href="#比较操作符" class="headerlink" title="比较操作符"></a>比较操作符</h3><p>Ruby的语法定义了比较操作符 <code>==</code> 、 <code>===</code> 、 <code>&lt;=&gt;</code> 、 <code>&lt;</code> 、 <code>&lt;=</code> 、 <code>&gt;</code> 、 <code>&gt;=</code> 、 <code>=~</code> 。所有这些操作符都是由方法来实现的。习惯上，Ruby也使用标准方法 <code>eql?</code> 和 <code>equal?</code> 。其中 <code>==</code> 和 <code>=</code> 都有相反的形式 <code>!=</code> 和 <code>!~</code></p>
+<h3 id="if语句"><a href="#if语句" class="headerlink" title="if语句"></a>if语句</h3><p>if语句是最基本的条件判断语句，形式如下：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> 条件<span class="number">1</span> <span class="keyword">then</span></span><br><span class="line">  处理<span class="number">1</span></span><br><span class="line"><span class="keyword">elsif</span> 条件<span class="number">2</span> <span class="keyword">then</span></span><br><span class="line">  处理<span class="number">2</span></span><br><span class="line"><span class="keyword">elsif</span> 条件<span class="number">3</span> <span class="keyword">then</span></span><br><span class="line">  处理<span class="number">3</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  处理<span class="number">4</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>可以省略 <code>then</code></p>
+<h3 id="unless语句"><a href="#unless语句" class="headerlink" title="unless语句"></a>unless语句</h3><p>unless语句的用法刚好与if相反，形式如下：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unless</span> 条件 <span class="keyword">then</span></span><br><span class="line">  处理<span class="number">1</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  处理<span class="number">2</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>可以省略 <code>then</code></p>
+<h3 id="if修饰符与unless修饰符"><a href="#if修饰符与unless修饰符" class="headerlink" title="if修饰符与unless修饰符"></a>if修饰符与unless修饰符</h3><p><code>if</code> 与 <code>unless</code> 可以像下面这样写在希望执行的代码后面</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">puts <span class="string">&quot;a &gt; b&quot;</span> <span class="keyword">if</span> a &gt; b</span><br></pre></td></tr></table></figure>
+
+<p>在使用修饰符写法时，要注意程序的易读性</p>
+<h3 id="三元运算符"><a href="#三元运算符" class="headerlink" title="三元运算符"></a>三元运算符</h3><p>三元运算符是 <code>if...else...</code> 的简写形式</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">条件 ? 处理<span class="number">1</span> : 处理<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="case语句"><a href="#case语句" class="headerlink" title="case语句"></a>case语句</h3><p>当比较对象只有一个，根据这个对象值的不同，执行不同的处理时，使用case语句会使程序更简单，更便于理解</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> 比较对象</span><br><span class="line"><span class="keyword">when</span> 值<span class="number">1</span> <span class="keyword">then</span></span><br><span class="line">  处理<span class="number">1</span></span><br><span class="line"><span class="keyword">when</span> 值<span class="number">2</span> <span class="keyword">then</span></span><br><span class="line">  处理<span class="number">2</span></span><br><span class="line"><span class="keyword">when</span> 值<span class="number">3</span> <span class="keyword">then</span></span><br><span class="line">  处理<span class="number">3</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  处理<span class="number">4</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>可以省略 <code>then</code></p>
+<h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><h3 id="times方法"><a href="#times方法" class="headerlink" title="times方法"></a>times方法</h3><p>times方法可以轻松实现单纯执行一定次数的处理</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">循环次数.times <span class="keyword">do</span></span><br><span class="line">  希望循环的处理</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p><code>do...end</code> 部分可以用 <code>&#123;...&#125;</code> 代替</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">循环次数.times &#123;</span><br><span class="line">    希望循环的处理</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用times方法时也可以获知块中当前的循环次数</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">5</span>.times <span class="keyword">do</span> |<span class="params">i</span>|</span><br><span class="line">  puts <span class="string">&quot;第 <span class="subst">#&#123;i&#125;</span> 次的循环&quot;</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="for语句"><a href="#for语句" class="headerlink" title="for语句"></a>for语句</h3><p>for并不是方法，而是Ruby提供的循环控制语句。形式如下：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> 变量 <span class="keyword">in</span> 开始值..结束值 <span class="keyword">do</span></span><br><span class="line">  希望循环的处理</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> 变量 <span class="keyword">in</span> 对象 <span class="keyword">do</span></span><br><span class="line">  希望循环的处理</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>可以省略 <code>do</code></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sum = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">1</span>..<span class="number">5</span></span><br><span class="line">  sum = sum + i</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">puts sum</span><br><span class="line"></span><br><span class="line">names = [<span class="string">&quot;awk&quot;</span>, <span class="string">&quot;Perl&quot;</span>, <span class="string">&quot;Python&quot;</span>, <span class="string">&quot;Ruby&quot;</span>]</span><br><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> names</span><br><span class="line">  puts name</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="while语句"><a href="#while语句" class="headerlink" title="while语句"></a>while语句</h3><p>不管哪种类型的循环，while语句都可以胜任，while语句的结构如下：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> 条件 <span class="keyword">do</span></span><br><span class="line">  希望循环的处理</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>可以省略 <code>do</code></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> i &lt; <span class="number">3</span></span><br><span class="line">  puts i</span><br><span class="line">  i += <span class="number">1</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="until语句"><a href="#until语句" class="headerlink" title="until语句"></a>until语句</h3><p>until是与while相对的语句，until语句的结构与while语句完全一样，只是条件判断刚好相反，不满足条件时才执行循环处理</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">until</span> 条件 <span class="keyword">do</span></span><br><span class="line">  希望循环的处理</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>可以省略 <code>do</code></p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sum = <span class="number">0</span></span><br><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">until</span> sum &gt;= <span class="number">50</span></span><br><span class="line">  sum += i</span><br><span class="line">  i += <span class="number">1</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">puts sum</span><br></pre></td></tr></table></figure>
+
+<h3 id="each方法"><a href="#each方法" class="headerlink" title="each方法"></a>each方法</h3><p>each方法是将对象集合中的对象逐个取出，这与for语句循环取出数组元素非常相似</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">对象.each <span class="keyword">do</span> |<span class="params">变量</span>|</span><br><span class="line">  希望循环的处理</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">对象.each &#123;|<span class="params">变量</span>|</span><br><span class="line">  希望循环的处理</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在Ruby内部，for语句是用each方法来实现的。因此可以使用each方法的对象，同样也可以指定为for语句的循环对象</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sum = <span class="number">0</span></span><br><span class="line">(<span class="number">1</span>..<span class="number">5</span>).each <span class="keyword">do</span> |<span class="params">i</span>|</span><br><span class="line">  sum = sum + i</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">puts sum</span><br></pre></td></tr></table></figure>
+
+<h3 id="loop方法"><a href="#loop方法" class="headerlink" title="loop方法"></a>loop方法</h3><p>还有一种循环的方法，没有终止循环的条件，只是不断执行循环处理</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">loop <span class="keyword">do</span></span><br><span class="line">  希望循环的处理</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>程序不小心执行了死循环，可以使用 <code>Ctrl + C</code> 来强行终止程序</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">loop <span class="keyword">do</span></span><br><span class="line">  puts <span class="string">&quot;Ruby&quot;</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="循环控制"><a href="#循环控制" class="headerlink" title="循环控制"></a>循环控制</h3><p><code>break</code> 终止处理，跳出循环</p>
+<p><code>next</code> 跳到下一次循环</p>
+<p><code>redo</code> 在相同的条件下重复刚才的处理。一般很少使用</p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h3><p>简单的方法调用</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对象.方法名(参数<span class="number">1</span>, 参数<span class="number">2</span>, ..., 参数n)</span><br></pre></td></tr></table></figure>
+
+<p>对象也被称为接收者(receiver)。在面向对象的世界中，调用方法被称为“向对象发送消息(message)”，调用的结果就是“对象接收(receive)了消息”。也就是说，方法的调用就是几个参数连同消息一起发送给对象的过程</p>
+<p>带块的方法调用</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">对象.方法名(参数, ...) <span class="keyword">do</span> |<span class="params">变量1, 变量2, ...</span>|</span><br><span class="line">  块内容</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">对象.方法名(参数, ...) &#123; |<span class="params">变量1, 变量2, ...</span>|</span><br><span class="line">  块内容</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>|~|</code> 中指定的变量称为块变量。在执行块的时候，块变量由方法传到块内部</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">5</span>.times <span class="keyword">do</span> |<span class="params">i</span>|</span><br><span class="line">  puts i</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>一般方法的定义</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def 方法名(参数<span class="number">1</span>, 参数<span class="number">2</span>, ..., 参数n)</span><br><span class="line">  希望执行的处理</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以用 <code>return</code> 语句指定方法的返回值</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> 值</span><br></pre></td></tr></table></figure>
+
+<p>通常方法的最后一个表达式结果就会成为方法的返回值，这时可以省略 <code>return</code> 语句</p>
+<p>通过 <code>yield</code> 关键字我们可以定义带块的方法</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">myloop</span></span><br><span class="line">  <span class="keyword">while</span> <span class="literal">true</span></span><br><span class="line">    <span class="keyword">yield</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">num = <span class="number">1</span></span><br><span class="line">myloop <span class="keyword">do</span></span><br><span class="line">  puts <span class="string">&quot;num is <span class="subst">#&#123;num&#125;</span>&quot;</span></span><br><span class="line">  <span class="keyword">break</span> <span class="keyword">if</span> num &gt; <span class="number">10</span></span><br><span class="line">  num *= <span class="number">2</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>可以通过 <code>*变量名</code> 的形式来定义参数个数不确定的方法。同样可以用 <code>*数组</code> 的形式来指定参数</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span>(<span class="params">*args</span>)</span><br><span class="line">  args</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">p foo(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)      =&gt; [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">p foo(*[<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>])   =&gt; [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br></pre></td></tr></table></figure>
+
+<p>定义带关键字参数的方法</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">def 方法名(参数<span class="number">1</span>: 参数<span class="number">1</span>的值, 参数<span class="number">2</span>: 参数<span class="number">2</span>的值, ...)</span><br><span class="line">  希望执行的处理</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>如果没有默认值的话，参数的值可以省略。我们还可以使用 <code>**args</code> 的形式来接收未定义的参数</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">volume</span>(<span class="params"><span class="symbol">x:</span>, <span class="symbol">y:</span> <span class="number">2</span>, <span class="symbol">z:</span> <span class="number">4</span>, **args</span>)</span><br><span class="line">  [x, y, z, args]</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">p volume(<span class="symbol">x:</span> <span class="number">2</span>, <span class="symbol">y:</span> <span class="number">3</span>)        =&gt; [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, &#123;&#125;]</span><br><span class="line">p volume(&#123;<span class="symbol">x:</span> <span class="number">3</span>, <span class="symbol">k:</span> <span class="number">5</span>&#125;)      =&gt; [<span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>, &#123;<span class="symbol">:k=&gt;</span><span class="number">5</span>&#125;]</span><br></pre></td></tr></table></figure>
+
+<h2 id="类和对象"><a href="#类和对象" class="headerlink" title="类和对象"></a>类和对象</h2><h3 id="类和继承"><a href="#类和继承" class="headerlink" title="类和继承"></a>类和继承</h3><p>类表示对象的种类，Ruby中的对象一定都属于某个类。通过扩展已定义的类来创建新类称为继承。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> 类名 [&lt; 父类名]</span><br><span class="line">  类的定义</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>类的首字母必须大写。类中的 <code>initialize</code> 方法比较特别。使用 <code>new</code> 方法生成新的对象时， <code>initialize</code> 方法会被调用，同时 <code>new</code> 方法的参数也会被原封不动地传给 <code>initialize</code> 方法</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">HelloWrold</span></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">initialize</span>(<span class="params">myname = <span class="string">&quot;Ruby&quot;</span></span>)</span><br><span class="line">    <span class="variable">@name</span> = myname</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">bob = <span class="title class_">HelloWrold</span>.new(<span class="string">&quot;Bob&quot;</span>)</span><br><span class="line">ruby = <span class="title class_">HelloWrold</span>.new</span><br></pre></td></tr></table></figure>
+
+<h3 id="存取器"><a href="#存取器" class="headerlink" title="存取器"></a>存取器</h3><p>在Ruby中，从对象外部不能直接访问实例变量或对实例变量修改，需要通过方法来访问对象内部。Ruby为我们提供了简便的定义方法 <code>attr_reader</code> 、 <code>attr_writer</code> 、 <code>attr_accessor</code></p>
+<p><code>attr_reader :name</code> 只读(定义name方法)</p>
+<p><code>attr_writer :name</code> 只写(定义name&#x3D;方法)</p>
+<p><code>attr_accessor :name</code> 读写(同时定义以上两个方法)</p>
+<h3 id="类方法"><a href="#类方法" class="headerlink" title="类方法"></a>类方法</h3><p>方法的接收者就是类本身的方法称为类方法</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> &lt;&lt; 类名</span><br><span class="line">  方法定义</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">def 类名.方法名(参数, ...)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>下面展示四种定义方法</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> &lt;&lt; <span class="title class_">HelloWorld</span></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">hello</span>(<span class="params">name</span>)</span><br><span class="line">    puts <span class="string">&quot;<span class="subst">#&#123;name&#125;</span> said hello.&quot;</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">HelloWorld</span>.hello(<span class="string">&quot;John&quot;</span>)        =&gt; <span class="title class_">John</span> said hello.</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HelloWorld</span></span><br><span class="line">  <span class="keyword">class</span> &lt;&lt; <span class="variable language_">self</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">hello</span>(<span class="params">name</span>)</span><br><span class="line">      puts <span class="string">&quot;<span class="subst">#&#123;name&#125;</span> said hello.&quot;</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">HelloWorld</span>.hello(<span class="string">&quot;Allen&quot;</span>)       =&gt; <span class="title class_">Allen</span> said hello.</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">HelloWorld</span>.hello(name)</span><br><span class="line">  puts <span class="string">&quot;<span class="subst">#&#123;name&#125;</span> said hello.&quot;</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">HelloWorld</span>.hello(<span class="string">&quot;Amber&quot;</span>)       =&gt; <span class="title class_">Amber</span> said hello.</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HelloWorld</span></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">self</span>.hello(name)</span><br><span class="line">    puts <span class="string">&quot;<span class="subst">#&#123;name&#125;</span> said hello.&quot;</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">HelloWorld</span>.hello(<span class="string">&quot;Chloe&quot;</span>)       =&gt; <span class="title class_">Chloe</span> said hello.</span><br></pre></td></tr></table></figure>
+
+<h3 id="类变量和常量"><a href="#类变量和常量" class="headerlink" title="类变量和常量"></a>类变量和常量</h3><p>类变量是该类所有实例的共享变量，这一点与常量类似</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">HelloWorld</span></span><br><span class="line">  <span class="title class_">Version</span> = <span class="string">&quot;1.0&quot;</span></span><br><span class="line">  <span class="variable">@@count</span> = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">self</span>.count</span><br><span class="line">    <span class="variable">@@count</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">initialize</span>(<span class="params">myname = <span class="string">&quot;Ruby&quot;</span></span>)</span><br><span class="line">    <span class="variable">@name</span> = myname</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">hello</span></span><br><span class="line">    <span class="variable">@@count</span> += <span class="number">1</span></span><br><span class="line">    puts <span class="string">&quot;Hello, world. I am <span class="subst">#&#123;<span class="variable">@name</span>&#125;</span>.&quot;</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">bob = <span class="title class_">HelloWorld</span>.new(<span class="string">&quot;Bob&quot;</span>)</span><br><span class="line">alice = <span class="title class_">HelloWorld</span>.new(<span class="string">&quot;Alice&quot;</span>)</span><br><span class="line">ruby = <span class="title class_">HelloWorld</span>.new</span><br><span class="line"></span><br><span class="line">p <span class="title class_">HelloWorld</span>.count      =&gt; <span class="number">0</span></span><br><span class="line">bob.hello</span><br><span class="line">alice.hello</span><br><span class="line">ruby.hello</span><br><span class="line">p <span class="title class_">HelloWorld</span>.count      =&gt; <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="限制方法调用"><a href="#限制方法调用" class="headerlink" title="限制方法调用"></a>限制方法调用</h3><p><code>public</code> 以实例方法的形式向外部公开该方法</p>
+<p><code>private</code> 只能使用缺省接收者的方式调用该方法</p>
+<p><code>protected</code> 在同一个类中时可将该方法作为实例方法调用</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Point</span></span><br><span class="line">  <span class="built_in">attr_accessor</span> <span class="symbol">:x</span>, <span class="symbol">:y</span></span><br><span class="line">  <span class="keyword">protected</span> <span class="symbol">:x=</span>, <span class="symbol">:y=</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">initialize</span>(<span class="params">x=<span class="number">0.0</span>, y=<span class="number">0.0</span></span>)</span><br><span class="line">    <span class="variable">@x</span>, <span class="variable">@y</span> = x, y</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">swap</span>(<span class="params">other</span>)</span><br><span class="line">    tmp_x, tmp_y = <span class="variable">@x</span>, <span class="variable">@y</span></span><br><span class="line">    <span class="variable">@x</span>, <span class="variable">@y</span> = other.x, other.y</span><br><span class="line">    other.x, other.y = tmp_x, tmp_y</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">self</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">p1 = <span class="title class_">Point</span>.new(<span class="number">1.0</span>, <span class="number">2.0</span>)</span><br><span class="line">p2 = <span class="title class_">Point</span>.new(<span class="number">3.0</span>, <span class="number">4.0</span>)</span><br><span class="line"></span><br><span class="line">p [p1.x, p1.y]</span><br><span class="line">p [p2.x, p2.y]</span><br><span class="line"></span><br><span class="line">p1.swap(p2)</span><br><span class="line"></span><br><span class="line">p [p1.x, p1.y]</span><br><span class="line">p [p2.x, p2.y]</span><br></pre></td></tr></table></figure>
+
+<h3 id="alias与undef"><a href="#alias与undef" class="headerlink" title="alias与undef"></a>alias与undef</h3><p>有时我们希望给已经存在的方法设置别名，这种情况下就需要使用 <code>alias</code> 方法</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alias</span> 别名 原名</span><br><span class="line"><span class="keyword">alias</span> <span class="symbol">:</span>别名 <span class="symbol">:</span>原名</span><br></pre></td></tr></table></figure>
+
+<p><code>undef</code> 用于删除已定义的方法</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">undef</span> 方法名</span><br><span class="line"><span class="keyword">undef</span> <span class="symbol">:</span>方法名</span><br></pre></td></tr></table></figure>
+
+<h3 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h3><p>模块是Ruby的特色功能之一</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span></span><br><span class="line">  模块定义</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>模块不能拥有实例，模块不能被继承。如果希望把方法作为模块函数公开给外部使用，就需要用到 <code>module_function</code> 方法</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> <span class="title class_">HelloModule</span></span><br><span class="line">  <span class="title class_">Version</span> = <span class="string">&quot;1.0&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">hello</span>(<span class="params">name</span>)</span><br><span class="line">    puts <span class="string">&quot;Hello, <span class="subst">#&#123;name&#125;</span>&quot;</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="built_in">module_function</span> <span class="symbol">:hello</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">p <span class="title class_">HelloModule</span><span class="symbol">:</span><span class="symbol">:Version</span>      =&gt; <span class="number">1.0</span></span><br><span class="line"><span class="title class_">HelloModule</span>.hello(<span class="string">&quot;Alice&quot;</span>)  =&gt; <span class="title class_">Hello</span>, <span class="title class_">Alice</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span> <span class="title class_">HelloModule</span></span><br><span class="line"><span class="title class_">Version</span>                     =&gt; <span class="number">1.0</span></span><br><span class="line">hello(<span class="string">&quot;Alice&quot;</span>)              =&gt; <span class="title class_">Hello</span>, <span class="title class_">Alice</span></span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>Mix-in</code> 就能将模块混合到类中。在定义类时使用 <code>include</code> ，模块中的方法、常量就能被类使用</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">meth</span></span><br><span class="line">    <span class="string">&quot;meth&quot;</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> C</span><br><span class="line">  <span class="keyword">include</span> M</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">c = C.new</span><br><span class="line">p c.meth        =&gt; meth</span><br></pre></td></tr></table></figure>
+
+<h2 id="错误与异常处理"><a href="#错误与异常处理" class="headerlink" title="错误与异常处理"></a>错误与异常处理</h2><h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><p>Ruby异常是 <code>Exception</code> 或其子类的对象，标准写法如下：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br><span class="line">  可能会发生异常的处理</span><br><span class="line"><span class="keyword">rescue</span></span><br><span class="line">  发生异常时的处理</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>Ruby中异常及其相关信息都是被作为对象来处理的。在 <code>rescue</code> 后指定变量名，可以获得异常对象</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br><span class="line">  可能会发生异常的处理</span><br><span class="line"><span class="keyword">rescue</span> =&gt; 引用异常对象的变量</span><br><span class="line">  发生异常时的处理</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>异常对象方法有 <code>class</code> 异常种类、 <code>message</code> 异常信息和 <code>backtrace</code> 异常发生的位置信息</p>
+<h3 id="后处理"><a href="#后处理" class="headerlink" title="后处理"></a>后处理</h3><p>不管是否发生异常都希望执行的处理，在Ruby中可以用 <code>ensure</code> 关键字来定义</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br><span class="line">  可能会发生异常的处理</span><br><span class="line"><span class="keyword">rescue</span> =&gt; 变量</span><br><span class="line">  发生异常时的处理</span><br><span class="line"><span class="keyword">ensure</span></span><br><span class="line">  不管是否发生异常都要执行的处理</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="重试"><a href="#重试" class="headerlink" title="重试"></a>重试</h3><p>在 <code>rescue</code> 中使用 <code>retry</code> 后， <code>begin</code> 以下的处理会再重新执行一遍</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br><span class="line">  io = <span class="title class_">File</span>.open(file)</span><br><span class="line"><span class="keyword">rescue</span></span><br><span class="line">  sleep <span class="number">10</span></span><br><span class="line">  <span class="keyword">retry</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="rescue修饰符"><a href="#rescue修饰符" class="headerlink" title="rescue修饰符"></a>rescue修饰符</h3><p>与 <code>if</code> 修饰符、 <code>unless</code> 修饰符一样， <code>rescue</code> 也有对应的修饰符</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">表达式<span class="number">1</span> <span class="keyword">rescue</span> 表达式<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>如果表达式1中发生异常，表达式2的值就会成为整个表达式的值</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="title class_">Integer</span>(val) <span class="keyword">rescue</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="异常补充"><a href="#异常补充" class="headerlink" title="异常补充"></a>异常补充</h3><p>如果异常处理的范围是方法的整个处理，也就是说整个方法内的程序都用 <code>begin...end</code> 括起来的话，就可以省略 <code>begin</code> 以及 <code>end</code> ，直接书写 <code>rescue</code> 与 <code>ensure</code> 部分的程序</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">foo</span></span><br><span class="line">  方法处理</span><br><span class="line"><span class="keyword">rescue</span> =&gt; 变量</span><br><span class="line">  异常处理</span><br><span class="line"><span class="keyword">ensure</span></span><br><span class="line">  后处理</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span></span><br><span class="line">  类定义</span><br><span class="line"><span class="keyword">rescue</span> =&gt; 变量</span><br><span class="line">  异常处理</span><br><span class="line"><span class="keyword">ensure</span></span><br><span class="line">  后处理</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>当存在多个种类的异常，且需要按异常的种类分别进行处理时，可以用多个 <code>rescue</code> 来分开处理</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br><span class="line">  可能发生异常的处理</span><br><span class="line"><span class="keyword">rescue</span> <span class="title class_">Exception1</span>, <span class="title class_">Exception2</span> =&gt; 变量</span><br><span class="line">  异常处理<span class="number">1</span></span><br><span class="line"><span class="keyword">rescue</span> <span class="title class_">Exception3</span> =&gt; 变量</span><br><span class="line">  异常处理<span class="number">2</span></span><br><span class="line"><span class="keyword">rescue</span></span><br><span class="line">  以上异常之外的异常处理</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="主动抛出异常"><a href="#主动抛出异常" class="headerlink" title="主动抛出异常"></a>主动抛出异常</h3><p><code>raise 信息</code> - 抛出 <code>RuntimeError</code> 异常，并在新生成的异常对象中设置作为信息的字符串</p>
+<p><code>raise 异常类</code> - 抛出指定的异常</p>
+<p><code>raise 异常类, 信息</code> - 抛出指定的异常，并在新生成的异常对象中设置作为信息的字符串</p>
+<p><code>raise</code> - 在 <code>rescue</code> 外抛出 <code>RuntimeError</code> 。在 <code>rescue</code> 中调用时，会再次抛出最后一次发生的异常( <code>$!</code> )</p>
+<h2 id="块-block"><a href="#块-block" class="headerlink" title="块(block)"></a>块(block)</h2><p>块(block)就是在调用方法时能与参数一起传递的多个处理的集合</p>
+<h3 id="控制块的执行"><a href="#控制块的执行" class="headerlink" title="控制块的执行"></a>控制块的执行</h3><p>同循环一样，块也使用 <code>break</code> 、 <code>next</code> 和 <code>redo</code> 作为流程控制</p>
+<h3 id="将块封装为对象"><a href="#将块封装为对象" class="headerlink" title="将块封装为对象"></a>将块封装为对象</h3><p>如上所述，在接收块的方法中执行块时，可以使用 <code>yield</code> 关键字。而Ruby还能把块当作对象处理。把块当对象处理后，就可以在接收块的方法之外的其他地方执行块，或者把块交给其他方法执行</p>
+<p>把块当对象操作时，我们需要用到 <code>Proc</code> 对象。定义 <code>Proc</code> 对象的典型方法是，调用 <code>Proc.new</code> 这个带块的方法。在调用 <code>Proc</code> 对象的 <code>call</code> 方法之前，块中定义的程序不会被执行</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hello = <span class="title class_">Proc</span>.new <span class="keyword">do</span> |<span class="params">name</span>|</span><br><span class="line">  puts <span class="string">&quot;Hello, <span class="subst">#&#123;name&#125;</span>&quot;</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">hello.call(<span class="string">&quot;World&quot;</span>)</span><br><span class="line">hello.call(<span class="string">&quot;Ruby&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在定义方法时，如果末尾的参数使用 <code>&amp;参数</code> 的形式，Ruby就会自动把调用方法时传进来的块封装为Proc对象</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">total</span>(<span class="params">from, to, &amp;block</span>)</span><br><span class="line">  result = <span class="number">0</span></span><br><span class="line">  from.upto(to) <span class="keyword">do</span> |<span class="params">num</span>|</span><br><span class="line">    <span class="keyword">if</span> block</span><br><span class="line">      result += block.call(num)</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      result += num</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">return</span> result</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">p total(<span class="number">1</span>, <span class="number">10</span>)                      =&gt; <span class="number">55</span></span><br><span class="line">p total(<span class="number">1</span>, <span class="number">10</span>) &#123;|<span class="params">num</span>| num ** <span class="number">2</span>&#125;     =&gt; <span class="number">385</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h3><p>块内部的命名空间和块外部是共享的。在块外部定义的局部变量，在块中也可以继续使用。嗯！简而言之，这可以让Ruby轻松实现函数式的闭包。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">counter</span></span><br><span class="line">  cnt = <span class="number">0</span></span><br><span class="line">  <span class="title class_">Proc</span>.new <span class="keyword">do</span></span><br><span class="line">    cnt += <span class="number">1</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">c1 = counter</span><br><span class="line">c2 = counter</span><br><span class="line"></span><br><span class="line">c1.call         =&gt; <span class="number">1</span></span><br><span class="line">c1.call         =&gt; <span class="number">2</span></span><br><span class="line">c1.call         =&gt; <span class="number">3</span></span><br><span class="line">c2.call         =&gt; <span class="number">1</span></span><br><span class="line">c2.call         =&gt; <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h2><p><a target="_blank" rel="noopener" href="https://www.ruby-lang.org/">Ruby官网</a></p>
+<p><a target="_blank" rel="noopener" href="https://ruby-doc.org/">Ruby文档</a></p>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E7%BC%96%E7%A8%8B/">编程</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/Ruby/">Ruby</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/learn-erlang-data-structure.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          Erlang极简学习笔记<08>——常用数据结构篇Erlang极简学习笔记<08>——常用数据结构篇
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/odds-calc.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          赔率计算
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>

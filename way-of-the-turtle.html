@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>海龟交易法则 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        海龟交易法则
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2019-05-18 23:58:00</time>
+          <span class="text-gray-400">·</span>
+          <span>8 min</span>
+          <span class="text-gray-400">·</span>
+          <span>2.5k words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="像海龟一样思考"><a href="#像海龟一样思考" class="headerlink" title="像海龟一样思考"></a>像海龟一样思考</h2><ol>
+<li><strong>重要的是现在:</strong> 不要对过去念念不忘，也不要去预测未来。前者对你无益，后者是徒劳的。</li>
+<li><strong>从概率角度考虑问题，不要预测未来:</strong> 不要试图作出正确的预测，唯有使用概率是对你有利的方法，你才能长期的获得成功。</li>
+<li><strong>对你自己的交易结果负责:</strong> 不要把你的错误和失败归咎于其他人、市场、你的经纪人等。要对自己的错误负责，从错误中学习。</li>
+<li><strong>以长远眼光看待交易:</strong> 避免结果偏好，相信正期望值的威力。</li>
+</ol>
+<h3 id="情绪陷阱"><a href="#情绪陷阱" class="headerlink" title="情绪陷阱"></a>情绪陷阱</h3><ol>
+<li><strong>希望:</strong> 我希望买了之后，它马上就涨。</li>
+<li><strong>恐惧:</strong> 我再也赔不起了，这次我躲的远远的。</li>
+<li><strong>贪婪:</strong> 我赚翻了，我要把我的头寸扩大一倍。</li>
+<li><strong>绝望:</strong> 这个交易系统不管用了，我一直在赔钱。</li>
+</ol>
+<h3 id="认知偏差"><a href="#认知偏差" class="headerlink" title="认知偏差"></a>认知偏差</h3><ol>
+<li><strong>损失厌恶(lose aversion):</strong> 对避免损失有一种强烈的偏好。也就是说，不赔钱远比赚钱更重要。</li>
+<li><strong>沉没成本效应(sunk costs effect):</strong> 更重视已经花掉的钱，而不是未来可能要花的钱。</li>
+<li><strong>处置效应(disposition effect):</strong> 早早兑现利润，却让损失持续下去。</li>
+<li><strong>结果偏好(outcome bias):</strong> 只会根据一个决策的结果来判断它的好坏，而不去考虑决策本身的质量。</li>
+<li><strong>近期偏好(recency bias):</strong> 更重视近期的数据或经验，忽视早期的数据或经验。</li>
+<li><strong>锚定效应(anchoring):</strong> 过于依赖（或锚定）容易获得的信息。</li>
+<li><strong>潮流效应(bandwagon effect):</strong> 盲目相信一件事，只因为其他许多人都相信它。</li>
+<li><strong>小数定律(the law of small numbers):</strong> 从太少的信息中得出没有依据的结论。</li>
+</ol>
+<h3 id="市场状态"><a href="#市场状态" class="headerlink" title="市场状态"></a>市场状态</h3><ol>
+<li><strong>稳定平静:</strong> 价格在一个相对较小的范围内上下波动，很少超出这个范围。</li>
+<li><strong>稳定波动:</strong> 有大的日间或周间变化，但没有重大的月际变化。</li>
+<li><strong>平静的趋势:</strong> 价格在几个月中呈现出缓慢的运动或趋向，但始终没有剧烈的回调或反方向运动。</li>
+<li><strong>波动的趋势:</strong> 价格有大的变化，偶尔伴有剧烈的短期逆转。</li>
+</ol>
+<h2 id="发现系统的优势"><a href="#发现系统的优势" class="headerlink" title="发现系统的优势"></a>发现系统的优势</h2><h3 id="优势系统的三大要素"><a href="#优势系统的三大要素" class="headerlink" title="优势系统的三大要素"></a>优势系统的三大要素</h3><ol>
+<li><strong>资产组合的选择:</strong> 决定应该进入哪些市场的运算系统。</li>
+<li><strong>入市信号:</strong> 决定什么时候开始一笔交易的运算系统。</li>
+<li><strong>退出信号:</strong> 决定什么时候退出一笔交易的运算系统。</li>
+</ol>
+<h3 id="优势比率"><a href="#优势比率" class="headerlink" title="优势比率"></a>优势比率</h3><p>   最大不利变动幅度——往坏方向的最大变动幅度称为 <del>MAE(Max Adverse Excursion)</del></p>
+<p>   最大有利变动幅度——往好方向的最大变动幅度称为 <del>MFE(Max Favorable Excursion)</del></p>
+<p>   真实波动幅度均值 <del>ATR</del></p>
+<ol>
+<li>为每一个入市信号计算指定时间段内的 <del>MFE</del> 和 <del>MAE</del></li>
+<li>将上述各 <del>MFE</del> 和 <del>MAE</del> 值分别除以入市时的 <del>ATR</del> ,这是为了根据波动性作出调整，将不同市场标准化</li>
+<li>将上述调整后的 <del>MFE</del> 和 <del>MAE</del> 值分别求和，然后除以入市信号的总次数，得出调整后的平均 <del>MFE</del> 和 <del>MAE</del></li>
+<li>调整后的平均 <del>MFE</del> 除以调整后的平均 <del>MAE</del> 就是 <del>E - 比率</del></li>
+</ol>
+<h2 id="衡量风险"><a href="#衡量风险" class="headerlink" title="衡量风险"></a>衡量风险</h2><h3 id="四大风险"><a href="#四大风险" class="headerlink" title="四大风险"></a>四大风险</h3><ol>
+<li>衰落: 一连串损失使你的账户缩水</li>
+<li>低回报: 回报太低，你赚到的钱微不足道</li>
+<li>价格动荡: 一个或多个市场中出现价格的骤然变化，导致无可挽回的重大损失</li>
+<li>系统死亡: 市场状态改变，致使曾今有效的系统突然失效</li>
+</ol>
+<h3 id="风险量化"><a href="#风险量化" class="headerlink" title="风险量化"></a>风险量化</h3><ol>
+<li>最大衰落(最大回撤): 这是一个数字，代表一个测试期中从最高点到随后的最低点的下跌百分比</li>
+<li>最大衰落期: 从一个顶峰到下一个新顶峰的最长周期。它衡量的是恢复速度，也就是在一段损失期之后需要多长时间才能重新站上新的高点</li>
+<li>回报标准差: 这是回报率分散状况的一个衡量指标。低标准差表明大多数时候的回报率都接近于平均值，高标准差表明不同月份之间的回报率差异较大</li>
+<li>R平方值: 这个指标衡量的是实际投资回报率与平均复合增长率的吻合程度。对带息账户这一类的固定收益来说，R 平方值等于 1.0，而如果回报率不稳定，R 平方值将小于 1.0</li>
+</ol>
+<h3 id="回报的量化"><a href="#回报的量化" class="headerlink" title="回报的量化"></a>回报的量化</h3><ol>
+<li>平均复合增长率(geometric average return): 平均复合增长率也称作几何平均回报率，是指特定投资期间内的平均化复利率。期初资产按这个复利率滚动增长，将恰好增长到期末资产的水平</li>
+<li>滚动平均一年期回报率(average one year trailing return): 这是指连续滚动计算的一年期平均回报率。这个指标能更好地反应任何一个特定一年期内的典型回报水平</li>
+<li>平均月度回报率(average monthly return): 这是指测试期内各个月份的回报率平均值</li>
+</ol>
+<h3 id="衡量风险与回报的综合指标"><a href="#衡量风险与回报的综合指标" class="headerlink" title="衡量风险与回报的综合指标"></a>衡量风险与回报的综合指标</h3><ol>
+<li>夏普比率(Sharpe ratio): (年平均复合增长率 - 无风险回报率) &#x2F; 年回报率的标准差</li>
+<li>MAR比率(Managed Account Report ratio): 年均回报率 &#x2F; 最大的衰落幅度</li>
+</ol>
+<h3 id="模仿效应与系统死亡风险"><a href="#模仿效应与系统死亡风险" class="headerlink" title="模仿效应与系统死亡风险"></a>模仿效应与系统死亡风险</h3><ol>
+<li>使用某一种特定策略的人越多，价格差就消失得越快，因为这些交易者本质上都在争夺同样得机会。长此以往，这种效应就会毁掉这种策略，因为它会变得越来越无利可图</li>
+<li>相反，对一般投资者没有吸引力得系统和策略反而有更长得生命周期</li>
+</ol>
+<h2 id="趋势捕捉-Trend-Capture"><a href="#趋势捕捉-Trend-Capture" class="headerlink" title="趋势捕捉(Trend Capture)"></a>趋势捕捉(Trend Capture)</h2><ol>
+<li>突破(Breakout): 突破是指价格冲破了过去一段特定时期内得最高或最低价格</li>
+<li>移动平均价(Moving Average): 是指连续计算的特定时期内的平均价格</li>
+<li>波幅通道(Volatility Channel): 波幅通道等于一个移动平均价再加上某个特定的数值，这个特定数值是根据标准差或ATR这一类的波动性指标而确定的</li>
+<li>定时退出(Time-based Exit): 这是最简单的退出策略——在一个事先确定的特定时间退出（比如10天或80天之后退出）</li>
+<li>简单回顾(Simple Lookback): 拿当前价格与早些时候的某个历史价格相比较</li>
+</ol>
+<h2 id="仓位管理"><a href="#仓位管理" class="headerlink" title="仓位管理"></a>仓位管理</h2><ol>
+<li>每一个市场中最多只能投入4个头寸单位</li>
+<li>在高度相关的多个市场中，多头或空头单位都不能超过6个</li>
+<li>在任何一个方向上的总交易量都不得超过10个头寸（也就是最多10个多头和10个空头）</li>
+</ol>
+<h2 id="资金管理"><a href="#资金管理" class="headerlink" title="资金管理"></a>资金管理</h2><ol>
+<li>以止损幅度来计算头寸资金规模，例如：某次交易可以承受的最大亏损是2000元，止损为50个点。那么投入的头寸规模为 <code>2000 / 50 = 40张合约</code>，相应的资金规模就是<code>40张合约 * 合约价格</code></li>
+<li>按品种波动来计算头寸资金规模，例如：最大承受亏损依然是2000元，承受的波动幅度为2ATR。那么投入的资金规模就是 <code>(2000 / 2ATR对应的点数) * 合约价格</code></li>
+</ol>
+<h2 id="退出策略-止盈-x2F-止损"><a href="#退出策略-止盈-x2F-止损" class="headerlink" title="退出策略(止盈&#x2F;止损)"></a>退出策略(止盈&#x2F;止损)</h2><ol>
+<li>时间退出：到达事先设定的时间后，无条件退出</li>
+<li>回撤退出：当价格由最高点或最低点回撤一定幅度后退出</li>
+<li>目标价位退出：到达目标价格后退出(可能是止盈，也可能是止损)</li>
+</ol>
+<h2 id="回测陷阱"><a href="#回测陷阱" class="headerlink" title="回测陷阱"></a>回测陷阱</h2><ol>
+<li>交易者效应：如果一种方法在近期赚了很多钱，那么其他交易者很可能会注意到它，开始用类似的方法模仿它，这很容易导致这种方法失效</li>
+<li>随机效应：历史回测的结果夸大了系统的内在优势也可能是纯随机性的现象</li>
+<li>最优化矛盾：选择特定参数的过程，可能降低事后测试的预测价值</li>
+<li>过度拟合：系统可能太过复杂，以至于失去了预测价值。由于它与历史数据的吻合度太高，市场行为的一个轻微变化就会造成效果明显恶化</li>
+</ol>
+<h2 id="稳健交易系统的两大特征"><a href="#稳健交易系统的两大特征" class="headerlink" title="稳健交易系统的两大特征"></a>稳健交易系统的两大特征</h2><ol>
+<li>分散化：在生态系统中，大自然不会仅靠一两个物种去完成一个任务。它不会只有一种食肉动物，只有一种食物源，只有一种食草动物，只有一种负责清理尸骸的食腐动物。分散化非常重要，因为它可以避免生态系统在某种生物的数量急剧变化的情况下陷于被动</li>
+<li>简单化：在稳定环境中，复杂的生态系统更有韧性，复杂的物种似乎也远远优于简单的物种。但在变化时期，复杂的物种更容易死亡，因为在这些时候，最坚强的物种都是那些非常简单的物种。简单的生命之所以更坚强，是因为它们并不是那么依赖于特殊的环境</li>
+</ol>
+<h2 id="成功海龟的交易心得"><a href="#成功海龟的交易心得" class="headerlink" title="成功海龟的交易心得"></a>成功海龟的交易心得</h2><ol>
+<li>掌握优势：找到一个期望值为正的交易策略，因为长期来看它能创造正的回报</li>
+<li>管理风险：控制风险，守住阵地，否则即使你有一个期望值为正的系统，你可能也等不到它创造成果的那一天</li>
+<li>坚定不移：唯有坚定不移地执行你的策略，你才能真正获得系统的正期望</li>
+<li>简单明了：长久来看，简单的系统比复杂的系统更有生命力</li>
+</ol>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%8A%95%E8%B5%84%E7%90%86%E8%B4%A2/">投资理财</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E6%B5%B7%E9%BE%9F%E4%BA%A4%E6%98%93/">海龟交易</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/stock-fundamental.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          股票基本面概念
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/calc-similar.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          计算两篇文章相似度
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>

@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>Make命令教程 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        Make命令教程
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2020-09-12 14:51:00</time>
+          <span class="text-gray-400">·</span>
+          <span>13 min</span>
+          <span class="text-gray-400">·</span>
+          <span>3.4k words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>作者：<a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2015/02/make.html">阮一峰</a></p>
+<p>代码变成可执行文件，叫做编译（compile）；先编译这个，还是先编译那个（即编译的安排），叫做构建（build）。</p>
+<p><a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Make_%28software%29">Make</a>是最常用的构建工具，诞生于1977年，主要用于C语言的项目。但是实际上 ，任何只要某个文件有变化，就要重新构建的项目，都可以用Make构建。</p>
+<p>本文介绍Make命令的用法，从简单的讲起，不需要任何基础，只要会使用命令行，就能看懂。我的参考资料主要是Isaac Schlueter的<a target="_blank" rel="noopener" href="https://gist.github.com/isaacs/62a2d1825d04437c6f08">《Makefile文件教程》</a>和<a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/make.html">《GNU Make手册》</a>。</p>
+<h2 id="Make的概念"><a href="#Make的概念" class="headerlink" title="Make的概念"></a>Make的概念</h2><p>Make这个词，英语的意思是”制作”。Make命令直接用了这个意思，就是要做出某个文件。比如，要做出文件a.txt，就可以执行下面的命令。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make a.txt</span></span><br></pre></td></tr></table></figure>
+
+<p>但是，如果你真的输入这条命令，它并不会起作用。因为Make命令本身并不知道，如何做出a.txt，需要有人告诉它，如何调用其他命令完成这个目标。</p>
+<p>比如，假设文件 a.txt 依赖于 b.txt 和 c.txt ，是后面两个文件连接（cat命令）的产物。那么，make 需要知道下面的规则。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">a.txt: b.txt c.txt</span></span><br><span class="line">    cat b.txt c.txt &gt; a.txt</span><br></pre></td></tr></table></figure>
+
+<p>也就是说，make a.txt 这条命令的背后，实际上分成两步：第一步，确认 b.txt 和 c.txt 必须已经存在，第二步使用 cat 命令 将这个两个文件合并，输出为新文件。</p>
+<p>像这样的规则，都写在一个叫做Makefile的文件中，Make命令依赖这个文件进行构建。Makefile文件也可以写为makefile， 或者用命令行参数指定为其他文件名。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make -f rules.txt</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">或者</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make --file=rules.txt</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码指定make命令依据rules.txt文件中的规则，进行构建。</p>
+<p>总之，make只是一个根据指定的Shell命令进行构建的工具。它的规则很简单，你规定要构建哪个文件、它依赖哪些源文件，当那些文件有变动时，如何重新构建它。</p>
+<h2 id="Makefile文件的格式"><a href="#Makefile文件的格式" class="headerlink" title="Makefile文件的格式"></a>Makefile文件的格式</h2><p>构建规则都写在Makefile文件里面，要学会如何Make命令，就必须学会如何编写Makefile文件。</p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>Makefile文件由一系列规则（rules）构成。每条规则的形式如下。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;target&gt; : &lt;prerequisites&gt;</span><br><span class="line">[tab]  &lt;commands&gt;</span><br></pre></td></tr></table></figure>
+
+<p>上面第一行冒号前面的部分，叫做”目标”（target），冒号后面的部分叫做”前置条件”（prerequisites）；第二行必须由一个tab键起首，后面跟着”命令”（commands）。</p>
+<p>“目标”是必需的，不可省略；”前置条件”和”命令”都是可选的，但是两者之中必须至少存在一个。</p>
+<p>每条规则就明确两件事：构建目标的前置条件是什么，以及如何构建。下面就详细讲解，每条规则的这三个组成部分。</p>
+<h3 id="目标（target）"><a href="#目标（target）" class="headerlink" title="目标（target）"></a>目标（target）</h3><p>一个目标（target）就构成一条规则。目标通常是文件名，指明Make命令所要构建的对象，比如上文的 a.txt 。目标可以是一个文件名，也可以是多个文件名，之间用空格分隔。</p>
+<p>除了文件名，目标还可以是某个操作的名字，这称为”伪目标”（phony target）。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm *.o</span><br></pre></td></tr></table></figure>
+
+<p>上面代码的目标是clean，它不是文件名，而是一个操作的名字，属于”伪目标 “，作用是删除对象文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make  clean</span></span><br></pre></td></tr></table></figure>
+
+<p>但是，如果当前目录中，正好有一个文件叫做clean，那么这个命令不会执行。因为Make发现clean文件已经存在，就认为没有必要重新构建了，就不会执行指定的rm命令。</p>
+<p>为了避免这种情况，可以明确声明clean是”伪目标”，写法如下。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: clean</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm *.o temp</span><br></pre></td></tr></table></figure>
+
+<p>声明clean是”伪目标”之后，make就不会去检查是否存在一个叫做clean的文件，而是每次运行都执行对应的命令。像.PHONY这样的内置目标名还有不少，可以查看手册。</p>
+<p>如果Make命令运行时没有指定目标，默认会执行Makefile文件的第一个目标。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码执行Makefile文件的第一个目标。</p>
+<h3 id="前置条件（prerequisites）"><a href="#前置条件（prerequisites）" class="headerlink" title="前置条件（prerequisites）"></a>前置条件（prerequisites）</h3><p>前置条件通常是一组文件名，之间用空格分隔。它指定了”目标”是否重新构建的判断标准：只要有一个前置文件不存在，或者有过更新（前置文件的last-modification时间戳比目标的时间戳新），”目标”就需要重新构建。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">result.txt: source.txt</span></span><br><span class="line">    cp source.txt result.txt</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，构建 result.txt 的前置条件是 source.txt 。如果当前目录中，source.txt 已经存在，那么 <code>make result.txt</code> 可以正常运行，否则必须再写一条规则，来生成 source.txt 。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">source.txt:</span></span><br><span class="line">    echo <span class="string">&quot;this is the source&quot;</span> &gt; source.txt</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，source.txt后面没有前置条件，就意味着它跟其他文件都无关，只要这个文件还不存在，每次调用 <code>make source.txt</code> ，它都会生成。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make result.txt</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make result.txt</span></span><br></pre></td></tr></table></figure>
+
+<p>上面命令连续执行两次 <code>make result.txt</code> 。第一次执行会先新建 source.txt，然后再新建 result.txt。第二次执行，Make发现 source.txt 没有变动（时间戳晚于 result.txt），就不会执行任何操作，result.txt 也不会重新生成。</p>
+<p>如果需要生成多个文件，往往采用下面的写法。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">source: file1 file2 file3</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，source 是一个伪目标，只有三个前置文件，没有任何对应的命令。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make <span class="built_in">source</span></span></span><br></pre></td></tr></table></figure>
+
+<p>执行 <code>make source</code> 命令后，就会一次性生成 file1，file2，file3 三个文件。这比下面的写法要方便很多。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make file1</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make file2</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make file3</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="命令（commands）"><a href="#命令（commands）" class="headerlink" title="命令（commands）"></a>命令（commands）</h3><p>命令（commands）表示如何更新目标文件，由一行或多行的Shell命令组成。它是构建”目标”的具体指令，它的运行结果通常就是生成目标文件。</p>
+<p>每行命令之前必须有一个tab键。如果想用其他键，可以用内置变量.RECIPEPREFIX声明。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.RECIPEPREFIX = &gt;</span><br><span class="line"><span class="section">all:</span></span><br><span class="line">&gt; echo Hello, world</span><br></pre></td></tr></table></figure>
+
+<p>上面代码用.RECIPEPREFIX指定，大于号<code>&gt;</code>替代tab键。所以，每一行命令的起首变成了大于号，而不是tab键。</p>
+<p>需要注意的是，每行命令在一个单独的shell中执行。这些Shell之间没有继承关系。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">var-lost:</span></span><br><span class="line">    <span class="keyword">export</span> foo=bar</span><br><span class="line">    echo <span class="string">&quot;foo=[$$foo]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码执行后 <code>make var-lost</code> ，取不到foo的值。因为两行命令在两个不同的进程执行。一个解决办法是将两行命令写在一行，中间用分号分隔。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">var-kept:</span></span><br><span class="line">    <span class="keyword">export</span> foo=bar; echo <span class="string">&quot;foo=[$$foo]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>另一个解决办法是在换行符前加反斜杠转义。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">var-kept:</span></span><br><span class="line">    <span class="keyword">export</span> foo=bar; \</span><br><span class="line">    echo <span class="string">&quot;foo=[$$foo]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>最后一个方法是加上.ONESHELL:命令。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">.ONESHELL:</span></span><br><span class="line"><span class="section">var-kept:</span></span><br><span class="line">    <span class="keyword">export</span> foo=bar;</span><br><span class="line">    echo <span class="string">&quot;foo=[$$foo]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Makefile文件的语法"><a href="#Makefile文件的语法" class="headerlink" title="Makefile文件的语法"></a>Makefile文件的语法</h2><h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><p>井号<code>#</code>在Makefile中表示注释。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这是注释</span></span><br><span class="line"><span class="section">result.txt: source.txt</span></span><br><span class="line">    <span class="comment"># 这是注释</span></span><br><span class="line">    cp source.txt result.txt <span class="comment"># 这也是注释</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="回声（echoing）"><a href="#回声（echoing）" class="headerlink" title="回声（echoing）"></a>回声（echoing）</h3><p>正常情况下，make会打印每条命令，然后再执行，这就叫做回声（echoing）。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">test:</span></span><br><span class="line">    <span class="comment"># 这是测试</span></span><br></pre></td></tr></table></figure>
+
+<p>执行上面的规则，会得到下面的结果。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make <span class="built_in">test</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">这是测试</span></span><br></pre></td></tr></table></figure>
+
+<p>在命令的前面加上<code>@</code>，就可以关闭回声。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">test:</span></span><br><span class="line">    @<span class="comment"># 这是测试</span></span><br></pre></td></tr></table></figure>
+
+<p>现在再执行 <code>make test</code> ，就不会有任何输出。</p>
+<p>由于在构建过程中，需要了解当前在执行哪条命令，所以通常只在注释和纯显示的echo命令前面加上<code>@</code>。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">test:</span></span><br><span class="line">    @<span class="comment"># 这是测试</span></span><br><span class="line">    @echo TODO</span><br></pre></td></tr></table></figure>
+
+<h3 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h3><p>通配符（wildcard）用来指定一组符合条件的文件名。Makefile 的通配符与 Bash 一致，主要有星号<code>*</code>、问号<code>?</code>和 <code>[...]</code> 。比如， *.o 表示所有后缀名为o的文件。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">clean:</span></span><br><span class="line">    rm -f *.o</span><br></pre></td></tr></table></figure>
+
+<h3 id="模式匹配"><a href="#模式匹配" class="headerlink" title="模式匹配"></a>模式匹配</h3><p>Make命令允许对文件名，进行类似正则运算的匹配，主要用到的匹配符是<code>%</code>。比如，假定当前目录下有 f1.c 和 f2.c 两个源码文件，需要将它们编译为对应的对象文件。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">%.o: %.c</span></span><br></pre></td></tr></table></figure>
+
+<p>等同于下面的写法。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">f1.o: f1.c</span></span><br><span class="line"><span class="section">f2.o: f2.c</span></span><br></pre></td></tr></table></figure>
+
+<p>使用匹配符<code>%</code>，可以将大量同类型的文件，只用一条规则就完成构建。</p>
+<h3 id="变量和赋值符"><a href="#变量和赋值符" class="headerlink" title="变量和赋值符"></a>变量和赋值符</h3><p>Makefile 允许使用等号自定义变量。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">txt = Hello World</span><br><span class="line"><span class="section">test:</span></span><br><span class="line">    @echo <span class="variable">$(txt)</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，变量 txt 等于 Hello World。调用时，变量需要放在 <code>$( )</code> 之中。</p>
+<p>调用Shell变量，需要在美元符号前，再加一个美元符号，这是因为Make命令会对美元符号转义。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">test:</span></span><br><span class="line">    @echo $$HOME</span><br></pre></td></tr></table></figure>
+
+<p>有时，变量的值可能指向另一个变量。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v1 = <span class="variable">$(v2)</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，变量 v1 的值是另一个变量 v2。这时会产生一个问题，v1 的值到底在定义时扩展（静态扩展），还是在运行时扩展（动态扩展）？如果 v2 的值是动态的，这两种扩展方式的结果可能会差异很大。</p>
+<p>为了解决类似问题，Makefile一共提供了四个赋值运算符 <code>=</code>、<code>:=</code>、<code>?=</code>、<code>+=</code>，它们的区别请看<a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/448910/makefile-variable-assignment">StackOverflow</a>。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">VARIABLE = value</span><br><span class="line"><span class="comment"># 在执行时扩展，允许递归扩展。</span></span><br><span class="line"></span><br><span class="line">VARIABLE := value</span><br><span class="line"><span class="comment"># 在定义时扩展。</span></span><br><span class="line"></span><br><span class="line">VARIABLE ?= value</span><br><span class="line"><span class="comment"># 只有在该变量为空时才设置值。</span></span><br><span class="line"></span><br><span class="line">VARIABLE += value</span><br><span class="line"><span class="comment"># 将值追加到变量的尾端。</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="内置变量（Implicit-Variables）"><a href="#内置变量（Implicit-Variables）" class="headerlink" title="内置变量（Implicit Variables）"></a>内置变量（Implicit Variables）</h3><p>Make命令提供一系列内置变量，比如，<code>$(CC)</code> 指向当前使用的编译器，<code>$(MAKE)</code> 指向当前使用的Make工具。这主要是为了跨平台的兼容性，详细的内置变量清单见<a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html">手册</a>。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">output:</span></span><br><span class="line">    <span class="variable">$(CC)</span> -o output input.c</span><br></pre></td></tr></table></figure>
+
+<h3 id="自动变量（Automatic-Variables）"><a href="#自动变量（Automatic-Variables）" class="headerlink" title="自动变量（Automatic Variables）"></a>自动变量（Automatic Variables）</h3><p>Make命令还提供一些自动变量，它们的值与当前规则有关。主要有以下几个。</p>
+<h4 id=""><a href="#" class="headerlink" title="$@"></a><code>$@</code></h4><p><code>$@</code>指代当前目标，就是Make命令当前构建的那个目标。比如 <code>make foo</code> 的 <code>$@</code> 就指代foo。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a.txt b.txt:</span><br><span class="line">    touch <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+
+<p>等同于下面的写法。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">a.txt:</span></span><br><span class="line">    touch a.txt</span><br><span class="line"><span class="section">b.txt:</span></span><br><span class="line">    touch b.txt</span><br></pre></td></tr></table></figure>
+
+<h4 id="lt"><a href="#lt" class="headerlink" title="$&lt;"></a><code>$&lt;</code></h4><p><code>$&lt;</code> 指代第一个前置条件。比如，规则为 <code>t: p1 p2</code>，那么<code>$&lt;</code> 就指代p1。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">a.txt: b.txt c.txt</span></span><br><span class="line">    cp <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+
+<p>等同于下面的写法。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">a.txt: b.txt c.txt</span></span><br><span class="line">    cp b.txt a.txt</span><br></pre></td></tr></table></figure>
+
+<h4 id="-1"><a href="#-1" class="headerlink" title="$?"></a><code>$?</code></h4><p><code>$?</code> 指代比目标更新的所有前置条件，之间以空格分隔。比如，规则为 <code>t: p1 p2</code>，其中 p2 的时间戳比 t 新，<code>$?</code>就指代p2。</p>
+<h4 id="-2"><a href="#-2" class="headerlink" title="$^"></a><code>$^</code></h4><p><code>$^</code> 指代所有前置条件，之间以空格分隔。比如，规则为 <code>t: p1 p2</code>，那么 <code>$^</code> 就指代 p1 p2 。</p>
+<h4 id="-3"><a href="#-3" class="headerlink" title="$*"></a><code>$*</code></h4><p><code>$*</code> 指代匹配符 <code>%</code> 匹配的部分， 比如 <code>%</code> 匹配 f1.txt 中的f1 ，<code>$*</code> 就表示 f1。</p>
+<h4 id="D-和-F"><a href="#D-和-F" class="headerlink" title="$(@D) 和 $(@F)"></a><code>$(@D)</code> 和 <code>$(@F)</code></h4><p><code>$(@D)</code> 和 <code>$(@F)</code> 分别指向 <code>$@</code> 的目录名和文件名。比如，<code>$@</code>是 src&#x2F;input.c，那么<code>$(@D)</code> 的值为 src ，<code>$(@F)</code> 的值为 input.c。</p>
+<h4 id="lt-D-和-lt-F"><a href="#lt-D-和-lt-F" class="headerlink" title="$(&lt;D) 和 $(&lt;F)"></a><code>$(&lt;D)</code> 和 <code>$(&lt;F)</code></h4><p><code>$(&lt;D)</code> 和 <code>$(&lt;F)</code> 分别指向 <code>$&lt;</code> 的目录名和文件名。</p>
+<p>所有的自动变量清单，请看<a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">手册</a>。下面是自动变量的一个例子。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">dest/%.txt: src/%.txt</span></span><br><span class="line">    @[ -d dest ] || mkdir dest</span><br><span class="line">    cp <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码将 src 目录下的 txt 文件，拷贝到 dest 目录下。首先判断 dest 目录是否存在，如果不存在就新建，然后，<code>$&lt;</code> 指代前置文件<code>src/%.txt</code>， <code>$@</code> 指代目标文件<code>dest/%.txt</code>。</p>
+<h3 id="判断和循环"><a href="#判断和循环" class="headerlink" title="判断和循环"></a>判断和循环</h3><p>Makefile使用 Bash 语法，完成判断和循环。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ifeq</span> (<span class="variable">$(CC)</span>,gcc)</span><br><span class="line">    libs=<span class="variable">$(libs_for_gcc)</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    libs=<span class="variable">$(normal_libs)</span></span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码判断当前编译器是否 gcc ，然后指定不同的库文件。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">LIST = one two three</span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    for i in <span class="variable">$(LIST)</span>; do \</span><br><span class="line">        echo $$i; \</span><br><span class="line">    done</span><br><span class="line"></span><br><span class="line"><span class="comment"># 等同于</span></span><br><span class="line"></span><br><span class="line"><span class="section">all:</span></span><br><span class="line">    for i in one two three; do \</span><br><span class="line">        echo $i; \</span><br><span class="line">    done</span><br></pre></td></tr></table></figure>
+
+<p>上面代码的运行结果。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">one</span><br><span class="line">two</span><br><span class="line">three</span><br></pre></td></tr></table></figure>
+
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><p>Makefile 还可以使用函数，格式如下。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(function arguments)</span></span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">$&#123;function arguments&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Makefile提供了许多内置函数，可供调用。下面是几个常用的内置函数。</p>
+<h4 id="shell-函数"><a href="#shell-函数" class="headerlink" title="shell 函数"></a>shell 函数</h4><p>shell 函数用来执行 shell 命令</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">srcfiles := <span class="variable">$(<span class="built_in">shell</span> echo src/&#123;00..99&#125;.txt)</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="wildcard-函数"><a href="#wildcard-函数" class="headerlink" title="wildcard 函数"></a>wildcard 函数</h4><p>wildcard 函数用来在 Makefile 中，替换 Bash 的通配符。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">srcfiles := <span class="variable">$(<span class="built_in">wildcard</span> src/*.txt)</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="subst-函数"><a href="#subst-函数" class="headerlink" title="subst 函数"></a>subst 函数</h4><p>subst 函数用来文本替换，格式如下。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">subst</span> from,to,text)</span></span><br></pre></td></tr></table></figure>
+
+<p>下面的例子将字符串”feet on the street”替换成”fEEt on the strEEt”。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">subst</span> ee,EE,feet on the street)</span></span><br></pre></td></tr></table></figure>
+
+<p>下面是一个稍微复杂的例子。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">comma:= ,</span><br><span class="line">empty:=</span><br><span class="line"><span class="comment"># space变量用两个空变量作为标识符，当中是一个空格</span></span><br><span class="line">space:= <span class="variable">$(empty)</span> <span class="variable">$(empty)</span></span><br><span class="line">foo:= a b c</span><br><span class="line">bar:= <span class="variable">$(<span class="built_in">subst</span> <span class="variable">$(space)</span>,<span class="variable">$(comma)</span>,<span class="variable">$(foo)</span>)</span></span><br><span class="line"><span class="comment"># bar is now `a,b,c&#x27;.</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="patsubst函数"><a href="#patsubst函数" class="headerlink" title="patsubst函数"></a>patsubst函数</h4><p>patsubst 函数用于模式匹配的替换，格式如下。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">patsubst</span> pattern,replacement,text)</span></span><br></pre></td></tr></table></figure>
+
+<p>下面的例子将文件名”x.c.c bar.c”，替换成”x.c.o bar.o”。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(<span class="built_in">patsubst</span> %.c,%.o,x.c.c bar.c)</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="替换后缀名"><a href="#替换后缀名" class="headerlink" title="替换后缀名"></a>替换后缀名</h4><p>替换后缀名函数的写法是：变量名 + 冒号 + 后缀名替换规则。它实际上patsubst函数的一种简写形式。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">min: $(OUTPUT:.js=.min.js)</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码的意思是，将变量OUTPUT中的后缀名 .js 全部替换成 .min.js 。</p>
+<h2 id="Makefile-的实例"><a href="#Makefile-的实例" class="headerlink" title="Makefile 的实例"></a>Makefile 的实例</h2><h3 id="执行多个目标"><a href="#执行多个目标" class="headerlink" title="执行多个目标"></a>执行多个目标</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: cleanall cleanobj cleandiff</span></span><br><span class="line"></span><br><span class="line">cleanall : cleanobj cleandiff</span><br><span class="line">        rm program</span><br><span class="line"></span><br><span class="line">cleanobj :</span><br><span class="line">        rm *.o</span><br><span class="line"></span><br><span class="line">cleandiff :</span><br><span class="line">        rm *.diff</span><br></pre></td></tr></table></figure>
+
+<p>上面代码可以调用不同目标，删除不同后缀名的文件，也可以调用一个目标（cleanall），删除所有指定类型的文件。</p>
+<h3 id="编译C语言项目"><a href="#编译C语言项目" class="headerlink" title="编译C语言项目"></a>编译C语言项目</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">edit : main.o kbd.o command.o display.o</span><br><span class="line">    cc -o edit main.o kbd.o command.o display.o</span><br><span class="line"></span><br><span class="line">main.o : main.c defs.h</span><br><span class="line">    cc -c main.c</span><br><span class="line">kbd.o : kbd.c defs.h command.h</span><br><span class="line">    cc -c kbd.c</span><br><span class="line">command.o : command.c defs.h command.h</span><br><span class="line">    cc -c command.c</span><br><span class="line">display.o : display.c defs.h</span><br><span class="line">    cc -c display.c</span><br><span class="line"></span><br><span class="line">clean :</span><br><span class="line">    rm edit main.o kbd.o command.o display.o</span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="keyword">.PHONY</span>: edit clean</span></span><br></pre></td></tr></table></figure>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E7%BC%96%E7%A8%8B/">编程</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/Make/">Make</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/clear-history-of-git.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          清空Git仓库全部历史记录
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/tech-calc.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          技术指标计算
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>

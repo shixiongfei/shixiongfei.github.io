@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+
+
+<!-- Baidu Analytics -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?4dbc75a8d627e17a8714e4c8b2e9afa8";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+<!-- End Baidu Analytics -->
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="author" content="shixiongfei">
+
+
+  <meta name="subtitle" content="LESS is MORE">
+
+
+  <meta name="description" content="Mind is Power and Less is More!">
+
+
+  <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
+
+
+<title>Smalltalk学习记录 | Xiongfei Shi</title>
+
+
+
+<link rel="icon" href="/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
+
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+
+
+<script src="/lib/jquery.min.js"></script>
+
+
+<script src="/lib/iconify-icon.min.js"></script>
+
+
+<script src="https://cdn.tailwindcss.com?plugins=typography,line-clamp"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+
+
+<script src="/lib/nprogress/nprogress.js"></script>
+
+<script>
+  $(document).ready(() => {
+    NProgress.configure({
+      showSpinner: false,
+    });
+    NProgress.start();
+    $("#nprogress .bar").css({
+      background: "#de7441",
+    });
+    $("#nprogress .peg").css({
+      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
+    });
+    $("#nprogress .spinner-icon").css({
+      "border-top-color": "#de7441",
+      "border-left-color": "#de7441",
+    });
+    setTimeout(function () {
+      NProgress.done();
+      $(".fade").removeClass("out");
+    }, 800);
+  });
+</script>
+
+<script>
+  (function () {
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
+    if (setting === "dark" || (prefersDark && setting !== "light"))
+      document.documentElement.classList.toggle("dark", true);
+  })();
+  window.onload = function () {
+    // init iconify icon
+    const isDark = document.documentElement.classList.contains("dark");
+    if (isDark) {
+      $("#toggle-dark").attr("icon", "ri:moon-line");
+    } else {
+      $("#toggle-dark").attr("icon", "ri:sun-line");
+    }
+
+    const toggleDark = () => {
+      console.log("toggle dark");
+      const darkMode = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("hexo-color-scheme", darkMode ? "dark" : "light");
+      $("#toggle-dark").attr("icon", darkMode ? "ri:moon-line" : "ri:sun-line");
+    };
+
+    $("#toggle-dark").click(toggleDark);
+  };
+</script>
+
+
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
+  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
+  <div class="max-auto">
+    <nav class="flex items-center text-base">
+      <a href="/" class="group">
+        <h2 class="font-medium tracking-tighterp text-l p-2">
+          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" src="/images/logo.svg" alt="Xiongfei Shi" />
+          Xiongfei Shi
+        </h2>
+      </a>
+      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+        Categories
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center gap-3">
+        
+          <a class="hidden sm:flex" href="/archives">Posts</a>
+        
+          <a class="hidden sm:flex" href="/categories">Categories</a>
+        
+          <a class="hidden sm:flex" href="/tags">Tags</a>
+        
+        
+          
+            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/shixiongfei">
+              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
+            </a>
+          
+            <a class="w-5 h-5 hidden sm:flex" title="ZhiHu" target="_blank" rel="noopener" href="https://www.zhihu.com/people/shixiongfei">
+              <iconify-icon width="20" icon="ri:zhihu-line"></iconify-icon>
+            </a>
+          
+        
+        <a class="w-5 h-5" title="toggle theme">
+          <iconify-icon width="20" icon="ri:sun-line" id="toggle-dark"></iconify-icon>
+        </a>
+      </div>
+      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
+        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
+          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
+        </span>
+        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
+          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
+        </span>
+      </div>
+    </nav>
+  </div>
+</header>
+<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
+  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
+    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/categories" class="flex h-12 sm:h-auto items-center">Categories</a>
+        </li>
+      
+        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
+          <a href="/tags" class="flex h-12 sm:h-auto items-center">Tags</a>
+        </li>
+      
+    </ul>
+  </div>
+  <div class="mask bg-black/20 absolute inset-0"></div>
+</div>
+
+  <main class="p-12">
+    <!-- toc -->
+
+  <!-- tocbot -->
+<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
+
+
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- header -->
+  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
+    <div class="pt-4 md:pt-6">
+      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
+        Smalltalk学习记录
+      </h1>
+      <p class="mb-6">
+        
+      </p>
+      <div>
+        <section class="flex items-center gap-3 text-sm">
+          <time>2020-01-09 23:46:00</time>
+          <span class="text-gray-400">·</span>
+          <span>6 min</span>
+          <span class="text-gray-400">·</span>
+          <span>1.5k words</span>
+        </section>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="执行代码"><a href="#执行代码" class="headerlink" title="执行代码"></a>执行代码</h2><p>Do it(执行代码) <code>Ctrl + D</code> &#x2F; <code>Cmd + D</code> ，用于执行表达式</p>
+<p>Print it(打印结果) <code>Ctrl + P</code> &#x2F; <code>Cmd + P</code> ，用于打印表达式结果</p>
+<p>Inspect it(对象检查器) <code>Ctrl + I</code> &#x2F; <code>Cmd + I</code> ，用于查看对象内部结构</p>
+<h2 id="数值类型"><a href="#数值类型" class="headerlink" title="数值类型"></a>数值类型</h2><p>1, 2, 100, 2&#x2F;3 …这些都是数字，数字可以响应很多消息用于计算各种数学表达式</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2.</span></span><br><span class="line"></span><br><span class="line"><span class="number">20</span> factorial.</span><br><span class="line"></span><br><span class="line"><span class="number">1000</span> factorial / <span class="number">999</span> factorial.</span><br><span class="line"></span><br><span class="line">(<span class="number">1</span>/<span class="number">3</span>).</span><br><span class="line"></span><br><span class="line">(<span class="number">1</span>/<span class="number">3</span>) + (<span class="number">4</span>/<span class="number">5</span>).</span><br><span class="line"></span><br><span class="line">(<span class="number">1</span>/<span class="number">3</span>) asFloat.</span><br><span class="line"></span><br><span class="line"><span class="number">1</span> class.</span><br><span class="line"></span><br><span class="line"><span class="number">1</span> class maxVal class.</span><br><span class="line"></span><br><span class="line">(<span class="number">1</span> class maxVal + <span class="number">1</span>) class.</span><br></pre></td></tr></table></figure>
+
+<h2 id="字符类型"><a href="#字符类型" class="headerlink" title="字符类型"></a>字符类型</h2><p>字符使用 <code>$</code> 操作符</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">$A</span>.</span><br><span class="line"></span><br><span class="line"><span class="string">$A</span> class.</span><br><span class="line"></span><br><span class="line"><span class="string">$B</span> charCode.</span><br><span class="line"></span><br><span class="line"><span class="type">Character</span> cr.</span><br><span class="line"></span><br><span class="line"><span class="type">Character</span> space.</span><br></pre></td></tr></table></figure>
+
+<p>我们可以打印256个Ascii字符</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Character</span> allByteCharacters.</span><br></pre></td></tr></table></figure>
+
+<h2 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h2><p>字符串是一个字符集合，使用 <code>&#39;</code> 单引号将字符集合括起来即可</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;ProfStef&#x27;</span>.</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;ProfStef&#x27;</span> size.</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;abc&#x27;</span> asUppercase.</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;Hello World&#x27;</span> reverse.</span><br></pre></td></tr></table></figure>
+
+<p>我们可以使用 <code>at:</code> 消息来访问字符串中的任意字符</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;ProfStef&#x27;</span> at: <span class="number">1.</span></span><br></pre></td></tr></table></figure>
+
+<p>字符串拼接可以使用 <code>,</code> 操作符</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;ProfStef&#x27;</span>, <span class="string">&#x27; is cool&#x27;</span>.</span><br></pre></td></tr></table></figure>
+
+<h2 id="符号类型"><a href="#符号类型" class="headerlink" title="符号类型"></a>符号类型</h2><p>符号是保证全局唯一的字符串。只有一个 <code>#Symbol</code> 符号对象，但是可以有多个 <code>&#39;Symbol&#39;</code> 字符串对象</p>
+<p>(Message &#x3D;&#x3D; returns true if the two objects are the SAME)</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;ProfStef&#x27;</span> asSymbol.</span><br><span class="line"></span><br><span class="line"><span class="symbol">#ProfStef</span> asString.</span><br><span class="line"></span><br><span class="line">(<span class="number">2</span> asString) == (<span class="number">2</span> asString).</span><br><span class="line"></span><br><span class="line">(<span class="number">2</span> asString) asSymbol == (<span class="number">2</span> asString) asSymbol.</span><br></pre></td></tr></table></figure>
+
+<h2 id="数组类型"><a href="#数组类型" class="headerlink" title="数组类型"></a>数组类型</h2><p>静态数组在解析期间被创建</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>).</span><br><span class="line"></span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> #(<span class="number">4</span> <span class="number">5</span> <span class="number">6</span>)) size.</span><br><span class="line"></span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> <span class="number">4</span>) isEmpty.</span><br><span class="line"></span><br><span class="line">#(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>) first.</span><br><span class="line"></span><br><span class="line">#(<span class="string">&#x27;hello&#x27;</span> <span class="string">&#x27;World&#x27;</span>) at: <span class="number">2</span> put: <span class="string">&#x27;Pharo&#x27;</span>; yourself.</span><br></pre></td></tr></table></figure>
+
+<p>动态数组在执行期间被创建</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123; (<span class="number">2</span>+<span class="number">3</span>) . (<span class="number">6</span>*<span class="number">6</span>) &#125;.</span><br><span class="line"></span><br><span class="line">&#123; (<span class="number">2</span>+<span class="number">3</span>) . (<span class="number">6</span>*<span class="number">6</span>) . <span class="string">&#x27;hello&#x27;</span>, <span class="string">&#x27; Stef&#x27;</span>&#125; size.</span><br></pre></td></tr></table></figure>
+
+<h2 id="消息"><a href="#消息" class="headerlink" title="消息"></a>消息</h2><p>消息会被发送给对象，在Smalltalk中有三种类型的消息：一元 <code>unary</code> 、二元 <code>binary</code> 和关键字 <code>keyword</code></p>
+<h3 id="一元-Unary-消息的形式：-anObject-aMessage"><a href="#一元-Unary-消息的形式：-anObject-aMessage" class="headerlink" title="一元 Unary 消息的形式： anObject aMessage"></a>一元 <code>Unary</code> 消息的形式： <code>anObject aMessage</code></h3>  <figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> class.</span><br><span class="line"></span><br><span class="line"><span class="keyword">false</span> not.</span><br><span class="line"></span><br><span class="line"><span class="type">Time</span> now.</span><br><span class="line"></span><br><span class="line"><span class="type">Date</span> today.</span><br><span class="line"></span><br><span class="line"><span class="type">Float</span> pi.</span><br></pre></td></tr></table></figure>
+
+<h3 id="二元-Binary-消息的形式：-anObject-anotherObject"><a href="#二元-Binary-消息的形式：-anObject-anotherObject" class="headerlink" title="二元 Binary 消息的形式： anObject + anotherObject"></a>二元 <code>Binary</code> 消息的形式： <code>anObject + anotherObject</code></h3>  <figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">3</span> * <span class="number">2.</span></span><br><span class="line"></span><br><span class="line"><span class="type">Date</span> today + <span class="number">3</span> weeks.</span><br><span class="line"></span><br><span class="line"><span class="keyword">false</span> | <span class="keyword">false</span>.</span><br><span class="line"></span><br><span class="line"><span class="keyword">true</span> &amp; <span class="keyword">true</span>.</span><br><span class="line"></span><br><span class="line"><span class="keyword">true</span> &amp; <span class="keyword">false</span>.</span><br><span class="line"></span><br><span class="line"><span class="number">10</span> @ <span class="number">100.</span></span><br><span class="line"></span><br><span class="line"><span class="number">10</span> &lt;= <span class="number">12.</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;ab&#x27;</span>, <span class="string">&#x27;cd&#x27;</span>.</span><br><span class="line"></span><br><span class="line"><span class="type">Date</span> today &lt; <span class="type">Date</span> yesterday.</span><br></pre></td></tr></table></figure>
+
+<h3 id="关键字-Keyword-消息的形式：-anObject-akey-anotherObject-akey2-anotherObject2"><a href="#关键字-Keyword-消息的形式：-anObject-akey-anotherObject-akey2-anotherObject2" class="headerlink" title="关键字 Keyword 消息的形式： anObject akey: anotherObject akey2: anotherObject2"></a>关键字 <code>Keyword</code> 消息的形式： <code>anObject akey: anotherObject akey2: anotherObject2</code></h3>  <figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">4</span> between: <span class="number">0</span> and: <span class="number">10.</span></span><br></pre></td></tr></table></figure>
+
+<p>  这个是将 <code>between:and:</code> 消息发送给数字 <code>4</code></p>
+  <figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> max: <span class="number">3.</span></span><br><span class="line"></span><br><span class="line"><span class="type">Color</span> r:<span class="number">1</span> g:<span class="number">0</span> b:<span class="number">0.</span></span><br></pre></td></tr></table></figure>
+
+<p>  这里消息 <code>r:g:b:</code> 是由 <code>Color</code> 类实现的，我们也可以写成下面这种形式</p>
+  <figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Color</span></span><br><span class="line">    r:<span class="number">1</span></span><br><span class="line">    g:<span class="number">1</span></span><br><span class="line">    b:<span class="number">0.</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="消息优先级"><a href="#消息优先级" class="headerlink" title="消息优先级"></a>消息优先级</h2><p>一元消息会最先执行，接着执行二元消息，最后才会执行关键字消息</p>
+<ul>
+<li>一元 <code>Unary</code> &gt; 二元 <code>Binary</code> &gt; 关键字 <code>Keywords</code></li>
+</ul>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span> + <span class="number">3</span> squared.</span><br><span class="line"></span><br><span class="line"><span class="number">2</span> raisedTo: <span class="number">3</span> + <span class="number">2.</span></span><br></pre></td></tr></table></figure>
+
+<p>在具有相似优先级的消息之间，表达式从左到右执行</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">-3</span> abs negated reciprocal.</span><br></pre></td></tr></table></figure>
+
+<p>可以使用括号更改求值顺序</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">2</span> + <span class="number">3</span>) squared.</span><br><span class="line"></span><br><span class="line">(<span class="number">2</span> raisedTo: <span class="number">3</span>) + <span class="number">2.</span></span><br></pre></td></tr></table></figure>
+
+<p>传统的数学优先规则不适用于Smalltalk</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span> * <span class="number">10</span> + <span class="number">2.</span></span><br></pre></td></tr></table></figure>
+
+<p>这里消息 <code>*</code> 被发送到 2，2 回答 20，然后 20 接收消息 <code>+</code></p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span> + <span class="number">2</span> * <span class="number">10.</span></span><br><span class="line"></span><br><span class="line"><span class="number">2</span> + (<span class="number">2</span> * <span class="number">10</span>).</span><br><span class="line"></span><br><span class="line"><span class="number">8</span> - <span class="number">5</span> / <span class="number">2.</span></span><br><span class="line"></span><br><span class="line">(<span class="number">8</span> - <span class="number">5</span>) / <span class="number">2.</span></span><br><span class="line"></span><br><span class="line"><span class="number">8</span> - (<span class="number">5</span> / <span class="number">2</span>).</span><br></pre></td></tr></table></figure>
+
+<p>记住，所有消息都遵循一个简单的从左到右的优先规则，没有例外</p>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="; 运算符"></a><code>;</code> 运算符</h2><p><code>;</code> 是级联运算符，在向同一个接收者发送消息时非常有用</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Transcript</span> show: <span class="string">&#x27;hello&#x27;</span>.</span><br><span class="line"><span class="type">Transcript</span> show: <span class="string">&#x27;Pharo&#x27;</span>.</span><br><span class="line"><span class="type">Transcript</span> cr.</span><br></pre></td></tr></table></figure>
+
+<p>这段代码等价于下面的写法</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Transcript</span></span><br><span class="line">    show: <span class="string">&#x27;hello&#x27;</span>;</span><br><span class="line">    show: <span class="string">&#x27;Pharo&#x27;</span> ;</span><br><span class="line">    cr.</span><br></pre></td></tr></table></figure>
+
+<h2 id="块"><a href="#块" class="headerlink" title="块"></a>块</h2><p>块 <code>Blocks</code> 是匿名方法，可以存储到变量中并在需要的时候才执行</p>
+<p>块被包含在一对方括号中： <code>[]</code></p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[:x | x+<span class="number">2</span>].</span><br></pre></td></tr></table></figure>
+
+<p>这里有一个块，功能是对传入的参数做加2操作(这里的参数被命名为 <code>x</code> )，这里并不会真的执行块</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[:x | x+<span class="number">2</span>] value: <span class="number">5.</span></span><br></pre></td></tr></table></figure>
+
+<p>当我们想执行块的时候，需要向块发送 <code>value</code> 消息</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[:x | x+<span class="number">2</span>] value: <span class="number">10.</span></span><br><span class="line"></span><br><span class="line">[:x :y| x + y] value: <span class="number">3</span> value: <span class="number">5.</span></span><br></pre></td></tr></table></figure>
+
+<p>块可以分配给变量，并延迟执行</p>
+<p>通过 <code>| b |</code> 来声明变量 <code>b</code>，并使用 <code>：=</code> 操作符来为变量赋值</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">|b|</span><br><span class="line">b := [:x | x+<span class="number">2</span>].</span><br><span class="line">b value: <span class="number">12.</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="条件分支"><a href="#条件分支" class="headerlink" title="条件分支"></a>条件分支</h2><p>条件语句只是给布尔对象发送消息</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> &lt; <span class="number">2</span></span><br><span class="line">    ifTrue: [<span class="number">100</span>]</span><br><span class="line">    ifFalse: [<span class="number">42</span>].</span><br></pre></td></tr></table></figure>
+
+<p>这里的消息是 <code>ifTrue:ifFalse:</code></p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">3</span> &gt; <span class="number">10</span></span><br><span class="line">    ifTrue: [<span class="type">Transcript</span> show: <span class="string">&#x27;Maybe there&#x27;</span><span class="string">&#x27;s a bug ....&#x27;</span>]</span><br><span class="line">    ifFalse: [<span class="type">Transcript</span> show: <span class="string">&#x27;No: 3 is less than 10&#x27;</span>].</span><br></pre></td></tr></table></figure>
+
+<h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><p>循环是高级集合迭代器，作为常规方法实现</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">to:do:</span><br><span class="line">to:by:do:</span><br></pre></td></tr></table></figure>
+
+<p>标准循环写法：</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> to: <span class="number">100</span> do: [:i | <span class="type">Transcript</span> show: i asString; cr].</span><br><span class="line"></span><br><span class="line"><span class="number">1</span> to: <span class="number">100</span> by: <span class="number">3</span> do: [:i | <span class="type">Transcript</span> show: i asString; cr].</span><br><span class="line"></span><br><span class="line"><span class="number">100</span> to: <span class="number">0</span> by: <span class="number">-2</span> do: [:i | <span class="type">Transcript</span> show: i asString; cr].</span><br></pre></td></tr></table></figure>
+
+<p>消息 <code>do:</code> 被发送到集合对象( <code>Array</code> 、 <code>Set</code> 、 <code>OrderedCollection</code> )，为每个元素计算块</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#(<span class="number">11</span> <span class="number">38</span> <span class="number">3</span> <span class="number">-2</span> <span class="number">10</span>) do: [:each |</span><br><span class="line">    <span class="type">Transcript</span> show: each printString; cr].</span><br></pre></td></tr></table></figure>
+
+<p>除了 <code>do:</code> 之外，还有许多其他好用的迭代器</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#(<span class="number">11</span> <span class="number">38</span> <span class="number">3</span> <span class="number">-2</span> <span class="number">10</span>) collect: [:each | each abs].</span><br><span class="line"></span><br><span class="line">#(<span class="number">11</span> <span class="number">38</span> <span class="number">3</span> <span class="number">-2</span> <span class="number">10</span>) collect: [:each | each odd].</span><br><span class="line"></span><br><span class="line">#(<span class="number">11</span> <span class="number">38</span> <span class="number">3</span> <span class="number">-2</span> <span class="number">10</span>) select: [:each | each odd].</span><br><span class="line"></span><br><span class="line">#(<span class="number">11</span> <span class="number">38</span> <span class="number">3</span> <span class="number">-2</span> <span class="number">10</span>) select: [:each | each &gt; <span class="number">10</span>].</span><br><span class="line"></span><br><span class="line">#(<span class="number">11</span> <span class="number">38</span> <span class="number">3</span> <span class="number">-2</span> <span class="number">10</span>) reject: [:each | each &gt; <span class="number">10</span>].</span><br><span class="line"></span><br><span class="line">#(<span class="number">11</span> <span class="number">38</span> <span class="number">3</span> <span class="number">-2</span> <span class="number">10</span>)</span><br><span class="line">    do: [:each | <span class="type">Transcript</span> show: each printString]</span><br><span class="line">    separatedBy: [<span class="type">Transcript</span> show: <span class="string">&#x27;.&#x27;</span>].</span><br></pre></td></tr></table></figure>
+
+<h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h2><p>对象是一个类的实例。通常，我们将 <code>new</code> 消息发送给类来创建一个对象实例</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">SimpleButtonMorph</span> new</span><br><span class="line">    label: <span class="string">&#x27;A nice button&#x27;</span>;</span><br><span class="line">    openCenteredInWorld.</span><br></pre></td></tr></table></figure>
+
+<p>如果向类发送 <code>allInstances</code> 消息，类将回应一个包含该类所有实例的数组</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">SimpleButtonMorph</span> allInstances size.</span><br></pre></td></tr></table></figure>
+
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>你可以在运行时检查和更改系统</p>
+<p>查看 <code>True</code> 类的方法 <code>ifFalse:ifTrue:</code> 的源码</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="type">True</span>&gt;&gt;<span class="symbol">#ifFalse</span>:ifTrue:) definition.</span><br></pre></td></tr></table></figure>
+
+<p>也可以查看注释</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="type">True</span>&gt;&gt;<span class="symbol">#ifFalse</span>:ifTrue:) comment.</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>respondsTo</code> 检查是否能够响应消息</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ProfStef</span> respondsTo: <span class="symbol">#goToNextLesson</span>.</span><br></pre></td></tr></table></figure>
+
+<p>删除一个方法</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ProfStef</span> class removeSelector: <span class="symbol">#goToNextLesson</span>.</span><br></pre></td></tr></table></figure>
+
+<h2 id="Pharo环境"><a href="#Pharo环境" class="headerlink" title="Pharo环境"></a>Pharo环境</h2><p>Pharo是一个完整的环境，拥有诸如：窗口、文本、数字、日期、颜色、点等等。与其他编程语言相比，您可以更直接地与对象交互</p>
+<p>每个对象都理解消息 <code>inspect</code> ，因此，你将获得一个Inspector窗口，该窗口可以显示有关对象的详细信息</p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Date</span> today inspect.</span><br></pre></td></tr></table></figure>
+
+<h2 id="调试Debugger"><a href="#调试Debugger" class="headerlink" title="调试Debugger"></a>调试Debugger</h2><p>调试器可能是Smalltalk环境中最著名的工具。一旦发生异常它将立即打开。</p>
+<p>下面的代码将打开消息堆栈上的调试器，选择 <code>PharoSyntaxTutorial&gt;&gt;dividetwoyzero</code></p>
+<figure class="highlight smalltalk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">PharoSyntaxTutorial</span> new divideTwoByZero.</span><br></pre></td></tr></table></figure>
+
+  </article>
+  <!-- tag -->
+  <div class="mt-12 pt-6 border-t border-gray-200">
+    
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/%E7%BC%96%E7%A8%8B/">编程</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/Smalltalk/">Smalltalk</a>
+        </span>
+      
+        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
+          <a href="/tags/Pharo/">Pharo</a>
+        </span>
+      
+    
+  </div>
+  <!-- prev and next -->
+  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
+    <div>
+      
+        <a href="/windows-install-ocaml.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
+          Windows安装WSL+OCaml开发环境
+        </a>
+      
+    </div>
+    <div>
+      
+        <a href="/oop-scheme.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
+          使用Scheme模拟类和对象
+          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+<script src="https://giscus.app/client.js"
+        data-repo="shixiongfei/shixiongfei.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
+        data-category="General"
+        data-category-id="DIC_kwDOE95Za84CVZLb"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+  </div>
+</section>
+
+  </main>
+  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
+  <!-- busuanzi -->
+  
+
+  <!-- copyright -->
+  <div class="flex items-center gap-2">
+    <span>© 2018-2023</span>
+    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
+    <a href="https://shixiongfei.com" target="_blank" rel="noopener noreferrer">shixiongfei</a>
+  </div>
+  <!-- powered by -->
+  <div class="flex items-center gap-2">
+    <span>Powered by</span>
+    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
+    <span>&</span>
+    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
+  </div>
+
+</footer>
+
+  <iconify-icon class="fixed right-4 bottom-10 z-100 opacity-0" width="24" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
+  
+<script src="/lib/clipboard.min.js"></script>
+
+
+
+<script src="/js/main.js"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
+
+</body>
+
+</html>
