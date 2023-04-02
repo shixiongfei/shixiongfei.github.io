@@ -13,7 +13,7 @@ timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://shixiongfei.github.io
+url: https://shixiongfei.com
 permalink: :title.html
 permalink_defaults:
 pretty_urls:
@@ -62,7 +62,7 @@ prismjs:
 # order_by: Posts order. (Order by date descending by default)
 index_generator:
   path: ''
-  per_page: 20
+  per_page: 0
   order_by: -date
 
 # Category & Tag
@@ -85,7 +85,7 @@ updated_option: 'mtime'
 
 # Pagination
 ## Set per_page to 0 to disable pagination
-per_page: 20
+per_page: 0
 pagination_dir: page
 
 # Include / Exclude file(s)
@@ -96,6 +96,9 @@ ignore:
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
+plugins:
+  - hexo-reference
+
 ## Themes: https://hexo.io/themes/
 theme: maple
 

@@ -14,7 +14,7 @@
       </p>
       <div>
         <section class="flex items-center gap-3 text-sm">
-          <time><%- date(page.updated, "YYYY-MM-DD HH:mm:ss") %></time>
+          <time><%- date(page.date, "YYYY-MM-DD HH:mm:ss") %></time>
           <span class="text-gray-400">·</span>
           <span><%= min2read(page.content) %> min</span>
           <span class="text-gray-400">·</span>
@@ -24,7 +24,7 @@
     </div>
   </header>
   <!-- content -->
-  <article class="post-content mt-10 prose dark:prose-invert post-content">
+  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
     <%- page.content %>
   </article>
   <!-- tag -->

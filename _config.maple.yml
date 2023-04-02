@@ -1,11 +1,11 @@
 # Header
 nav:
   Posts: /archives
-  Categories: /category
-  Tags: /tag
+  Categories: /categories
+  Tags: /tags
 
 # favicon
-favicon: /favicon.png
+favicon: /favicon.ico
 
 # logo
 logo: /images/logo.svg
