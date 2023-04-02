@@ -1,7 +1,7 @@
 ---
 title: YUM/RPM常用命令
 author: shixiongfei
-date: 2018-12-12 200:03:00
+date: 2018-12-12 00:03:00
 categories: 技术
 tags: [技术, Linux, CentOS, YUM, RPM]
 ---
