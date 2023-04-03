@@ -51,6 +51,12 @@ export Ali_Secret="jlsdflanljkljlfdsaklkjflsa"
 $ acme.sh --issue --dns dns_ali -d shixf.com -d www.shixf.com
 ```
 
+如果需要泛域的话可以使用下面的命令
+
+```shell
+$ acme.sh --issue --dns dns_ali -d shixf.com -d '*.shixf.com'
+```
+
 等待差不多1分钟左右，证书就签发完毕了
 
 ## 安装证书
