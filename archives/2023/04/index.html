@@ -33,7 +33,7 @@
   <meta name="keywords" content="javascript, typescript, node, nodejs, c, ml, sql, git, linux, macos, windows, game, app, 教程, 软件, 编程, 开发, 运维, 云计算, 网络, 互联网, 数据分析, 量化, 交易">
 
 
-<title>Debian设置PPTP | Xiongfei Shi</title>
+<title>归档: 2023/4 | Xiongfei Shi</title>
 
 
 
@@ -196,109 +196,41 @@
 </div>
 
   <main class="p-12">
-    <!-- toc -->
-
-  <!-- tocbot -->
-<nav class="post-toc toc text-sm w-48 relative top-32 right-0 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
-
-
-<section class="px-6 max-w-prose mx-auto md:px-0">
-  <!-- header -->
-  <header class="overflow-hidden pt-6 pb-6 md:pt-12">
-    <div class="pt-4 md:pt-6">
-      <h1 id="article-title" class="text-[2rem] font-bold leading-snug mb-4 md:mb-6 md:text-[2.6rem]">
-        Debian设置PPTP
-      </h1>
-      <p class="mb-6">
-        
-      </p>
-      <div>
-        <section class="flex items-center gap-3 text-sm">
-          <time>2019-03-21 23:37:00</time>
-          <span class="text-gray-400">·</span>
-          <span>1 min</span>
-          <span class="text-gray-400">·</span>
-          <span>202 words</span>
-        </section>
+    <section class="px-6 max-w-prose mx-auto gap-12 grid grid-cols-1">
+  <div class="flex flex-col h-48 items-center justify-center">
+    <h1 class="site-title text-4xl leading-relaxed">
+      Xiongfei Shi
+    </h1>
+    <p class="text-gray-500 mt-2">
+      LESS is MORE
+    </p>
+  </div>
+  
+  
+    
+    
+      <div class="relative pointer-events-none">
+        <span class="text-9xl opacity-10 absolute -left-11 -top-6 font-bold">2023</span>
       </div>
-    </div>
-  </header>
-  <!-- content -->
-  <article class="post-content mt-10 prose prose-code:before:content-none prose-code:after:content-none prose-code:border prose-code:border-gray-700 prose-code:rounded prose-code:px-1 prose-code:py-0.5 dark:prose-invert post-content">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><h2 id="设置PPTP"><a href="#设置PPTP" class="headerlink" title="设置PPTP"></a>设置PPTP</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">aptitude install pptpd</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /etc/pptpd.conf</span></span><br><span class="line">    localip 10.1.0.1</span><br><span class="line">    remoteip 10.1.0.10-210</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /etc/ppp/pptpd-options</span></span><br><span class="line">    ms-dns 8.8.8.8</span><br><span class="line">    ms-dns 8.8.4.4</span><br><span class="line">    ms-dns 208.67.222.222</span><br><span class="line">    ms-dns 208.67.220.220</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /etc/sysctl.conf</span></span><br><span class="line">    net.ipv4.ip_forward = 1</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sysctl -p</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /etc/rc.local</span></span><br><span class="line">    iptables -t nat -A POSTROUTING -s 10.0.0.0/8 -o eth0 -j MASQUERADE</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mknod</span> /dev/ppp c 108 0</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /etc/ppp/chap-secrets</span></span><br><span class="line">    test pptpd 123456 *</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">reboot</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>DNS 这里提供了 2 组，第一组是 Google DNS，第二组是 OpenDNS，任选一组就行了。</li>
-</ul>
-<h2 id="用简单脚本监测PPTPD服务"><a href="#用简单脚本监测PPTPD服务" class="headerlink" title="用简单脚本监测PPTPD服务"></a>用简单脚本监测PPTPD服务</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vi /root/check_pptpd.sh</span></span><br><span class="line">    #!/bin/bash</span><br><span class="line">    PID=`ps -ef |grep &quot;pptpd&quot; |grep -v grep |grep -v &quot;$0&quot; | awk &#x27;&#123;print $2&#125;&#x27;`</span><br><span class="line">    if [ &quot;$PID&quot; == &quot;&quot; ]; then</span><br><span class="line">      /etc/init.d/pptpd start</span><br><span class="line">    fi</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">chmod</span> 777 /root/check_pptpd.sh</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">crontab -e</span></span><br><span class="line">    * */1 * * * bash /root/check_pptpd.sh</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">crontab -l</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>略微修改一下，同样适用于其他进程监测。</li>
-</ul>
-
-  </article>
-  <!-- tag -->
-  <div class="mt-12 pt-6 border-t border-gray-200">
     
-      
-        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
-          <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
-        </span>
-      
-        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
-          <a href="/tags/Linux/">Linux</a>
-        </span>
-      
-        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
-          <a href="/tags/Debian/">Debian</a>
-        </span>
-      
-        <span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 m-1 text-sm rounded-md transition-colors hover:bg-gray-200">
-          <a href="/tags/PPTP/">PPTP</a>
-        </span>
-      
-    
-  </div>
-  <!-- prev and next -->
-  <div class="flex justify-between mt-12 pt-6 border-t border-gray-200">
-    <div>
-      
-        <a href="/rebar3-createapp.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
-          <iconify-icon width="20" icon="ri:arrow-left-s-line" data-inline="false"></iconify-icon>
-          用Rebar3构建Erlang应用
-        </a>
-      
-    </div>
-    <div>
-      
-        <a href="/debian-samba.html" class="text-sm text-gray-400 hover:text-gray-500 flex justify-center">
-          Debian设置文件共享Samba
-          <iconify-icon width="20" icon="ri:arrow-right-s-line" data-inline="false"></iconify-icon>
-        </a>
-      
-    </div>
-  </div>
-  <!-- comment -->
-  <div class="article-comments mt-12">
-    
-<script src="https://giscus.app/client.js"
-        data-repo="shixiongfei/shixiongfei.github.io"
-        data-repo-id="MDEwOlJlcG9zaXRvcnkzMzMzMzg5ODc="
-        data-category="General"
-        data-category-id="DIC_kwDOE95Za84CVZLb"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="preferred_color_scheme"
-        data-lang="zh-CN"
-        crossorigin="anonymous"
-        async>
-</script>
-
-
-  </div>
+    <a href="/acme-sh-https.html">
+      <header>
+        <h2 class="font-bold text-xl">
+          使用acme.sh自动签发https证书
+        </h2>
+      </header>
+      <section class="text-gray-400 my-1 text-sm time">
+        <p class="line-clamp-4">
+          
+        </p>
+        <p class="line-clamp-4">
+          4月 03
+          ·
+          1 min
+        </p>
+      </section>
+    </a>
+  
 </section>
 
   </main>
