@@ -33,7 +33,7 @@ $ crontab -l
 
 登陆[阿里云后台](https://ram.console.aliyun.com/users)，创建一个用户并勾选OpenAPI
 
-记得添加`AliyunDNSFullAccess / 管理云解析(DNS)`的权限权限
+记得添加`AliyunDNSFullAccess / 管理云解析(DNS)`的权限
 
 将`Key`和`Secret`添加到`.bashrc`中
 
