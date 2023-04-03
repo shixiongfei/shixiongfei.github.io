@@ -6,13 +6,15 @@ categories: 技术
 tags: [技术, Linux, CentOS, AlmaLinux]
 ---
 
-前置工作先安装`socat`
+## 前置工作
+
+先安装`socat`
 
 ```shell
 $ dnf install socat
 ```
 
-安装`acme.sh`
+## 安装`acme.sh`
 
 ```shell
 $ curl https://get.acme.sh | sh -s email=my@example.com
@@ -24,6 +26,8 @@ $ curl https://get.acme.sh | sh -s email=my@example.com
 $ crontab -l
 0 0 * * * "/home/user/.acme.sh"/acme.sh --cron --home "/home/user/.acme.sh" > /dev/null
 ```
+
+## 验证域名
 
 签发证书之前要对域名进行验证，我选择的是通过DNSAPI的方式验证。
 
@@ -39,7 +43,9 @@ export Ali_Key="sdfsdfsdfljlbjkljlkjsdfoiwje"
 export Ali_Secret="jlsdflanljkljlfdsaklkjflsa"
 ```
 
-签发证书，以我的短域名`shixf.com`为例
+## 签发证书
+
+以我的短域名`shixf.com`为例
 
 ```shell
 $ acme.sh --issue --dns dns_ali -d shixf.com -d www.shixf.com
@@ -47,11 +53,13 @@ $ acme.sh --issue --dns dns_ali -d shixf.com -d www.shixf.com
 
 等待差不多1分钟左右，证书就签发完毕了
 
+## 安装证书
+
 最后安装证书到Nginx并重新加载配置
 
 ```shell
 $ acme.sh --install-cert -d shixf.com \
-  --key-file       /usr/local/certs/shixf-com/secret.key  \
-  --fullchain-file /usr/local/certs/shixf-com/secret.pem \
-  --reloadcmd      "service nginx force-reload"
+--key-file       /usr/local/certs/shixf-com/secret.key  \
+--fullchain-file /usr/local/certs/shixf-com/secret.pem \
+--reloadcmd      "service nginx force-reload"
 ```
