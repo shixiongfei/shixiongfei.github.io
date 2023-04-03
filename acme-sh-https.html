@@ -218,7 +218,7 @@
           <span class="text-gray-400">·</span>
           <span>1 min</span>
           <span class="text-gray-400">·</span>
-          <span>267 words</span>
+          <span>298 words</span>
         </section>
       </div>
     </div>
@@ -241,6 +241,9 @@
 
 <h2 id="签发证书"><a href="#签发证书" class="headerlink" title="签发证书"></a>签发证书</h2><p>以我的短域名<code>shixf.com</code>为例</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">acme.sh --issue --dns dns_ali -d shixf.com -d www.shixf.com</span></span><br></pre></td></tr></table></figure>
+
+<p>如果需要泛域的话可以使用下面的命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">acme.sh --issue --dns dns_ali -d shixf.com -d <span class="string">&#x27;*.shixf.com&#x27;</span></span></span><br></pre></td></tr></table></figure>
 
 <p>等待差不多1分钟左右，证书就签发完毕了</p>
 <h2 id="安装证书"><a href="#安装证书" class="headerlink" title="安装证书"></a>安装证书</h2><p>最后安装证书到Nginx并重新加载配置</p>
