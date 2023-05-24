@@ -416,7 +416,7 @@ require("../lib/js/src/Index.bs");
 
 最后通过 `npm start` 启动项目就可以看到窗口界面了
 
-完整项目可以到 [GitHub Repo](https://github.com/shixiongfei/typescript-project-template) 查看
+完整项目可以到 [GitHub Repo](https://github.com/shixiongfei/rescript-electron-tailwindcss-template) 查看
 
 ## 参考资料
 
