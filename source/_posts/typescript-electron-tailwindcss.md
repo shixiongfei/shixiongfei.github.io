@@ -53,7 +53,7 @@ import rendererConfig from "./webpack.renderer.config";
 
 export default {
   packagerConfig: {
-    name: "Finworks",
+    name: "ElectronStartup",
     icon: "./icons/favicon",
     ignore: [
       "dist",
