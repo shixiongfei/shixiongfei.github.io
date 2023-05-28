@@ -303,7 +303,7 @@ module.exports = {
 3. 创建 `src/views/home.tsx`，文件内容如下：
 
 ```typescript
-const Home = () => <div className="m-4">"TypeScript Electron App Starter"</div>;
+const Home = () => <div className="m-4">TypeScript Electron App Starter</div>;
 
 export default Home;
 ```
