@@ -54,7 +54,7 @@ import rendererConfig from "./webpack.renderer.config";
 export default {
   packagerConfig: {
     name: "Finworks",
-    icon: "./assets/icons/favicon",
+    icon: "./icons/favicon",
     ignore: [
       "dist",
       "src",
@@ -85,7 +85,7 @@ export default {
         entryPoints: [
           {
             name: "main_window",
-            html: "./assets/index.html",
+            html: "./src/app/index.html",
             js: "./src/app/renderer.ts",
             preload: {
               config: preloadConfig,
@@ -249,7 +249,7 @@ module.exports = {
 
 ## 编写程序代码
 
-1. 创建 `assets/index.html` 文件，内容如下：
+1. 创建 `src/app/index.html` 文件，内容如下：
 
 ```html
 <!DOCTYPE html>
@@ -321,7 +321,7 @@ const createWindow = () => {
   const window = new BrowserWindow({
     width,
     height,
-    icon: "./assets/icons/favicon.png",
+    icon: "./icons/favicon.png",
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
