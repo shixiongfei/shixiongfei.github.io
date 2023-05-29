@@ -249,66 +249,7 @@ module.exports = {
 
 ## 编写程序代码
 
-1. 创建 `src/renderer/index.html` 文件，内容如下：
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Electron Startup</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'"
-    />
-    <meta
-      http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'"
-    />
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
-</html>
-```
-
-2. 创建 `src/renderer/styles.css` 文件，内容如下：
-
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #333;
-    color: white;
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  body {
-    background: #ddd;
-    color: black;
-  }
-}
-```
-
-3. 创建 `src/views/home.tsx`，文件内容如下：
-
-```typescript
-const Home = () => <div className="m-4">TypeScript Electron App Starter</div>;
-
-export default Home;
-```
-
-4. 创建 `src/main/main.ts` 文件，内容如下：
+1. 创建 `src/main/main.ts` 文件，内容如下：
 
 ```typescript
 import { app, BrowserWindow, screen } from "electron";
@@ -349,7 +290,66 @@ app.on("window-all-closed", () => {
 });
 ```
 
-5. 创建 `src/renderer/preload.ts` 文件，内容为空即可
+2. 创建 `src/renderer/preload.ts` 文件，内容为空即可
+
+3. 创建 `src/renderer/index.html` 文件，内容如下：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Electron Startup</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+```
+
+4. 创建 `src/renderer/styles.css` 文件，内容如下：
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #333;
+    color: white;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background: #ddd;
+    color: black;
+  }
+}
+```
+
+5. 创建 `src/renderer/views/home.tsx`，文件内容如下：
+
+```typescript
+const Home = () => <div className="m-4">TypeScript Electron App Starter</div>;
+
+export default Home;
+```
 
 6. 创建 `src/renderer/app.tsx`，文件内容如下：
 
