@@ -85,11 +85,11 @@ export default {
         entryPoints: [
           {
             name: "main_window",
-            html: "./src/app/index.html",
-            js: "./src/app/renderer.ts",
+            html: "./src/renderer/index.html",
+            js: "./src/renderer/renderer.ts",
             preload: {
               config: preloadConfig,
-              js: "./src/app/preload.ts",
+              js: "./src/renderer/preload.ts",
             },
           },
         ],
@@ -151,7 +151,7 @@ import { plugins } from "./webpack.shared.plugins";
 
 export default {
   entry: {
-    index: "./src/app/main.ts",
+    index: "./src/main/main.ts",
   },
   module: {
     rules,
@@ -176,7 +176,7 @@ import { plugins } from "./webpack.shared.plugins";
 
 export default {
   entry: {
-    preload: "./src/app/preload.ts",
+    preload: "./src/renderer/preload.ts",
   },
   module: {
     rules,
@@ -249,7 +249,7 @@ module.exports = {
 
 ## 编写程序代码
 
-1. 创建 `src/app/index.html` 文件，内容如下：
+1. 创建 `src/renderer/index.html` 文件，内容如下：
 
 ```html
 <!DOCTYPE html>
@@ -274,7 +274,7 @@ module.exports = {
 </html>
 ```
 
-2. 创建 `src/app/styles.css` 文件，内容如下：
+2. 创建 `src/renderer/styles.css` 文件，内容如下：
 
 ```css
 @tailwind base;
@@ -308,7 +308,7 @@ const Home = () => <div className="m-4">TypeScript Electron App Starter</div>;
 export default Home;
 ```
 
-4. 创建 `src/app/main.ts` 文件，内容如下：
+4. 创建 `src/main/main.ts` 文件，内容如下：
 
 ```typescript
 import { app, BrowserWindow, screen } from "electron";
@@ -349,9 +349,9 @@ app.on("window-all-closed", () => {
 });
 ```
 
-5. 创建 `src/app/preload.ts` 文件，内容为空即可
+5. 创建 `src/renderer/preload.ts` 文件，内容为空即可
 
-6. 创建 `src/app/app.tsx`，文件内容如下：
+6. 创建 `src/renderer/app.tsx`，文件内容如下：
 
 ```typescript
 import React from "react";
@@ -373,7 +373,7 @@ root.render(
 );
 ```
 
-7. 创建 `app/renderer.ts` 文件，内容如下：
+7. 创建 `src/renderer/renderer.ts` 文件，内容如下：
 
 ```typescript
 import "./styles.css";
