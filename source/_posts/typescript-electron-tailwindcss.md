@@ -272,7 +272,7 @@ const createWindow = () => {
     },
   });
 
-  mainWindow.webContents.on("did-finish-load", () => {
+  mainWindow.webContents.once("did-finish-load", () => {
     mainWindow.maximize();
     mainWindow.show();
     mainWindow.focus();
