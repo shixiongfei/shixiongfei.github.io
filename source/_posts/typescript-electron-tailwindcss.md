@@ -234,7 +234,7 @@ npx tailwindcss init
 配置 `tailwind.config.js`
 
 ```javascript
-content: ["./src/**/*.{js,jsx,ts,tsx}"],
+content: ["./src/renderer/**/*.{html,js,jsx,ts,tsx}"],
 ```
 
 添加 `postcss.config.js` 配置来让 `Webpack` 打包支持 `Tailwind CSS`，内容如下：
