@@ -87,7 +87,7 @@ export default {
           {
             name: "main_window",
             html: "./src/renderer/index.html",
-            js: "./src/renderer/renderer.ts",
+            js: "./src/renderer/renderer.tsx",
             preload: {
               config: preloadConfig,
               js: "./src/renderer/preload.ts",
@@ -263,6 +263,7 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width,
     height,
+    show: false,
     icon: "./icons/favicon.png",
     webPreferences: {
       nodeIntegration: true,
@@ -271,9 +272,14 @@ const createWindow = () => {
     },
   });
 
+  mainWindow.webContents.on("did-finish-load", () => {
+    mainWindow.maximize();
+    mainWindow.show();
+    mainWindow.focus();
+  });
+
   // mainWindow.webContents.openDevTools();
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-  mainWindow.maximize();
 };
 
 app.whenReady().then(() => {
@@ -352,13 +358,14 @@ const Home = () => <div className="m-4">TypeScript Electron App Starter</div>;
 export default Home;
 ```
 
-6. 创建 `src/renderer/app.tsx`，文件内容如下：
+6. 创建 `src/renderer/renderer.tsx` 文件，内容如下：
 
 ```typescript
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import Home from "../views/home";
+import "./styles.css";
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
@@ -374,14 +381,7 @@ root.render(
 );
 ```
 
-7. 创建 `src/renderer/renderer.ts` 文件，内容如下：
-
-```typescript
-import "./styles.css";
-import "./app";
-```
-
-8. 修改 `package.json` 中的 `main`
+7. 修改 `package.json` 中的 `main`
 
 ```json
 "main": ".webpack/main",
