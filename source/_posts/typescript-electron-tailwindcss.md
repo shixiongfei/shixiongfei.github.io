@@ -55,6 +55,7 @@ export default {
   packagerConfig: {
     name: "ElectronStartup",
     icon: "./icons/favicon",
+    asar: true,
     ignore: [
       "dist",
       "src",
@@ -259,7 +260,7 @@ declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 
 const createWindow = () => {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
-  const window = new BrowserWindow({
+  const mainWindow = new BrowserWindow({
     width,
     height,
     icon: "./icons/favicon.png",
@@ -270,9 +271,9 @@ const createWindow = () => {
     },
   });
 
-  window.webContents.openDevTools();
-  window.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-  window.maximize();
+  // mainWindow.webContents.openDevTools();
+  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+  mainWindow.maximize();
 };
 
 app.whenReady().then(() => {
