@@ -357,17 +357,17 @@
 <p>等同于下面的写法。</p>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">a.txt:</span></span><br><span class="line">    touch a.txt</span><br><span class="line"><span class="section">b.txt:</span></span><br><span class="line">    touch b.txt</span><br></pre></td></tr></table></figure>
 
-<h4 id="lt"><a href="#lt" class="headerlink" title="$&lt;"></a><code>$&lt;</code></h4><p><code>$&lt;</code> 指代第一个前置条件。比如，规则为 <code>t: p1 p2</code>，那么<code>$&lt;</code> 就指代p1。</p>
+<h4 id="-1"><a href="#-1" class="headerlink" title="$&lt;"></a><code>$&lt;</code></h4><p><code>$&lt;</code> 指代第一个前置条件。比如，规则为 <code>t: p1 p2</code>，那么<code>$&lt;</code> 就指代p1。</p>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">a.txt: b.txt c.txt</span></span><br><span class="line">    cp <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
 
 <p>等同于下面的写法。</p>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">a.txt: b.txt c.txt</span></span><br><span class="line">    cp b.txt a.txt</span><br></pre></td></tr></table></figure>
 
-<h4 id="-1"><a href="#-1" class="headerlink" title="$?"></a><code>$?</code></h4><p><code>$?</code> 指代比目标更新的所有前置条件，之间以空格分隔。比如，规则为 <code>t: p1 p2</code>，其中 p2 的时间戳比 t 新，<code>$?</code>就指代p2。</p>
-<h4 id="-2"><a href="#-2" class="headerlink" title="$^"></a><code>$^</code></h4><p><code>$^</code> 指代所有前置条件，之间以空格分隔。比如，规则为 <code>t: p1 p2</code>，那么 <code>$^</code> 就指代 p1 p2 。</p>
-<h4 id="-3"><a href="#-3" class="headerlink" title="$*"></a><code>$*</code></h4><p><code>$*</code> 指代匹配符 <code>%</code> 匹配的部分， 比如 <code>%</code> 匹配 f1.txt 中的f1 ，<code>$*</code> 就表示 f1。</p>
+<h4 id="-2"><a href="#-2" class="headerlink" title="$?"></a><code>$?</code></h4><p><code>$?</code> 指代比目标更新的所有前置条件，之间以空格分隔。比如，规则为 <code>t: p1 p2</code>，其中 p2 的时间戳比 t 新，<code>$?</code>就指代p2。</p>
+<h4 id="-3"><a href="#-3" class="headerlink" title="$^"></a><code>$^</code></h4><p><code>$^</code> 指代所有前置条件，之间以空格分隔。比如，规则为 <code>t: p1 p2</code>，那么 <code>$^</code> 就指代 p1 p2 。</p>
+<h4 id="-4"><a href="#-4" class="headerlink" title="$*"></a><code>$*</code></h4><p><code>$*</code> 指代匹配符 <code>%</code> 匹配的部分， 比如 <code>%</code> 匹配 f1.txt 中的f1 ，<code>$*</code> 就表示 f1。</p>
 <h4 id="D-和-F"><a href="#D-和-F" class="headerlink" title="$(@D) 和 $(@F)"></a><code>$(@D)</code> 和 <code>$(@F)</code></h4><p><code>$(@D)</code> 和 <code>$(@F)</code> 分别指向 <code>$@</code> 的目录名和文件名。比如，<code>$@</code>是 src&#x2F;input.c，那么<code>$(@D)</code> 的值为 src ，<code>$(@F)</code> 的值为 input.c。</p>
-<h4 id="lt-D-和-lt-F"><a href="#lt-D-和-lt-F" class="headerlink" title="$(&lt;D) 和 $(&lt;F)"></a><code>$(&lt;D)</code> 和 <code>$(&lt;F)</code></h4><p><code>$(&lt;D)</code> 和 <code>$(&lt;F)</code> 分别指向 <code>$&lt;</code> 的目录名和文件名。</p>
+<h4 id="-5"><a href="#-5" class="headerlink" title="$(&lt;D) 和 $(&lt;F)"></a><code>$(&lt;D)</code> 和 <code>$(&lt;F)</code></h4><p><code>$(&lt;D)</code> 和 <code>$(&lt;F)</code> 分别指向 <code>$&lt;</code> 的目录名和文件名。</p>
 <p>所有的自动变量清单，请看<a target="_blank" rel="noopener" href="https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html">手册</a>。下面是自动变量的一个例子。</p>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">dest/%.txt: src/%.txt</span></span><br><span class="line">    @[ -d dest ] || mkdir dest</span><br><span class="line">    cp <span class="variable">$&lt;</span> <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
 
