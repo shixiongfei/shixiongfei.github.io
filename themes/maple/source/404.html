@@ -14,7 +14,7 @@
         var redirect = url.pathname.split("/")[2];
 
         document.title = "Redirecting...";
-        url.pathname = `${redirect}.html`;
+        url.pathname = `${redirect.split(".")[0]}.html`;
 
         window.location.href = url.toString();
       } else {
