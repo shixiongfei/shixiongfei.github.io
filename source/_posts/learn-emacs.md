@@ -60,6 +60,10 @@ tags: [技术, Emacs]
 
 ## Common Lisp(Slime)
 
+  `M-x slime` 启动slime
+
+  `C-- M-x slime` 启动slime并选择要启动的lisp实现（有些设置可能是 `M-- M-x slime`）
+
   `M-p` 上一条被输入 REPL 执行的表达式
 
   `M-.` 跳转到符号定义处
