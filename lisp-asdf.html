@@ -224,7 +224,7 @@
           <span class="text-gray-400">·</span>
           <span>3 min</span>
           <span class="text-gray-400">·</span>
-          <span>751 words</span>
+          <span>754 words</span>
         </section>
       </div>
     </div>
@@ -239,7 +239,7 @@
 
 <p>(Windows上配置文件路径为：<code>C:\Users\your-username\AppData\Local\config\common-lisp\source-registry.conf.d\</code>)</p>
 <p>在工作目录下创建一个项目，并在 REPL 中执行 <code>(asdf:initialize-source-registry)</code> 之后，我们的项目就可以被 <code>asdf:load-system</code> 加载了</p>
-<h3 id="另外还有一个更简单的方法，如下所示："><a href="#另外还有一个更简单的方法，如下所示：" class="headerlink" title="另外还有一个更简单的方法，如下所示："></a>另外还有一个更简单的方法，如下所示：</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; startup file like ~/.sbclrc</span></span><br><span class="line">(<span class="name">pushnew</span> <span class="string">&quot;~/path-to-projects/root/&quot;</span> asdf<span class="symbol">:*central-registry*</span> <span class="symbol">:test</span> #&#x27;equal)</span><br></pre></td></tr></table></figure>
+<h3 id="另外还有一个更简单的方法，如下所示："><a href="#另外还有一个更简单的方法，如下所示：" class="headerlink" title="另外还有一个更简单的方法，如下所示："></a>另外还有一个更简单的方法，如下所示：</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;; startup file like ~/.sbclrc</span></span><br><span class="line">(<span class="name">pushnew</span> (<span class="name">truename</span> <span class="string">&quot;~/path-to-project/root/&quot;</span>) ql<span class="symbol">:*local-project-directories*</span>)</span><br><span class="line">(<span class="name">ql</span><span class="symbol">:register-local-projects</span>)</span><br></pre></td></tr></table></figure>
 
 <h2 id="asdf-load-system-加载包"><a href="#asdf-load-system-加载包" class="headerlink" title="asdf:load-system 加载包"></a>asdf:load-system 加载包</h2><p>在 SBCL 中， <code>require</code> 函数默认已经被 ASDF 的加载实现替换了，所以可以直接用：</p>
 <figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">require</span> <span class="symbol">:package</span>)</span><br></pre></td></tr></table></figure>
