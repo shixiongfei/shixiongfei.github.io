@@ -24,6 +24,13 @@ ASDF 可以构建、编译、加载 Lisp 程序，Quicklisp 也依赖 ASDF。但
 
 在工作目录下创建一个项目，并在 REPL 中执行 `(asdf:initialize-source-registry)` 之后，我们的项目就可以被 `asdf:load-system` 加载了
 
+### 另外还有一个更简单的方法，如下所示：
+
+```lisp
+;; startup file like ~/.sbclrc
+(pushnew "~/path-to-projects/root/" asdf:*central-registry* :test #'equal)
+```
+
 ## asdf:load-system 加载包
 
 在 SBCL 中， `require` 函数默认已经被 ASDF 的加载实现替换了，所以可以直接用：
@@ -46,11 +53,12 @@ ASDF 可以构建、编译、加载 Lisp 程序，Quicklisp 也依赖 ASDF。但
 
 ```lisp
 (asdf:defsystem #:cl-hello
-  :serial t
   :name "cl-hello"
   :description "This is my lisp package."
+  :version "0.0.1"
   :author "yourname"
   :license "your license"
+  :serial t
   :depends-on (#:depmod-1
                #:depmod-2
                 ...
