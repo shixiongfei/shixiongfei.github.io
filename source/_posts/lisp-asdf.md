@@ -28,7 +28,8 @@ ASDF 可以构建、编译、加载 Lisp 程序，Quicklisp 也依赖 ASDF。但
 
 ```lisp
 ;; startup file like ~/.sbclrc
-(pushnew "~/path-to-projects/root/" asdf:*central-registry* :test #'equal)
+(pushnew (truename "~/path-to-project/root/") ql:*local-project-directories*)
+(ql:register-local-projects)
 ```
 
 ## asdf:load-system 加载包
