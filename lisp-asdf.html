@@ -224,7 +224,7 @@
           <span class="text-gray-400">·</span>
           <span>3 min</span>
           <span class="text-gray-400">·</span>
-          <span>754 words</span>
+          <span>759 words</span>
         </section>
       </div>
     </div>
@@ -272,7 +272,7 @@
 <p>再编写一个 Makefile 通过 make 来执行编译工作</p>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">LISP ?= sbcl</span><br><span class="line"></span><br><span class="line"><span class="section">build:</span></span><br><span class="line">	<span class="variable">$(LISP)</span> --load my-app.asd \</span><br><span class="line">		--eval &#x27;(ql:quickload :my-app)&#x27; \</span><br><span class="line">		--eval &#x27;(asdf:make :my-app)&#x27; \</span><br><span class="line">		--eval &#x27;(quit)&#x27;</span><br></pre></td></tr></table></figure>
 
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://common-lisp.net/project/asdf/asdf.html">asdf手册</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://common-lisp.net/project/asdf/asdf.html">asdf手册</a><br><a target="_blank" rel="noopener" href="https://github.com/shixiongfei/cl-hello">cl-hello演示工程</a></p>
 
   </article>
   <!-- tag -->
