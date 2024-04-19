@@ -15,12 +15,10 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           submodules: recursive
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: "16"
-      - name: Cache NPM dependencies
-        uses: actions/cache@v2
+          node-version: 20
+      - uses: actions/cache@v2
         with:
           path: node_modules
           key: ${{ runner.OS }}-npm-cache
