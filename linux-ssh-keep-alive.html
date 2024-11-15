@@ -220,7 +220,7 @@
           <span class="text-gray-400">·</span>
           <span>1 min</span>
           <span class="text-gray-400">·</span>
-          <span>103 words</span>
+          <span>122 words</span>
         </section>
       </div>
     </div>
@@ -235,6 +235,9 @@
 <li>ClientAliveCountMax: 表示上述多少次心跳无响应之后，会认为Client已经断开。</li>
 </ul>
 <p>这里配置总共允许无响应的时间是 30 * 6 &#x3D; 180秒。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo systemctl restart sshd</span></span><br></pre></td></tr></table></figure>
+
+<p>最后重启一下 sshd 服务让配置生效。</p>
 
   </article>
   <!-- tag -->
