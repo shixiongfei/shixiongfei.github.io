@@ -125,7 +125,7 @@
 
 
 
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 8.0.0"></head>
 <body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
   <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
   <div class="max-auto">
@@ -220,7 +220,7 @@
           <span class="text-gray-400">·</span>
           <span>19 min</span>
           <span class="text-gray-400">·</span>
-          <span>5.3k words</span>
+          <span>5.1k words</span>
         </section>
       </div>
     </div>
@@ -234,15 +234,15 @@
 </li>
 <li><p>OTP的 <code>gen_server</code> 行为会要求提供一些进程的初始化和结束、基于消息发送的同步和异步处理以及其他任务的处理函数</p>
 </li>
-<li><p><code>init/1</code> 函数负责初始化服务器的状态，并完成服务器需要的所有一次性任务。这个函数可以返回 <code>&#123;ok, State&#125;</code> 、 <code>&#123;ok, State, TimeOut&#125;</code> 、 <code>&#123;ok, State, hibernate&#125;</code> 、 <code>&#123;stop, Reason&#125;</code> 以及 <code>ignore</code></p>
+<li><p><code>init/1</code> 函数负责初始化服务器的状态，并完成服务器需要的所有一次性任务。这个函数可以返回 <code>{ok, State}</code> 、 <code>{ok, State, TimeOut}</code> 、 <code>{ok, State, hibernate}</code> 、 <code>{stop, Reason}</code> 以及 <code>ignore</code></p>
 </li>
-<li><p>常规的 <code>&#123;ok, State&#125;</code> 返回值无需解释，只要记住 <code>State</code> 会直接传给进程的主循环，并作为进程的状态一直保存在那里就行了。</p>
+<li><p>常规的 <code>{ok, State}</code> 返回值无需解释，只要记住 <code>State</code> 会直接传给进程的主循环，并作为进程的状态一直保存在那里就行了。</p>
 </li>
 <li><p>当期望服务器在某个时间期限之前能收到一条消息时，可以使用 <code>TimeOut</code> 变量。如果到期没有收到任何消息，那么会给服务器发送一条特殊的消息（原子 <code>timeout</code> ），可以在 <code>handle_info/2</code> 中处理这条消息。很少会在产品代码使用这个选项，因为不能总是知道会收到哪条消息，而任意一条消息都会重置计时器。通常，更好的方法是使用 <code>erlang:start_timer/3</code> 之类的函数，可以获得更好的处理控制</p>
 </li>
 <li><p>如果确实觉得进程在很长一段时间内不会有什么消息要处理，并且担心内存问题，那么可以在元组中使用 <code>hibernate</code> 原子。一般来讲， <code>hibernate</code> 选项会缩减进程的状态，直到它收到一条消息，不过会多耗费些处理能力。如果在是否使用 <code>hibernate</code> 选项时存有疑惑，就说明不太需要它</p>
 </li>
-<li><p>如果在初始化的过程中出现了错误，可以返回 <code>&#123;stop, Reason&#125;</code></p>
+<li><p>如果在初始化的过程中出现了错误，可以返回 <code>{stop, Reason}</code></p>
 </li>
 <li><p>注意！当执行 <code>init/1</code> 函数时，创建服务器的进程会被阻塞。这是因为它在等待一条“就绪”消息，这条消息由 <code>gen_server</code> 模块自动发送以确认一切正常</p>
 </li>
@@ -250,14 +250,14 @@
 </li>
 <li><p>在 <code>gen_server</code> 中，有8种不同的返回值可供选择，这些返回值都是元组形式</p>
 <ul>
-<li><code>&#123;reply, Reply, NewState&#125;</code></li>
-<li><code>&#123;reply, Reply, NewState, TimeOut&#125;</code></li>
-<li><code>&#123;reply, Reply, NewState, hibernate&#125;</code></li>
-<li><code>&#123;noreply, NewState&#125;</code></li>
-<li><code>&#123;noreply, NewState, TimeOut&#125;</code></li>
-<li><code>&#123;noreply, NewState, hibernate&#125;</code></li>
-<li><code>&#123;stop, Reason, Reply, NewState&#125;</code></li>
-<li><code>&#123;stop, Reason, NewState&#125;</code></li>
+<li><code>{reply, Reply, NewState}</code></li>
+<li><code>{reply, Reply, NewState, TimeOut}</code></li>
+<li><code>{reply, Reply, NewState, hibernate}</code></li>
+<li><code>{noreply, NewState}</code></li>
+<li><code>{noreply, NewState, TimeOut}</code></li>
+<li><code>{noreply, NewState, hibernate}</code></li>
+<li><code>{stop, Reason, Reply, NewState}</code></li>
+<li><code>{stop, Reason, NewState}</code></li>
 </ul>
 </li>
 <li><p>这些返回值中， <code>TimeOut</code> 和 <code>hibernate</code> 的工作方式和 <code>init/1</code> 中的一样。 <code>Reply</code> 中的内容会被原封不动地发回给调用服务器的进程</p>
@@ -268,25 +268,25 @@
 </li>
 <li><p><code>handle_cast</code> 函数用于异步消息的处理，它的参数是： <code>Message</code> 和 <code>State</code> 。和 <code>handle_call/3</code> 类似，其中也可以进行任何处理。不过它只能返回 <code>noreply</code> 元组</p>
 <ul>
-<li><code>&#123;noreply, NewState&#125;</code></li>
-<li><code>&#123;noreply, NewState, TimeOut&#125;</code></li>
-<li><code>&#123;noreply, NewState, hibernate&#125;</code></li>
-<li><code>&#123;stop, Reason, NewState&#125;</code></li>
+<li><code>{noreply, NewState}</code></li>
+<li><code>{noreply, NewState, TimeOut}</code></li>
+<li><code>{noreply, NewState, hibernate}</code></li>
+<li><code>{stop, Reason, NewState}</code></li>
 </ul>
 </li>
 <li><p><code>handle_info</code> 函数用于处理和接口不相容的消息。它和 <code>handle_case/2</code> 非常类似，事实上，返回值也完全一样。它们之间的区别在于，这个回调函数只用来处理直接通过 <code>!</code> 操作符发送的消息，以及如 <code>init/1</code> 中 <code>timeout</code> 、监控器通知或者 <code>EXIT</code> 信号之类的特殊消息</p>
 </li>
-<li><p>当上面3种 <code>handle_something</code> 函数返回形如 <code>&#123;stop, Reason, NewState&#125;</code> 或者 <code>&#123;stop, Reason, Reply, NewState&#125;</code> 的元组时，会调用 <code>terminate/2</code> 函数。它有两个参数： <code>Reason</code> 和 <code>State</code> ，分别对应 <code>stop</code> 元组中的同名字段</p>
+<li><p>当上面3种 <code>handle_something</code> 函数返回形如 <code>{stop, Reason, NewState}</code> 或者 <code>{stop, Reason, Reply, NewState}</code> 的元组时，会调用 <code>terminate/2</code> 函数。它有两个参数： <code>Reason</code> 和 <code>State</code> ，分别对应 <code>stop</code> 元组中的同名字段</p>
 </li>
 <li><p>当父进程（创建服务器的进程）死亡时，也会调用 <code>terminate/2</code> 函数，不过这只会发生在 <code>gen_server</code> 捕获了退出信号的时候</p>
 </li>
-<li><p>如果在调用 <code>terminate/2</code> 时，原因不是 <code>normal</code> 、 <code>shutdown</code> 或者 <code>&#123;shutdown, Term&#125;</code> ，那么OTP框架会把这当成故障，并会把进程的状态、故障原因、最后收到的消息等记入日志。这让调试变得更加容易，可以帮助你快速定位问题</p>
+<li><p>如果在调用 <code>terminate/2</code> 时，原因不是 <code>normal</code> 、 <code>shutdown</code> 或者 <code>{shutdown, Term}</code> ，那么OTP框架会把这当成故障，并会把进程的状态、故障原因、最后收到的消息等记入日志。这让调试变得更加容易，可以帮助你快速定位问题</p>
 </li>
 <li><p>这个函数和 <code>init/1</code> 正好相反，因此所有在 <code>init/1</code> 中做的动作都应该在 <code>terminate/2</code> 中有对应的取消动作</p>
 </li>
-<li><p><code>code_change</code> 函数用于代码升级，它的调用形式是 <code>code_change(PreviousVersion, State, Extra)</code> 。其中，变量 <code>PreviousVersion</code> 在升级时是版本数据项本身，在降级时是 <code>&#123;down, Version&#125;</code> 。 <code>State</code> 变量中保存着服务器当前的所有状态数据，可以对其进行转换</p>
+<li><p><code>code_change</code> 函数用于代码升级，它的调用形式是 <code>code_change(PreviousVersion, State, Extra)</code> 。其中，变量 <code>PreviousVersion</code> 在升级时是版本数据项本身，在降级时是 <code>{down, Version}</code> 。 <code>State</code> 变量中保存着服务器当前的所有状态数据，可以对其进行转换</p>
 </li>
-<li><p>假如我们一开始使用一个有序字典来存储所有数据。一段时间之后，有序字典变得越来越慢，我们决定用常规字典把它替换掉。为了避免进程在接下来的调用中崩溃，可以在这个函数中安全地进行数据结构的转换。所要做的就是用 <code>&#123;ok, NewState&#125;</code> 返回新的状态</p>
+<li><p>假如我们一开始使用一个有序字典来存储所有数据。一段时间之后，有序字典变得越来越慢，我们决定用常规字典把它替换掉。为了避免进程在接下来的调用中崩溃，可以在这个函数中安全地进行数据结构的转换。所要做的就是用 <code>{ok, NewState}</code> 返回新的状态</p>
 </li>
 <li><p><code>gen_server</code> 的调用与回调关系</p>
 <ul>
@@ -300,13 +300,13 @@
 </li>
 <li><p><code>gen_fsm</code> 行为和 <code>gen_server</code> 有点类似，因为 <code>gen_fsm</code> 是 <code>gen_server</code> 行为的一个专用版本。它们之间最大的区别在于， <code>gen_fsm</code> 中不再处理 <code>call</code> 消息和 <code>cast</code> 消息，而是处理同步和异步事件</p>
 </li>
-<li><p>FSM中的 <code>init</code> 函数和通用服务器中使用的 <code>init/1</code> 完全一样，除了返回值多一些，可接受的返回值为： <code>&#123;ok, StateName, Data&#125;</code> 、 <code>&#123;ok, StateName, Data, Timeout&#125;</code> 、 <code>&#123;ok, StateName, Data, hibernate&#125;</code> 以及 <code>&#123;stop, Reason&#125;</code> 。 <code>stop</code> 元组的工作原理和 <code>gen_server</code> 中的完全一样， <code>hibernate</code> 和 <code>Timeout</code> 的语义也保持不变</p>
+<li><p>FSM中的 <code>init</code> 函数和通用服务器中使用的 <code>init/1</code> 完全一样，除了返回值多一些，可接受的返回值为： <code>{ok, StateName, Data}</code> 、 <code>{ok, StateName, Data, Timeout}</code> 、 <code>{ok, StateName, Data, hibernate}</code> 以及 <code>{stop, Reason}</code> 。 <code>stop</code> 元组的工作原理和 <code>gen_server</code> 中的完全一样， <code>hibernate</code> 和 <code>Timeout</code> 的语义也保持不变</p>
 </li>
 <li><p><code>StateName</code> 是一个新出现的变量。 <code>StateName</code> 是原子类型，表示下一个被调用的回调函数</p>
 </li>
 <li><p>函数 <code>StateName/2</code> 和 <code>StateName/3</code> 是占位名字，由你来决定它们的内容</p>
 </li>
-<li><p>假设 <code>init/1</code> 函数返回元组 <code>&#123;ok, sitting, dog&#125;</code> ，这意味着FSM会处于sitting状态</p>
+<li><p>假设 <code>init/1</code> 函数返回元组 <code>{ok, sitting, dog}</code> ，这意味着FSM会处于sitting状态</p>
 </li>
 <li><p>在上面的FSM中， <code>init/1</code> 函数的返回值表明我们该处于 <code>sitting</code> 状态。当 <code>gen_fsm</code> 进程收到一个事件时，函数 <code>sitting/2</code> 或者 <code>sitting/3</code> 会被调用。对于异步事件，会调用 <code>sitting/2</code> 函数，对于同步事件，会调用 <code>sitting/3</code> 函数</p>
 </li>
@@ -314,24 +314,24 @@
 </li>
 <li><p><code>sitting/2</code> 函数可以返回以下几种元组</p>
 <ul>
-<li><code>&#123;next_state, NextStateName, NewStateData&#125;</code></li>
-<li><code>&#123;next_state, NextStateName, NewStateData, Timeout&#125;</code></li>
-<li><code>&#123;next_state, NextStateName, hibernate&#125;</code></li>
-<li><code>&#123;stop, Reason, NewStateData&#125;</code></li>
+<li><code>{next_state, NextStateName, NewStateData}</code></li>
+<li><code>{next_state, NextStateName, NewStateData, Timeout}</code></li>
+<li><code>{next_state, NextStateName, hibernate}</code></li>
+<li><code>{stop, Reason, NewStateData}</code></li>
 </ul>
 </li>
 <li><p>函数 <code>sitting/3</code> 的参数与此类似，只是在 <code>Event</code> 和 <code>StateData</code> 之间多了一个 <code>From</code> 参数。 <code>From</code> 参数和 <code>gen_fsm:reply/2</code> 的用法与 <code>gen_server</code> 中的完全一样</p>
 </li>
 <li><p>函数 <code>StateName/3</code> 可以返回如下元组</p>
 <ul>
-<li><code>&#123;reply, Reply, NextStateName, NewStateData&#125;</code></li>
-<li><code>&#123;reply, Reply, NextStateName, NewStateData, Timeout&#125;</code></li>
-<li><code>&#123;reply, Reply, NextStateName, NewStateData, hibernate&#125;</code></li>
-<li><code>&#123;next_state, NextStateName, NewStateData&#125;</code></li>
-<li><code>&#123;next_state, NextStateName, NewStateData, Timeout&#125;</code></li>
-<li><code>&#123;next_state, NextStateName, NewStateData, hibernate&#125;</code></li>
-<li><code>&#123;stop, Reason, Reply, NewStateData&#125;</code></li>
-<li><code>&#123;stop, Reason, NewStateData&#125;</code></li>
+<li><code>{reply, Reply, NextStateName, NewStateData}</code></li>
+<li><code>{reply, Reply, NextStateName, NewStateData, Timeout}</code></li>
+<li><code>{reply, Reply, NextStateName, NewStateData, hibernate}</code></li>
+<li><code>{next_state, NextStateName, NewStateData}</code></li>
+<li><code>{next_state, NextStateName, NewStateData, Timeout}</code></li>
+<li><code>{next_state, NextStateName, NewStateData, hibernate}</code></li>
+<li><code>{stop, Reason, Reply, NewStateData}</code></li>
+<li><code>{stop, Reason, NewStateData}</code></li>
 </ul>
 </li>
 <li><p>注意，这些函数数量不受限制，只要被导出就行。元组中的原子 <code>NextStateName</code> 决定了下一次会调用哪个函数</p>
@@ -344,7 +344,7 @@
 </li>
 <li><p>两个对等的用来发送全局事件的函数为： <code>gen_fsm:send_all_state_event/2</code> 和 <code>gen_fsm:sync_send_all_state_event/2-3</code></p>
 </li>
-<li><p>FSM中 <code>code_change</code> 函数的工作方式和 <code>gen_server</code> 中的完全一样，只是多处一个额外的状态参数，如： <code>code_change(OldVersion, StateName, Data, Extra)</code> ，并且返回的元组格式为 <code>&#123; ok, NextStateName, NewStateData &#125;</code></p>
+<li><p>FSM中 <code>code_change</code> 函数的工作方式和 <code>gen_server</code> 中的完全一样，只是多处一个额外的状态参数，如： <code>code_change(OldVersion, StateName, Data, Extra)</code> ，并且返回的元组格式为 <code>{ ok, NextStateName, NewStateData }</code></p>
 </li>
 <li><p>同样的，FSM中 <code>terminate</code> 的行为和通用服务器中也类似， <code>terminate(Reason, StateName, Data)</code> 函数做多额工作应该和 <code>init/1</code> 相反</p>
 </li>
@@ -352,31 +352,31 @@
 </li>
 <li><p>简单来讲， <code>gen_event</code> 行为运行这个接受并调用回调函数的事件管理器进程，而你只需要提供包含这些回调函数的模块即可。这意味着你无需关心事件分派，只需按照事件管理器要求的格式放置回调函数即可。所有的事件管理就自然都有了，你只需提供应用特定的东西</p>
 </li>
-<li><p><code>init</code> 和 <code>terminate</code> 函数与我们前面看到的 <code>gen_server</code> 和 <code>gen_fsm</code> 行为中的类似。 <code>init/1</code> 函数接收列表参数，返回 <code>&#123;ok, State&#125;</code> 。在 <code>init/1</code> 中创建的东西，要在 <code>terminate/2</code> 函数中有对应释放操作</p>
+<li><p><code>init</code> 和 <code>terminate</code> 函数与我们前面看到的 <code>gen_server</code> 和 <code>gen_fsm</code> 行为中的类似。 <code>init/1</code> 函数接收列表参数，返回 <code>{ok, State}</code> 。在 <code>init/1</code> 中创建的东西，要在 <code>terminate/2</code> 函数中有对应释放操作</p>
 </li>
 <li><p><code>handle_event(Event, State)</code> 函数可以说是 <code>gen_event</code> 回调模块的核心函数。和 <code>gen_server</code> 中的 <code>handle_cast/2</code> 一样， <code>handle_event/2</code> 函数也是异步的。不过，它的返回值有所不同：</p>
 <ul>
-<li><code>&#123;ok, NewState&#125;</code></li>
-<li><code>&#123;ok, NewState, hibernate&#125;</code> ，让事件管理器进程进入休眠状态，直到收到下一个事件</li>
+<li><code>{ok, NewState}</code></li>
+<li><code>{ok, NewState, hibernate}</code> ，让事件管理器进程进入休眠状态，直到收到下一个事件</li>
 <li><code>remove_handler</code></li>
-<li><code>&#123;swap_handler, Args1, NewState, NewHandler, Args2&#125;</code></li>
+<li><code>{swap_handler, Args1, NewState, NewHandler, Args2}</code></li>
 </ul>
 </li>
-<li><p>返回值 <code>&#123;ok, NewState&#125;</code> 元组的含义和 <code>gen_server:handle_cast/2</code> 函数中的一样。它只更新自己的状态，不做任何回应。</p>
+<li><p>返回值 <code>{ok, NewState}</code> 元组的含义和 <code>gen_server:handle_cast/2</code> 函数中的一样。它只更新自己的状态，不做任何回应。</p>
 </li>
-<li><p>返回 <code>&#123;ok, NewState, hibernate&#125;</code> 则会使整个事件管理器进入休眠状态。记住，事件处理器和其他管理器运行在同一个进程中</p>
+<li><p>返回 <code>{ok, NewState, hibernate}</code> 则会使整个事件管理器进入休眠状态。记住，事件处理器和其他管理器运行在同一个进程中</p>
 </li>
 <li><p>返回 <code>remove_handler</code> 则会导致事件处理器从事件管理器中删除。当某个事件处理器知道自己已经完成工作并且无其他任务时，可以使用这个返回值</p>
 </li>
-<li><p>最后一个返回值 <code>&#123;swap_handler, Args1, NewState, NewHandler, Args2&#125;</code> ，它移除当前事件处理器并用一个新的替代它。事件管理器首先调用 <code>CurrentHandler:terminate(Args1, NewState)</code> 函数，并移除当前的事件处理器。接着调用 <code>NewHandler:init(Args2, ResultFromTerminate)</code> 函数，添加新的事件处理器。</p>
+<li><p>最后一个返回值 <code>{swap_handler, Args1, NewState, NewHandler, Args2}</code> ，它移除当前事件处理器并用一个新的替代它。事件管理器首先调用 <code>CurrentHandler:terminate(Args1, NewState)</code> 函数，并移除当前的事件处理器。接着调用 <code>NewHandler:init(Args2, ResultFromTerminate)</code> 函数，添加新的事件处理器。</p>
 </li>
 <li><p>所有事件都是通过 <code>gen_event:notify/2</code> 函数触发的，和 <code>gen_server:cast/2</code> 一样，它也是异步的。还有另外一个函数 <code>gen_event:sync_notify/2</code> ，它是同步的。由于 <code>handle_event/2</code> 是异步的，这里的同步指的是，当所有事件处理器都收到这个事件并且处理完毕后， <code>sync_notify</code> 函数才会返回。在那之前，事件管理器会一直阻塞调用进程，不予响应</p>
 </li>
-<li><p><code>handle_call</code> 函数和 <code>gen_server</code> 的 <code>handle_call</code> 回调函数类似，不同之处在于，它可以返回 <code>&#123;ok, Reply, NewState&#125;</code> 、 <code>&#123;ok, Reply, NewState, hibernate&#125;</code> 、 <code>&#123;remove_handler, Reply&#125;</code> 以及 <code>&#123;swap_handler, Reply, Args1, NewState, Handler2, Args2&#125;</code> 。使用 <code>gen_event:call/3-4</code> 函数就可以发起该调用</p>
+<li><p><code>handle_call</code> 函数和 <code>gen_server</code> 的 <code>handle_call</code> 回调函数类似，不同之处在于，它可以返回 <code>{ok, Reply, NewState}</code> 、 <code>{ok, Reply, NewState, hibernate}</code> 、 <code>{remove_handler, Reply}</code> 以及 <code>{swap_handler, Reply, Args1, NewState, Handler2, Args2}</code> 。使用 <code>gen_event:call/3-4</code> 函数就可以发起该调用</p>
 </li>
 <li><p><code>handle_info</code> 回调和 <code>handle_event</code> 回调非常相似（有着同样的返回值和含义），唯一的不同在于， <code>handle_info</code> 只处理带外消息，如退出信号或使用 <code>!</code> 操作符直接向事件管理器进程发送消息。它的使用场景和 <code>gen_server</code> 以及 <code>gen_fsm</code> 中的 <code>handle_info</code> 的使用场景类似</p>
 </li>
-<li><p><code>code_change</code> 函数的工作方式和 <code>gen_server</code> 中的一样，不过它仅仅针对单独的事件处理器。它的参数为： <code>OldVsn</code> 、 <code>State</code> 、 <code>Extra</code> ，分别表示版本号、当前事件处理器的状态、最后这个参数—— <code>Extra</code> ，目前可以不用关心。这个方法只要返回 <code>&#123;ok, NewState&#125;</code> 即可</p>
+<li><p><code>code_change</code> 函数的工作方式和 <code>gen_server</code> 中的一样，不过它仅仅针对单独的事件处理器。它的参数为： <code>OldVsn</code> 、 <code>State</code> 、 <code>Extra</code> ，分别表示版本号、当前事件处理器的状态、最后这个参数—— <code>Extra</code> ，目前可以不用关心。这个方法只要返回 <code>{ok, NewState}</code> 即可</p>
 </li>
 <li><p>在所有OTP中，监督者是最容易使用和理解的一个，但也是最难设计好的一个。在Erlang中应该把所有东西都监督起来，此外，监督机制还可以让你以恰当的顺序终止应用</p>
 </li>
@@ -397,11 +397,11 @@
 </li>
 <li><p><code>RestartStrategy</code> 元组中剩余的两个变量是 <code>MaxRestart</code> 和 <code>MaxTime</code> 。他们的意思是，如果在 <code>MaxTime</code> （以秒为单位）指定的时间内，重启次数超过了 <code>MaxRestart</code> 指定的数字，那么监督者会放弃重启并终止所有子进程，然后自杀，永远停止运行</p>
 </li>
-<li><p>子进程规格说明可以描述成： <code>&#123;ChildId, StartFunc, Restart, Shutdown, Type, Modules&#125;</code></p>
+<li><p>子进程规格说明可以描述成： <code>{ChildId, StartFunc, Restart, Shutdown, Type, Modules}</code></p>
 </li>
 <li><p><code>ChildId</code> 只是监督者内部使用的一个名称</p>
 </li>
-<li><p><code>StartFunc</code> 是一个元组，用来指定子进程的启动方式，它采用了标准的 <code>&#123;M, F, A&#125;</code> 格式。注意！这里的启动函数是OTP兼容的，在执行时会和调用者进程链接在一起，这一点非常重要</p>
+<li><p><code>StartFunc</code> 是一个元组，用来指定子进程的启动方式，它采用了标准的 <code>{M, F, A}</code> 格式。注意！这里的启动函数是OTP兼容的，在执行时会和调用者进程链接在一起，这一点非常重要</p>
 </li>
 <li><p><code>Restart</code> 指定了监督者在某个特定的子进程死后的处理方式，它可以取如下3个值：</p>
 </li>
@@ -436,7 +436,7 @@
 </li>
 <li><p>使用 <code>simple_one_for_one</code> 策略的监督者把所有子进程信息存放在一个字典中，这样可以快速查找，并且对监督者的所有子进程来说，只有一份子进程规格说明</p>
 </li>
-<li><p>编写 <code>simple_one_for_one</code> 策略监督者的方式基本上和其他策略的监督者类似，只有一点不同： <code>&#123;M, F, A&#125;</code> 元组中的参数列表 <code>A</code> 并不是全部参数，完整的参数是把 <code>supervisor:start_child(Sup, Args)</code> 调用中的 <code>Args</code> 追加到 <code>A</code> 之后的新列表</p>
+<li><p>编写 <code>simple_one_for_one</code> 策略监督者的方式基本上和其他策略的监督者类似，只有一点不同： <code>{M, F, A}</code> 元组中的参数列表 <code>A</code> 并不是全部参数，完整的参数是把 <code>supervisor:start_child(Sup, Args)</code> 调用中的 <code>Args</code> 追加到 <code>A</code> 之后的新列表</p>
 </li>
 <li><p>这里的 <code>supervisor:start_child/2</code> 的含义改变了。与原来的 <code>supervisor:start_child(Sup, Spec)</code> 调用 <code>erlang:apply(M, F, A)</code> 不同，现在的 <code>supervisor:start_child(Sup, Args)</code> 调用的是 <code>erlang:apply(M, F, A++Args)</code></p>
 <figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">init</span><span class="params">(jamband)</span> -&gt;</span></span><br><span class="line">    &#123;ok, &#123;&#123;simple_one_for_one, <span class="number">3</span>, <span class="number">60</span>&#125;,</span><br><span class="line">          [&#123;jam_musician,</span><br><span class="line">           &#123;musicians, start_link, []&#125;,</span><br><span class="line">           temporary, <span class="number">1000</span>, worker, [musicians]&#125;</span><br><span class="line">          ]&#125;&#125;</span><br></pre></td></tr></table></figure>

@@ -125,7 +125,7 @@
 
 
 
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 8.0.0"></head>
 <body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
   <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
   <div class="max-auto">
@@ -409,7 +409,7 @@
 <ol>
 <li><p>不适合出错异常的情形</p>
 <ul>
-<li>在进行查询时，模块不一定总能找到一个特定的数据。此时，让调用者去处理这个未知的结果是合理的。调用者可以使用一个默认值、插入一个新值或者做其他处理。在这种情况下，返回 <code>&#123;ok, Value&#125;</code> 元组或者一个像 <code>undefined</code> 这样的原子，要比引发错误异常更为合适</li>
+<li>在进行查询时，模块不一定总能找到一个特定的数据。此时，让调用者去处理这个未知的结果是合理的。调用者可以使用一个默认值、插入一个新值或者做其他处理。在这种情况下，返回 <code>{ok, Value}</code> 元组或者一个像 <code>undefined</code> 这样的原子，要比引发错误异常更为合适</li>
 </ul>
 </li>
 <li><p>自定义错误</p>

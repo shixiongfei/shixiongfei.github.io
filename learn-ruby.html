@@ -125,7 +125,7 @@
 
 
 
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 8.0.0"></head>
 <body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
   <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
   <div class="max-auto">
@@ -266,7 +266,7 @@
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">:Object</span></span><br><span class="line"><span class="symbol">:my_variable</span></span><br><span class="line"><span class="symbol">:<span class="string">&quot;Ruby rules&quot;</span></span></span><br><span class="line">a = <span class="string">&#x27;cat&#x27;</span></span><br><span class="line"><span class="symbol">:<span class="string">&#x27;catsup&#x27;</span></span>       =&gt; <span class="symbol">:catsup</span></span><br><span class="line"><span class="symbol">:<span class="string">&quot;<span class="subst">#&#123;a&#125;</span>sup&quot;</span></span>      =&gt; <span class="symbol">:catsup</span></span><br><span class="line"><span class="symbol">:<span class="string">&#x27;<span class="subst">#&#123;a&#125;</span>sup&#x27;</span></span>      =&gt; <span class="symbol">:<span class="string">&quot;\#&#123;a&#125;sup&quot;</span></span></span><br></pre></td></tr></table></figure>
 
 <p>其他语言称这个过程为 <code>interning</code> ，而称符号为原子</p>
-<h3 id="正则表达式-regular-expressions"><a href="#正则表达式-regular-expressions" class="headerlink" title="正则表达式(regular expressions)"></a>正则表达式(regular expressions)</h3><p>正则表达式的字面量是 <code>Regexp</code> 类型的对象。可以通过调用 <code>Regexp.new</code> 构造函数显示创建正则表达式，也可以使用字面量形式 <code>/pattern/</code> 和 <code>%r&#123;pattern&#125;</code> 隐式创建</p>
+<h3 id="正则表达式-regular-expressions"><a href="#正则表达式-regular-expressions" class="headerlink" title="正则表达式(regular expressions)"></a>正则表达式(regular expressions)</h3><p>正则表达式的字面量是 <code>Regexp</code> 类型的对象。可以通过调用 <code>Regexp.new</code> 构造函数显示创建正则表达式，也可以使用字面量形式 <code>/pattern/</code> 和 <code>%r{pattern}</code> 隐式创建</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/pattern/</span><br><span class="line"><span class="regexp">/pattern/options</span></span><br><span class="line">%r&#123;pattern&#125;</span><br><span class="line">%r&#123;pattern&#125;options</span><br><span class="line"><span class="title class_">Regexp</span>.new(<span class="string">&#x27;pattern&#x27;</span> [, options])</span><br></pre></td></tr></table></figure>
 
 <p>一旦有了正则表达式对象，可以使用 <code>Regexp#match(string)</code> 或匹配操作符 <code>=</code> (肯定匹配)和 <code>!</code> (否定匹配)对字符串进行匹配</p>
@@ -328,7 +328,7 @@
 <h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><h3 id="times方法"><a href="#times方法" class="headerlink" title="times方法"></a>times方法</h3><p>times方法可以轻松实现单纯执行一定次数的处理</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">循环次数.times <span class="keyword">do</span></span><br><span class="line">  希望循环的处理</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 
-<p><code>do...end</code> 部分可以用 <code>&#123;...&#125;</code> 代替</p>
+<p><code>do...end</code> 部分可以用 <code>{...}</code> 代替</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">循环次数.times &#123;</span><br><span class="line">    希望循环的处理</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>使用times方法时也可以获知块中当前的循环次数</p>

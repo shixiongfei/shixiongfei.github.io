@@ -125,7 +125,7 @@
 
 
 
-<meta name="generator" content="Hexo 7.3.0"></head>
+<meta name="generator" content="Hexo 8.0.0"></head>
 <body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200">
   <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
   <div class="max-auto">
@@ -283,7 +283,7 @@
 </li>
 <li><p>要想知道进程是否收到了消息，唯一的方法是让它发送一条回应。我们的进程如果需要知道要把回应发送给谁，就必须在消息中添加我们的 <code>pid</code> 。</p>
 </li>
-<li><p>在Erlang中，我们通过把进程 <code>pid</code> 打包在一个元组中完成这项工作，如果不这样做，那么消息就都是匿名的。打包的结果是一条类似 <code>&#123;Pid, Message&#125;</code> 的消息</p>
+<li><p>在Erlang中，我们通过把进程 <code>pid</code> 打包在一个元组中完成这项工作，如果不这样做，那么消息就都是匿名的。打包的结果是一条类似 <code>{Pid, Message}</code> 的消息</p>
 </li>
 <li><p>我们来编写一个海豚程序来展示消息的收发</p>
 <figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">-module</span><span class="params">(dolphins)</span>.</span><br><span class="line"><span class="keyword">-compile</span><span class="params">(export_all)</span>.</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="title">dolphin</span><span class="params">()</span> -&gt;</span></span><br><span class="line">    <span class="keyword">receive</span></span><br><span class="line">        &#123;From, do_a_flip&#125; -&gt;</span><br><span class="line">            From ! <span class="string">&quot;How about no?&quot;</span>,</span><br><span class="line">            dolphin();</span><br><span class="line">        &#123;From, fish&#125; -&gt;</span><br><span class="line">            From ! <span class="string">&quot;So long and thanks for all the fish!&quot;</span>;</span><br><span class="line">        _ -&gt;</span><br><span class="line">            io:format(<span class="string">&quot;Heh, we&#x27;re smarter than you humans.~n&quot;</span>),</span><br><span class="line">            dolphin()</span><br><span class="line">    <span class="keyword">end</span>.</span><br></pre></td></tr></table></figure>
@@ -358,7 +358,7 @@
 <li><p>创建监控器的函数是 <code>erlang:monitor/2</code> ，它的第一个参数永远是原子 <code>process</code> ，第二个参数是 <code>pid</code></p>
 <figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; erlang:monitor(process, spawn(<span class="keyword">fun</span>() -&gt; timer:sleep(<span class="number">500</span>) <span class="keyword">end</span>)).</span><br><span class="line">&gt; flush().</span><br><span class="line">  Shell got &#123;&#x27;DOWN&#x27;,#Ref&lt;<span class="number">0.4159903409</span>.<span class="number">3575906310.207444</span>&gt;,process,&lt;<span class="number">0.80</span>.<span class="number">0</span>&gt;,normal&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>每当被监控的进程死亡时，监控进程都会收到一条消息，格式是 <code>&#123;&#39;DOWN&#39;, MonitorReference, process, Pid, Reason&#125;</code> 。其中的引用可以用来解除对一个进程的监控</p>
+<li><p>每当被监控的进程死亡时，监控进程都会收到一条消息，格式是 <code>{&#39;DOWN&#39;, MonitorReference, process, Pid, Reason}</code> 。其中的引用可以用来解除对一个进程的监控</p>
 </li>
 <li><p>记住！监控器是可以叠加的，因此会收到多条 <code>DOWN</code> 消息。引用可以唯一确定一条 <code>DOWN</code> 消息</p>
 </li>
