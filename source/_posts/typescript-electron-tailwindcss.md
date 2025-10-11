@@ -389,8 +389,6 @@ root.render(
 
 最后通过 `npm start` 启动项目就可以看到窗口界面了
 
-完整项目可以到 [GitHub Repo](https://github.com/shixiongfei/typescript-electron-tailwindcss-template) 查看
-
 ## 参考资料
 
 * [React](https://react.dev/learn/add-react-to-an-existing-project)

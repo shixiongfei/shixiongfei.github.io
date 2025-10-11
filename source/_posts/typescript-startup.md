@@ -88,7 +88,3 @@ npm install prettier --save-dev
 ```json
 {}
 ```
-
-## 完整项目工程参考
-
-[GitHub Repo](https://github.com/shixiongfei/typescript-project-template)
