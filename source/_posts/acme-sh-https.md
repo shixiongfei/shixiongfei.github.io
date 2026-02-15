@@ -32,7 +32,7 @@ $ crontab -l
 签发证书之前要对域名的所有权进行验证，我选择的是通过DNS手动解析的方式进行验证。
 
 ```shell
-acme.sh --issue --dns -d shixiongfei.com -d  '*.shixiongfei.com' \
+acme.sh --issue --dns -d shixiongfei.com -d '*.shixiongfei.com' \
  --yes-I-know-dns-manual-mode-enough-go-ahead-please
 ```
 
