@@ -27,45 +27,33 @@ $ crontab -l
 0 0 * * * "/home/user/.acme.sh"/acme.sh --cron --home "/home/user/.acme.sh" > /dev/null
 ```
 
-## 验证域名
+## 验证域名并签发证书
 
-签发证书之前要对域名进行验证，我选择的是通过DNSAPI的方式验证。
-
-登陆[阿里云后台](https://ram.console.aliyun.com/users)，创建一个用户并勾选OpenAPI
-
-记得添加`AliyunDNSFullAccess / 管理云解析(DNS)`的权限
-
-将`Key`和`Secret`添加到`.bashrc`中
+签发证书之前要对域名的所有权进行验证，我选择的是通过DNS手动解析的方式进行验证。
 
 ```shell
-$ vi .bashrc
-export Ali_Key="sdfsdfsdfljlbjkljlkjsdfoiwje"
-export Ali_Secret="jlsdflanljkljlfdsaklkjflsa"
+acme.sh --issue --dns -d shixiongfei.com -d  '*.shixiongfei.com' \
+ --yes-I-know-dns-manual-mode-enough-go-ahead-please
 ```
 
-## 签发证书
+控制台上会显示需要解析的记录名 `Domain: _acme-challenge.xxxxxx` 和对应需要解析的txt值 `TXT value: 'xxxxxxx'`。
 
-以我的短域名`shixf.com`为例
+将上述txt解析添加到域名解析记录中，再重新生成证书并认证
 
 ```shell
-$ acme.sh --issue --dns dns_ali -d shixf.com -d www.shixf.com
+acme.sh  --renew -d shixiongfei.com \
+ --yes-I-know-dns-manual-mode-enough-go-ahead-please
 ```
 
-如果需要泛域的话可以使用下面的命令
-
-```shell
-$ acme.sh --issue --dns dns_ali -d shixf.com -d '*.shixf.com'
-```
-
-等待差不多1分钟左右，证书就签发完毕了
+等待差不多1分钟左右，证书就签发完毕了。（txt记录验证完之后可以删除）
 
 ## 安装证书
 
 最后安装证书到Nginx并重新加载配置
 
 ```shell
-$ acme.sh --install-cert -d shixf.com \
---key-file       /usr/local/certs/shixf-com/secret.key  \
---fullchain-file /usr/local/certs/shixf-com/secret.pem \
+$ acme.sh --install-cert -d shixiongfei.com \
+--key-file       /usr/local/certs/shixiongfei-com/secret.key  \
+--fullchain-file /usr/local/certs/shixiongfei-com/secret.pem \
 --reloadcmd      "service nginx force-reload"
 ```
