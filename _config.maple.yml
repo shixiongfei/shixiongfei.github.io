@@ -20,7 +20,7 @@ links:
 
 # analytics
 google_analytics:
-baidu_analytics: 4dbc75a8d627e17a8714e4c8b2e9afa8
+baidu_analytics:
 
 # mathjax
 fancybox: true
