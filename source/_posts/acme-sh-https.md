@@ -29,7 +29,19 @@ $ crontab -l
 
 ## 验证域名并签发证书
 
-签发证书之前要对域名的所有权进行验证，我选择的是通过DNS手动解析的方式进行验证。
+签发证书之前要对域名的所有权进行验证，通过DNSAPI进行验证的话，先要生成API Token，然后export到环境变量中，以dynadot举例
+
+```shell
+export DYNADOTAPI_Token="your_api_token"
+```
+
+验证域名
+
+```shell
+acme.sh --issue --dns dynadot -d shixiongfei.com -d '*.shixiongfei.com'
+```
+
+也可以通过DNS手动解析的方式进行验证。
 
 ```shell
 acme.sh --issue --dns -d shixiongfei.com -d '*.shixiongfei.com' \
@@ -46,6 +58,8 @@ acme.sh  --renew -d shixiongfei.com \
 ```
 
 等待差不多1分钟左右，证书就签发完毕了。（txt记录验证完之后可以删除）
+
+**注意：** 通过手动验证方式的可能无法自动续订证书
 
 ## 安装证书
 
