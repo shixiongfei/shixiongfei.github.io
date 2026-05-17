@@ -29,16 +29,26 @@ $ crontab -l
 
 ## 验证域名并签发证书
 
-签发证书之前要对域名的所有权进行验证，通过DNSAPI进行验证的话，先要生成API Token，然后export到环境变量中，以dynadot举例
+因为ZeroSSL的签发不太稳定，所以我默认使用Let's Encrypt
 
 ```shell
-export DYNADOTAPI_Token="your_api_token"
+acme.sh --set-default-ca --server letsencrypt
 ```
 
-验证域名
+签发证书之前要对域名的所有权进行验证，通过DNSAPI进行验证的话，先要生成API Token，然后export到环境变量中，以CloudFlare举例
+
+环境变量里添加API Token等验证信息
 
 ```shell
-acme.sh --issue --dns dynadot -d shixiongfei.com -d '*.shixiongfei.com'
+export CF_Token="DNS Token"
+export CF_Zone_ID="Zone ID"
+export CF_Account_ID="Account ID"
+```
+
+进行域名验证
+
+```shell
+acme.sh --issue --dns dns_cf -d shixiongfei.com -d '*.shixiongfei.com'
 ```
 
 也可以通过DNS手动解析的方式进行验证。
