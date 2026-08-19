@@ -1,35 +1,51 @@
-name: Pages
+name: GitHub Pages
 
 on:
   push:
     branches:
       - master
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
-  pages:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          submodules: recursive
-      - uses: actions/setup-node@v6
-        with:
-          node-version: lts/*
-      - uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-npm-cache
-          restore-keys: |
-            ${{ runner.OS }}-npm-cache
-      - name: Install Dependencies
-        run: npm install
-      - name: Build
-        run: npm run build
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+        - uses: actions/checkout@v6
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            submodules: recursive
+        - uses: actions/setup-node@v6
+          with:
+            node-version: lts/*
+        - uses: actions/cache@v4
+          with:
+            path: node_modules
+            key: ${{ runner.OS }}-npm-cache
+            restore-keys: |
+              ${{ runner.OS }}-npm-cache
+        - name: Install Dependencies
+          run: npm ci
+        - name: Build
+          run: npm run build
+        - name: Upload Pages artifact
+          uses: actions/upload-pages-artifact@v4
+          with:
+            path: ./dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
