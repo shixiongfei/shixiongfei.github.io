@@ -12,30 +12,28 @@ export default defineConfig({
     starlight({
       plugins: [starlightBlog({})],
       title: "Xiongfei Shi",
+      description:
+        "Xiongfei Shi's homepage and blog, record and share life and technology.",
+      logo: {
+        src: "./src/assets/houston.webp",
+      },
       customCss: ["./src/styles/global.css"],
       components: {
         SocialIcons: "./src/components/SocialIcons.astro",
       },
       social: [
         {
+          icon: "twitter",
+          label: "Twitter",
+          href: "https://twitter.com/xiongfei_shi",
+        },
+        {
           icon: "github",
           label: "GitHub",
           href: "https://github.com/shixiongfei",
         },
       ],
-      sidebar: [
-        {
-          label: "Guides",
-          items: [
-            // Each item here is one entry in the navigation menu.
-            { label: "Example Guide", slug: "guides/example" },
-          ],
-        },
-        {
-          label: "Reference",
-          items: [{ autogenerate: { directory: "reference" } }],
-        },
-      ],
+      sidebar: [],
     }),
   ],
 
