@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
+import starlightBlog from "starlight-blog";
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,6 +10,7 @@ export default defineConfig({
 
   integrations: [
     starlight({
+      plugins: [starlightBlog({})],
       title: "Xiongfei Shi",
       customCss: ["./src/styles/global.css"],
       components: {

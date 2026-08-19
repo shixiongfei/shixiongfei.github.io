@@ -2,8 +2,6 @@
 import Default from "@astrojs/starlight/components/SocialIcons.astro";
 ---
 
-<Default {...Astro.props}><slot /></Default>
-
 <a href="https://www.zhihu.com/people/shixiongfei" rel="me" class="sl-flex">
   <span class="sr-only">Zhihu</span>
   <svg
@@ -18,6 +16,8 @@ import Default from "@astrojs/starlight/components/SocialIcons.astro";
     ></path>
   </svg>
 </a>
+
+<Default {...Astro.props}><slot /></Default>
 
 <style>
   a {
