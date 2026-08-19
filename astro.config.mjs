@@ -20,7 +20,19 @@ export default defineConfig({
 
   integrations: [
     starlight({
-      plugins: [starlightBlog({})],
+      plugins: [
+        starlightBlog({
+          navigation: "header-start",
+          authors: {
+            shixiongfei: {
+              name: "shixiongfei",
+              title: "Create something...",
+              picture: "./src/assets/head.jpg",
+              url: "https://github.com/shixiongfei",
+            },
+          },
+        }),
+      ],
       title: "Xiongfei Shi",
       description:
         "Xiongfei Shi's homepage and blog, record and share life and technology.",
