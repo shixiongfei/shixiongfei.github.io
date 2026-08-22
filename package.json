@@ -23,5 +23,8 @@
     "solid-js": "^1.9.15",
     "starlight-blog": "^0.29.0",
     "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "daisyui": "^5.7.20"
   }
 }

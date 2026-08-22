@@ -5,3 +5,42 @@
 @import 'tailwindcss/utilities.css' layer(utilities);
 
 @import 'katex/dist/katex.min.css';
+
+@plugin "daisyui" {
+  themes: starlight;
+  prefix: "ui-";
+}
+
+@plugin "daisyui/theme" {
+  name: "starlight";
+  default: true;
+  color-scheme: light dark;
+  --color-base-100: var(--sl-color-bg);
+  --color-base-200: var(--sl-color-gray-6);
+  --color-base-300: var(--sl-color-gray-5);
+  --color-base-content: var(--sl-color-text);
+  --color-primary: var(--sl-color-text-accent);
+  --color-primary-content: var(--sl-color-text-invert);
+  --color-secondary: var(--color-blue-500);
+  --color-secondary-content: var(--sl-color-text-invert);
+  --color-accent: var(--color-sky-500);
+  --color-accent-content: var(--sl-color-text-invert);
+  --color-neutral: var(--sl-color-gray-3);
+  --color-neutral-content: var(--sl-color-text-invert);
+  --color-info: var(--sl-color-blue-low);
+  --color-info-content: var(--sl-color-blue-high);
+  --color-success: var(--sl-color-green-low);
+  --color-success-content: var(--sl-color-green-high);
+  --color-warning: var(--sl-color-orange-low);
+  --color-warning-content: var(--sl-color-orange-high);
+  --color-error: var(--sl-color-red-low);
+  --color-error-content: var(--sl-color-red-high);
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1.5px;
+  --depth: 0;
+  --noise: 0;
+}
