@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from "astro/config";
+import solidJs from "@astrojs/solid-js";
 import starlight from "@astrojs/starlight";
 import tailwindcss from "@tailwindcss/vite";
 import starlightBlog from "starlight-blog";
@@ -19,6 +20,7 @@ export default defineConfig({
   },
 
   integrations: [
+    solidJs(),
     starlight({
       plugins: [
         starlightBlog({
