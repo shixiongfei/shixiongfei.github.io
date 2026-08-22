@@ -44,3 +44,17 @@
   --depth: 0;
   --noise: 0;
 }
+
+@layer components {
+  .hstack {
+    @apply flex flex-row items-stretch shrink-0 content-start relative min-w-0 min-h-0;
+  }
+
+  .vstack {
+    @apply flex flex-col items-stretch shrink-0 content-start relative min-w-0 min-h-0;
+  }
+
+  .spacer {
+    @apply flex-1 self-stretch min-w-0 min-h-0;
+  }
+}
