@@ -21,12 +21,12 @@
   --color-base-content: var(--sl-color-text);
   --color-primary: var(--sl-color-text-accent);
   --color-primary-content: var(--sl-color-text-invert);
-  --color-secondary: var(--sl-color-accent-low);
-  --color-secondary-content: var(--sl-color-accent-high);
-  --color-accent: var(--sl-color-red-low);
-  --color-accent-content: var(--sl-color-red-high);
-  --color-neutral: var(--sl-color-orange-low);
-  --color-neutral-content: var(--sl-color-orange-high);
+  --color-secondary: var(--sl-color-purple-low);
+  --color-secondary-content: var(--sl-color-purple-high);
+  --color-accent: var(--sl-color-green-low);
+  --color-accent-content: var(--sl-color-green-high);
+  --color-neutral: var(--sl-color-white);
+  --color-neutral-content: var(--sl-color-black);
   --color-info: var(--sl-color-blue-low);
   --color-info-content: var(--sl-color-blue-high);
   --color-success: var(--sl-color-green-low);
