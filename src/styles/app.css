@@ -1,0 +1,17 @@
+@layer components {
+  .hstack {
+    @apply flex flex-row items-stretch shrink-0 content-start relative min-w-0 min-h-0;
+  }
+
+  .vstack {
+    @apply flex flex-col items-stretch shrink-0 content-start relative min-w-0 min-h-0;
+  }
+
+  .spacer {
+    @apply flex-1 self-stretch min-w-0 min-h-0;
+  }
+
+  .viewbox {
+    @apply bg-base-200 border border-base-300 rounded-box;
+  }
+}
