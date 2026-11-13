@@ -6,43 +6,14 @@
 
 @import "katex/dist/katex.min.css";
 
-@plugin "daisyui" {
-  themes: starlight;
-  prefix: "ui-";
+@utility hstack {
+  @apply flex flex-row items-stretch shrink-0 content-start relative min-w-0 min-h-0;
 }
 
-@plugin "daisyui/theme" {
-  name: "starlight";
-  default: true;
-  color-scheme: light dark;
-  --color-base-100: var(--sl-color-bg);
-  --color-base-200: var(--sl-color-gray-6);
-  --color-base-300: var(--sl-color-gray-5);
-  --color-base-content: var(--sl-color-text);
-  --color-primary: var(--sl-color-text-accent);
-  --color-primary-content: var(--sl-color-text-invert);
-  --color-secondary: var(--sl-color-purple-low);
-  --color-secondary-content: var(--sl-color-purple-high);
-  --color-accent: var(--sl-color-green-low);
-  --color-accent-content: var(--sl-color-green-high);
-  --color-neutral: var(--sl-color-white);
-  --color-neutral-content: var(--sl-color-black);
-  --color-info: var(--sl-color-blue-low);
-  --color-info-content: var(--sl-color-blue-high);
-  --color-success: var(--sl-color-green-low);
-  --color-success-content: var(--sl-color-green-high);
-  --color-warning: var(--sl-color-orange-low);
-  --color-warning-content: var(--sl-color-orange-high);
-  --color-error: var(--sl-color-red-low);
-  --color-error-content: var(--sl-color-red-high);
-  --radius-selector: 0.25rem;
-  --radius-field: 0.25rem;
-  --radius-box: 0.25rem;
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
-  --border: 1px;
-  --depth: 0;
-  --noise: 0;
+@utility vstack {
+  @apply flex flex-col items-stretch shrink-0 content-start relative min-w-0 min-h-0;
 }
 
-@import "./app.css";
+@utility spacer {
+  @apply flex-1 self-stretch min-w-0 min-h-0;
+}
